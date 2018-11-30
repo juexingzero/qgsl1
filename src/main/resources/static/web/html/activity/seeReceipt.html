@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>企业之声列表</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+</head>
+
+<body>
+	<div id="searchForm" style="margin-top:10px;margin-bottom:1px;">
+	    <input name="is_answer" class="mini-textbox" visible="false"/>
+	    <div style="margin:0;padding:0px;border-bottom:none;">
+			<table>
+				<tr>
+					<td>
+						<label style="font-family:Verdana;padding-left:5px;">活动名称：</label>
+						<input th:value="${activity_name}" class="mini-textbox" width="200px" onenter="loadGridData" readonly="readonly"/>
+	                </td>
+	                <td>
+						<label style="font-family:Verdana;padding-left:5px;">已报名单位数量：</label>
+						<input th:value="${total}" class="mini-textbox" width="200px" onenter="loadGridData" readonly="readonly"/>家
+	                </td>
+					<td style="padding-right:5px;">
+						<a class="mini-button searchBtn" onclick="exportRow()"><i class="fa fa-download"></i>导出</a>
+					</td>
+				</tr>
+			</table>
+	    </div>
+	</div>
+	<div id="mini-fit" class="mini-fit" >
+	    <div id="datagrid1_standardLibararyList" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[5,10,20,50]" pageSize="20"
+	         url="/web/v1/activity/getActivityEntryList" idField="standardLibraryList_id" multiSelect="true">
+	        <div property="columns">
+	            <div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div>
+	            <div field="member_name" width="10%" headerAlign="center" align="center">公司/团体名称</div>
+	            <div field="member_linkman_name" width="10%" headerAlign="center" align="center">联系人姓名</div>
+	            <div field="member_linkman_sex" width="25%" headerAlign="center" align="center" renderer="covertxb">性别</div>
+	            <div field="member_linkman_title" width="10%" headerAlign="center" align="center">公司职位</div>
+	            <div field="member_linkman_phone" width="10%" headerAlign="center" align="center">手机号码</div>
+	            <div field="remarks" width="25%" headerAlign="center" align="center">备注</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/activity/seeReceipt.js"></script>
+	<script type="text/javascript" >
+		/*<![CDATA[*/
+    var activity_id = "[[${activity_id}]]";
+    /*]]>*/
+    </script>
+</body>
+</html>

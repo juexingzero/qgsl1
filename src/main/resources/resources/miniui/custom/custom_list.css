@@ -1,0 +1,117 @@
+/* 列表公共样式(默认风格) */
+.wrapper {
+	height: 100%;
+}
+
+/* 顶部查询区域 */
+.search_toolbar {
+	margin-bottom: 10px;
+}
+.search_toolbar:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+.search_toolbar table td {
+	padding-bottom: 10px;
+}
+
+.search_type {
+	margin-right: 10px;
+	line-height: 28px;
+	color: #66afe9;
+	font-size: 15px;
+}
+
+.search_table,
+.search_table_border {
+	border-spacing: 8px;
+}
+
+.search_table_border {
+	border: solid 1px #ccc;
+}
+
+.search_table .mini-button,
+.search_table_border .mini-button {
+	margin: 0 2px;
+}
+
+/* 列表区域 */
+body .mini-toolbar {
+	/*border-bottom: none;*/
+	overflow: hidden;
+	/*padding: 5px !important;*/
+}
+
+body .mini-toolbar.no_bor {
+	border: none;
+}
+
+body .mini-toolbar .text {
+	line-height: 28px;
+}
+
+/* 表头 */
+body .mini-grid-headerCell {
+	/* background: #f1f1f1; */
+	background: #eee;
+	border-color: #ccc;
+	color: #909399;
+	font-weight: bold;
+	font-size: 14px;
+	line-height: 28px;
+}
+
+/* 表体 */
+body .mini-grid-cell {
+	line-height: 28px;
+}
+
+/*body .mini-grid-cell a {*/
+	 /*color: #333; */
+/*}*/
+/*body .mini-grid-row-selected .mini-grid-cell a {*/
+	/*color: #3ba6ee;*/
+	/*text-decoration: underline;*/
+/*}*/
+
+html body .mini-grid-row-selected,
+html body .mini-grid-row-selected.mini-grid-row-hover {
+	background: #ebf7ff;
+}
+
+html body .mini-grid-row-hover {
+	background: #f5f7fa;
+}
+
+html body .mini-grid-row-selected td {
+	color: #3ba6ee;
+}
+
+html body .mini-grid-row-hover td {
+	/*border-color: #ebf7ff;*/
+}
+
+/* 列表下的按钮 */
+/* body .mini-grid-cell .cus_btn,
+body .mini-grid-cell .cus_btn_default,
+body .mini-grid-cell .cus_btn_state,
+body .mini-grid-cell .cus_btn_del,
+body .mini-grid-cell .cus_btn_default_del {
+	margin: 0 2px;
+}
+ body .mini-grid-cell .cus_btn:hover {
+	background: #3ba6ee;
+	border-color: #3ba6ee;
+	color: #fff;
+}
+body .mini-grid-cell .cus_btn.cus_btn_del:hover {
+	background: none;
+	color: #f43030;
+}  */
+
+body .mini-pager {
+	line-height: 32px;
+}

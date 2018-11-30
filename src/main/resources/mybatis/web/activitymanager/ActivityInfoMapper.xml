@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.activity.ActivityInfoMapper">
+    <select id="getActivityInfoList" resultType="com.manhui.gsl.jbqgsl.model.activitymanager.ActivityInfo">
+    	SELECT
+			*
+		FROM
+			activity_info
+		WHERE
+			is_delete=0
+        <if test="activity_name != null and activity_name != ''">
+            AND activity_name like #{activity_name}
+        </if>
+        <if test="activity_state != null and activity_state.size > 0">
+            AND activity_state in
+             <foreach collection="activity_state" index="index" item="item" open="(" separator="," close=")">
+               #{item}
+          </foreach>
+        </if>
+        ORDER BY create_time desc
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryActivityInfoTotal" resultType="int">
+       SELECT
+			count(*)
+		FROM
+			activity_info
+		WHERE
+			is_delete=0
+        <if test="activity_name != null and activity_name != ''">
+            AND activity_name like #{activity_name}
+        </if>
+        <if test="activity_state != null and activity_state.size > 0">
+            AND activity_state in
+             <foreach collection="activity_state" index="index" item="item" open="(" separator="," close=")">
+               #{item}
+          </foreach>
+        </if>
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+    
+    <update id="updateActivityInfo" parameterType="com.manhui.gsl.jbqgsl.model.activitymanager.ActivityInfo">
+    	update activity_info
+    	<set>
+    		<if test="activity_state != '' and activity_state != null">
+    			activity_state=#{activity_state},
+    		</if>
+    		<if test="is_delete != '' and is_delete != null">
+    			is_delete=#{is_delete},
+    		</if>
+    		<if test="activity_name != '' and activity_name != null">
+    			activity_name=#{activity_name},
+    		</if>
+    		<if test="activity_address != '' and activity_address != null">
+    			activity_address=#{activity_address},
+    		</if>
+    		<if test="activity_navigation != '' and activity_navigation != null">
+    			activity_navigation=#{activity_navigation},
+    		</if>
+    		<if test="longitude_latitude != '' and longitude_latitude != null">
+    			longitude_latitude=#{longitude_latitude},
+    		</if>
+    		<if test="activity_file != '' and activity_file != null">
+    			activity_file=#{activity_file},
+    		</if>
+    		<if test="activity_image != '' and activity_image != null">
+    			activity_image=#{activity_image},
+    		</if>
+    		<if test="activity_start_time != '' and activity_start_time != null">
+    			activity_start_time=#{activity_start_time},
+    		</if>
+    		<if test="activity_end_time != '' and activity_end_time != null">
+    			activity_end_time=#{activity_end_time},
+    		</if>
+    		<if test="activity_link_man != '' and activity_link_man != null">
+    			activity_link_man=#{activity_link_man},
+    		</if>
+    		<if test="activity_link_phone != '' and activity_link_phone != null">
+    			activity_link_phone=#{activity_link_phone},
+    		</if>
+    		<if test="activity_content != '' and activity_content != null">
+    			activity_content=#{activity_content},
+    		</if>
+    		<if test="sign_qrcode != '' and sign_qrcode != null">
+    			sign_qrcode=#{sign_qrcode},
+    		</if>
+    		<if test="is_sign != '' and is_sign != null">
+    			is_sign=#{is_sign},
+    		</if>
+    		<if test="activity_entry_end_time != '' and activity_entry_end_time != null">
+    			activity_entry_end_time=#{activity_entry_end_time},
+    		</if>
+    	</set>
+    	where activity_id=#{activity_id}
+    </update>
+    
+    <insert id="addActivityInfo" parameterType="com.manhui.gsl.jbqgsl.model.activitymanager.ActivityInfo">
+    	insert into activity_info
+    	<trim prefix="(" suffix=")" suffixOverrides="," >
+			activity_id,
+			activity_name,
+			activity_address,
+			activity_navigation,
+			longitude_latitude,
+			activity_file,
+			activity_image,
+			activity_start_time,
+			activity_end_time,
+			activity_link_man,
+			activity_link_phone,
+			activity_content,
+			sign_qrcode,
+			is_sign,
+			activity_entry_end_time,
+			create_time
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			#{activity_id},
+			#{activity_name},
+			#{activity_address},
+			#{activity_navigation},
+			#{longitude_latitude},
+			#{activity_file},
+			#{activity_image},
+			#{activity_start_time},
+			#{activity_end_time},
+			#{activity_link_man},
+			#{activity_link_phone},
+			#{activity_content},
+			#{sign_qrcode},
+			#{is_sign},
+			#{activity_entry_end_time},
+			now(),
+		</trim>
+    </insert>
+    
+    <select id="queryActivityInfo" resultType="com.manhui.gsl.jbqgsl.model.activitymanager.ActivityInfo">
+    	SELECT
+			*
+		FROM
+			activity_info
+		WHERE 1=1
+        <if test="activity_id != null and activity_id != ''">
+            AND activity_id = #{activity_id}
+        </if>
+    </select>
+    
+    <select id="queryActivityInfoNum" resultType="int">
+    	select count(*) from 
+    		activity_info
+    	where 1=1
+    	<if test="activity_start_time != null and activity_start_time != ''">
+    	and activity_start_time=#{activity_start_time}
+    	</if>
+    	<if test="activity_end_time != null and activity_end_time != ''">
+    	and activity_end_time=#{activity_end_time}
+    	</if>
+    	
+    </select>
+</mapper>

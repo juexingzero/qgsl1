@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyQyjsMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyjs">
+        <id column="QYJSZJ" jdbcType="VARCHAR" property="qyjszj" />
+        <result column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="QYFZLC" jdbcType="VARCHAR" property="qyfzlc" />
+        <result column="QYJJ" jdbcType="VARCHAR" property="qyjj" />
+        <result column="QYWH" jdbcType="VARCHAR" property="qywh" />
+        <result column="QYHYDWYXL" jdbcType="VARCHAR" property="qyhydwyxl" />
+        <result column="QYTCTD" jdbcType="VARCHAR" property="qytctd" />
+        <result column="QYWZ" jdbcType="VARCHAR" property="qywz" />
+        <result column="QYPP" jdbcType="VARCHAR" property="qypp" />
+        <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+        <result column="FAX" jdbcType="VARCHAR" property="fax" />
+        <result column="ZIP_CODE" jdbcType="VARCHAR" property="zip_code" />
+        <result column="STAFF_NUMBER" jdbcType="INTEGER" property="staff_number" />
+        <result column="PARTY_NUMBER" jdbcType="INTEGER" property="party_number" />
+        <result column="COLLEGE_NUMBER" jdbcType="INTEGER" property="college_number" />
+        <result column="IS_SOCIETY" jdbcType="VARCHAR" property="is_society" />
+        <result column="JYFW" jdbcType="VARCHAR" property="jyfw" />
+        <result column="QYID" jdbcType="VARCHAR" property="qyid" />
+        <result column="STATE" jdbcType="VARCHAR" property="state" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyjs">
+       insert into member_qy_qyjs(QYJSZJ,JBXXZJ,QYFZLC,QYJJ,QYWH,QYHYDWYXL,QYTCTD,QYWZ,QYPP,PHONE,FAX,ZIP_CODE,
+          STAFF_NUMBER,PARTY_NUMBER,COLLEGE_NUMBER,IS_SOCIETY,JYFW,QYID,STATE)
+        values (#{qyjszj},#{jbxxzj},#{qyfzlc},#{qyjj},#{qywh},#{qyhydwyxl},#{qytctd},#{qywz},#{qypp},#{phone},#{fax},
+          #{zip_code},#{staff_number},#{party_number},#{college_number},#{is_society},#{jyfw},#{qyid},#{state})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyjs">
+        update member_qy_qyjs
+        <set>
+            <if test="qyjszj!=null and qyjszj != ''">QYJSZJ=#{qyjszj},</if>
+            <if test="jbxxzj!=null">JBXXZJ=#{jbxxzj},</if>
+            <if test="qyfzlc!=null">QYFZLC=#{qyfzlc},</if>
+            <if test="qyjj!=null">QYJJ=#{qyjj},</if>
+            <if test="qywh!=null">QYWH=#{qywh},</if>
+            <if test="qyhydwyxl!=null">QYHYDWYXL=#{qyhydwyxl},</if>
+            <if test="qytctd!=null">QYTCTD=#{qytctd},</if>
+            <if test="qywz!=null">QYWZ=#{qywz},</if>
+            <if test="qypp!=null">QYPP=#{qypp},</if>
+            <if test="phone!=null">PHONE=#{phone},</if>
+            <if test="fax!=null">FAX=#{fax},</if>
+            <if test="zip_code!=null">ZIP_CODE=#{zip_code},</if>
+            <if test="staff_number!=null">STAFF_NUMBER=#{staff_number},</if>
+            <if test="party_number!=null">PARTY_NUMBER=#{party_number},</if>
+            <if test="college_number!=null">COLLEGE_NUMBER=#{college_number},</if>
+            <if test="is_society!=null">IS_SOCIETY=#{is_society},</if>
+            <if test="jyfw!=null">JYFW=#{jyfw},</if>
+            <if test="qyid!=null">QYID=#{qyid},</if>
+            <if test="state!=null">STATE=#{state},</if>
+        </set>
+        where QYJSZJ = #{qyjszj}
+    </update>
+
+    <!--根据企业基本信息表id 查询数据-->
+    <select id="queryByQyid" parameterType="String" resultType="HashMap">
+        select qyjszj,qywz,phone,fax,zip_code,staff_number,party_number,college_number,is_society,qypp,jyfw
+         from member_qy_qyjs where QYID = #{qyid}
+    </select>
+    
+    <!--根据qyid 查询数据，并且qyjj !=null-->
+    <select id="queryCompanyApplyJsData" parameterType="String" resultType="HashMap">
+        select qyjszj,qyfzlc,qyjj,qywh,state from member_qy_qyjs where QYID = #{qyid} and QYJJ is not null
+    </select>
+</mapper>

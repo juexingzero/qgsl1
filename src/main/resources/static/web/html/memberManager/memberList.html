@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>会员管理-列表</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+</head>
+
+<body>
+	<div class="flow_hidden">
+		<div style="display:none;">
+			<input class="mini-hidden" name="menu_type" th:value="${menu_type}">
+		</div>
+		
+		<div id="searchForm" style="margin-top:10px;margin-bottom:10px;">
+			<div style="margin:0;padding:0px;border-bottom:none;">
+				<table class="search_table_border">
+					<tr>
+						<td>
+							<label style="font-family:Verdana;padding-left:5px;">商会名称</label>
+		                    <select class="mini-combobox" name="commerce_name" style="width:150px" valueField="commerce_id" textField="commerce_name" value="0" onvaluechanged="loadGridData"></select>
+							<label style="font-family:Verdana;padding-left:5px;">会员类型</label>
+		                    <select class="mini-combobox" name="member_type" style="width:120px" value="0" onvaluechanged="loadGridData">
+		                        <option value="0">--请选择--</option>
+		                        <option value="HYLX-01">个人会员</option>
+		                        <option value="HYLX-02">团体会员</option>
+		                        <option value="HYLX-03">企业会员</option>
+		                    </select>
+							<label id="forApprove_text" style="font-family:Verdana;padding-left:5px;">审批状态</label>
+		                    <select class="mini-combobox" name="approve_status" id="forApprove_value" style="width:120px" value="0" onvaluechanged="loadGridData">
+		                        <option value="0">--请选择--</option>
+		                        <option value="HYSP-01">待审批</option>
+		                        <option value="HYSP-02">审批通过</option>
+		                        <option value="HYSP-03">审批拒绝</option>
+		                    </select>
+							<label style="font-family:Verdana;padding-left:5px;">会员名称</label>
+				            <input class="mini-textbox" name="member_name" emptyText="请输入会员名称" style="width: 120px" onenter="loadGridData" />
+							<label style="font-family:Verdana;padding-left:5px;">联系人姓名</label>
+				            <input class="mini-textbox" name="linkman_name" emptyText="请输入联系人姓名" style="width: 120px" onenter="loadGridData" />
+							<label style="font-family:Verdana;padding-left:5px;">联系人手机</label>
+							<input class="mini-textbox" name="linkman_phone" emptyText="请输入联系人手机" style="width: 120px" onenter="loadGridData" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a class="mini-button searchBtn"><i class="fa fa-search"></i>查询</a>
+							<a class="mini-button cleanBtn"><i class="fa fa-repeat"></i>重置</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div id="mini-fit" class="mini-fit" >
+	    <div id="datagrid_memberList" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[5,10,20,50]" pageSize="20"
+	         url="/web/v1/memberManager/getMemberList" idField="member_id" multiSelect="true">
+	        <div property="columns">
+	         	<div type="indexcolumn" width="50px" headerAlign="center">序号</div>
+	            <div field="commerce_name" headerAlign="center">商会名称</div>
+	            <div field="member_type" headerAlign="center" align="center" renderer="covertMemberType">会员类型</div>
+	            <div field="member_name" headerAlign="center">会员名称</div>
+	            <div field="linkman_name" headerAlign="center" align="center">联系人姓名</div>
+	            <div field="linkman_phone" headerAlign="center" align="center">联系人手机</div>
+	            <div field="app_user_name" headerAlign="center" align="center">创建人姓名</div>
+	            <div field="apply_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm">申请时间</div>
+	            <div field="approve_status" headerAlign="center" align="center" renderer="covertApproveStatus">审批状态</div>
+	            <div field="approve_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm">审批时间</div>
+	            <div width="10%" headerAlign="center" align="center" renderer="onActionRenderer">操作</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/memberManager/memberList.js"></script>
+</body>
+</html>

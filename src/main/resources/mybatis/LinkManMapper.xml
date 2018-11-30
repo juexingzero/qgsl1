@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.LinkManMapper">
+    <!-- 获取部门列表 -->
+    <select id="getDeptList" resultType="com.manhui.gsl.jbqgsl.model.Dept">
+    	SELECT
+			sd.*
+		FROM
+			sys_dept sd
+		WHERE
+			1 = 1
+		AND sd.p_dept_id = #{p_dept_id}
+        <if test="inner_outer_dept != null and inner_outer_dept != ''">
+            AND sd.inner_outer_dept = #{inner_outer_dept}
+        </if>
+		ORDER BY
+			sd.order_no ASC
+    </select>
+
+    <!-- 获取岗位 -->
+    <select id="getPositionList" resultType="com.manhui.gsl.jbqgsl.model.Position">
+        SELECT
+			sp.*
+		FROM
+			sys_position sp
+		WHERE
+			1 = 1
+		ORDER BY
+			sp.order_no ASC
+    </select>
+    <!-- 获取部门详细信息 -->
+    <select id="queryDeptInfo" resultType="com.manhui.gsl.jbqgsl.model.Dept">
+        SELECT
+			sd.*
+		FROM
+			sys_dept sd
+		WHERE
+			dept_id = #{dept_id}
+    </select>
+    
+    <!-- 获取账户列表 -->
+    <select id="getLinkManByPositionList" resultType="com.manhui.gsl.jbqgsl.controller.app.linkman.LinkManResult">
+	    SELECT
+			su.user_id,
+			su.user_name,
+			su.mobile_no,
+			su.work_phone,
+			su.home_phone,
+			su.email,
+			su.order_no,
+			su.head_img
+		FROM
+			sys_user_position sup
+		LEFT JOIN sys_user su ON sup.user_id = su.user_id
+		WHERE
+			1 = 1
+		AND sup.position_id = #{position_id}
+		AND su.user_no != '1'
+		ORDER BY
+			su.order_no ASC
+    </select>
+    <!-- 获取账户列表 -->
+    <select id="getLinkManByPositionList2" resultType="com.manhui.gsl.jbqgsl.controller.app.linkman.LinkManResult">
+	    SELECT
+			su.user_id,
+			su.user_name,
+			su.mobile_no,
+			su.work_phone,
+			su.home_phone,
+			su.email,
+			su.order_no,
+			su.head_img,
+			su.user_sex,
+			sup.position_id as position_id,
+			sp.dept_id as dept_id,
+			sp.position_name as position_name
+		FROM
+			sys_user_position sup
+		LEFT JOIN sys_user su ON sup.user_id = su.user_id
+		LEFT JOIN sys_position sp ON sup.position_id = sp.position_id
+		<where>
+			<if test="positionIdsList !=null and positionIdsList.size()>0">
+				and sup.position_id in
+				<foreach collection="positionIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY
+			sp.order_no ASC
+    </select>
+        <!-- 模糊查询对应的人员信息 -->
+    <select id="queryLinkManList" resultType="com.manhui.gsl.jbqgsl.controller.app.linkman.LinkManResult">
+	   SELECT
+			sd.dept_name as dept_name,syu.*
+		FROM
+			sys_dept sd
+		inner join 
+	   
+	   (
+	    SELECT
+			su.user_id,
+			su.user_name,
+			su.mobile_no,
+			su.work_phone,
+			su.home_phone,
+			su.email,
+			su.order_no,
+			su.head_img,
+			sup.position_id as position_id,
+			sp.dept_id as dept_id,
+			sp.position_name as position_name
+		FROM
+			sys_user_position sup
+		LEFT JOIN sys_user su ON sup.user_id = su.user_id
+		LEFT JOIN sys_position sp ON sup.position_id = sp.position_id
+			<where>
+			<if test="called_name !=null and called_name !=''">
+				su.user_name like CONCAT('%',#{called_name},'%') 
+			</if>
+			AND su.user_no != '1' AND sup.is_primary='1'
+		</where>
+		) syu
+	on sd.dept_id = syu.dept_id
+    </select>
+</mapper>

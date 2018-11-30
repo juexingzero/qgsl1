@@ -1,0 +1,68 @@
+body{
+    background: #FFFFFF;
+}
+.from tr{
+    height: 45px;
+    line-height: 45px;
+}
+.from td{
+    height: 32px;
+    line-height: 32px;
+}
+
+/*input:read-only{
+    background: #f0f0f0;
+}*/
+.mini-textbox-readOnly .mini-corner-all{
+    background: #f0f0f0;
+}
+.mini-textbox{
+    height: 30px;
+    line-height: 30px;
+}
+.mini-textbox-border{
+    height: 30px;
+    line-height: 30px;
+}
+.mini-textbox-input{
+    height: 30px;
+    line-height: 30px;
+}
+.mini-buttonedit{
+    height: 30px;
+    line-height: 30px;
+}
+.mini-buttonedit-border{
+    height: 30px;
+    line-height: 30px;
+}
+.mini-buttonedit-input{
+    height: 30px;
+    line-height: 30px;
+}
+.mini-buttonedit-button{
+    height: 26px;
+}
+.mini-button{
+    margin-right: 20px;
+}
+.mini-toolbar{
+    border: 1px solid #e1e1e1;
+}
+
+table {
+	width: 100%;
+	max-width: 100%;
+}
+
+table tr > td:first-child {
+	text-align: right;
+}
+
+.mini-checkboxlist table tr > td:first-child {
+	text-align: left;
+}
+
+table tr > td > span {
+	display: inline;
+}

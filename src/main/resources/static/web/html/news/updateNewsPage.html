@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>新增新闻</title>
+ 		<link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+        <style type="text/css">
+            /**修改文件上传框的大小**/
+            body .upload .image {
+                width: 160px;
+                height: 200px;
+            }
+            body .upload .image .image_font {
+                height: 165px;
+                line-height: 165px;
+            }
+            body .upload .image .image_content {
+                width: auto;
+                height: auto;
+            }
+            /***修改文件上传框的大小**/
+            
+            .form_wrappper {
+            	padding-bottom: 50px;
+            }
+            .bot_fixed {
+            	position: fixed;
+            	z-index: 999;
+            	left: 0;
+            	bottom: 0;
+            	width: 100%;
+            	text-align: center;
+            	background: #f5f5f5;
+            	padding: 10px 0;
+            	border-top: solid 1px #e1e1e1;
+            }
+        </style>
+
+        <link href="/resources/miniui/scripts/miniui/themes/blue/skin.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+    <!--富文本编辑器-->
+    <script type="text/javascript" charset="utf-8" src="/resources/ueditor/utf8-jsp/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/resources/ueditor/utf8-jsp/ueditor.all.min.js"> </script>
+    <!--文本编译器语言-->
+    <script type="text/javascript" charset="utf-8" src="/resources/ueditor/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
+    <!--文本编译器tolbars-->
+    <script type="text/javascript" charset="utf-8" src="/resources/ueditor/utf8-jsp/toolbars.js"></script>
+    <script src="/resources/miniui/res/third-party/swfupload/swfupload.js" type="text/javascript"></script>
+    
+    <body>
+        <div class="form_wrappper" id="form1">
+	        <table border="0" cellpadding="1" cellspacing="2" style="border-collapse:separate; border-spacing:10px;">
+	            <tr>
+	             <td class="td1" ><span style="color: red; margin-right:2px;">*</span>发布栏目：</td>
+	                <td style="width:200px">
+	                    <input class="mini-textbox" id="menuNames" name="menuNames" style="width:200px;" required="true" th:value="${news.menuNames}" onclick="onSelectMenus"/>
+	                	<input class="mini-textbox" id="menuIds" name="menuIds" th:value="${news.menuIds}" visible="false"/>
+	                </td>
+	            </tr>
+	            <tr>
+	            <td class="td1" ><span style="color: red; margin-right:2px;">*</span>新闻标题：</td>
+	                <td style="width:200px">
+	                    <input name="newsName" class="mini-textbox" style="width:200px" required="true" maxLength="50" th:value="${news.newsName}"/>
+	                    <input visible="false"  name="newsId" id="newsId" class="mini-textbox" style="width: 530px;" th:value="${news.newsId}" required="true" />
+	                </td>
+	            </tr>
+	            <tr>
+	             <td class="td1" ><span style="color: red; margin-right:2px;">*</span>信息来源：</td>
+	                <td style="width:200px">
+	                    <input name="infoSource" class="mini-textbox" style="width:200px" required="true" maxLength="30" th:value="${news.infoSource}"/>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td style="width:150px;">内容摘要：</td>
+	                <td colspan="2" style="width:500px">
+	                    <input name="remark" class="mini-textarea" style="width:590px;height:60px;" maxLength="200" th:value="${news.remark}"/>
+	                </td>
+	            </tr>
+	            <!--
+	            <tr>
+	                <td style="width:150px;" >外部链接地址：</td>
+	                <td style="width:200px">
+	                    <input name="externalUrl" class="mini-textbox" style="width:200px"  maxLength="100" th:value="${news.externalUrl}"/>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td style="width:150px;" >优先级：</td>
+	                <td style="width:200px">
+	                    <input name="priority" class="mini-spinner" style="width:200px" value="0" maxValue="100" minValue="0" th:value="${news.priority}"/>
+	                </td>
+	            </tr>
+	            -->
+	            <tr>
+	                <td style="width:150px;">封面图：</td>
+	                <td ><!---->
+	                    <input visible="false"  name="newsImg" id="newsImg" th:value="${news.newsImg}" class="mini-textbox" style="width: 530px;" required="true" />
+	                    <div id="uploadImage"></div>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td style="width:150px;" >推荐位置：</td>
+	                <td style="width:200px">
+	                    <div id="newsType" name="newsType" class="mini-checkboxlist" align="left" repeatItems="3" repeatLayout="div"
+	                         textField="name" valueField="id" value="" data="" >
+	                    </div>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td style="width:150px;" >发布时间：</td>
+	                <td style="width:200px">
+	                    <input id="releaseTime" name="releaseTime" class="mini-datepicker" valueType="string" style="width:200px;" format="yyyy-MM-dd HH:mm:ss" timeFormat="HH:mm:ss" showTime="true"  required="true" allowInput="false" th:value="${news.releaseTime}"/>
+	                </td>
+	            </tr>
+	
+	            <tr>
+	                <td style="width:150px;">视频：</td>
+	                <td ><!---->
+	                    <input id="file" class="mini-fileupload" name="file" limitType="*.mp4;*.ogg;" style="width: 400px;height: 26px;"
+	                           flashUrl="/resources/miniui/res/third-party/swfupload/swfupload.swf"
+	                           uploadUrl="/upload/uploadFile"
+	                           onuploadsuccess="onUploadSuccess"
+	                           onuploaderror="onUploadError" onfileselect="onFileSelect"
+	                    />
+	                    <a checkOnClick="true" groupName="search" class="mini-button" id="fileupload" onclick="startUpload()">上传</a>
+	                    <a checkOnClick="true" groupName="search" class="mini-button" id="filedel" onclick="delUpload()">删除</a>
+	                </td>
+	            </tr>
+	            <tr>
+	            <td class="td1" ><span style="color: red; margin-right:2px;">*</span>新闻内容：</td>
+	                <td colspan="5" style="width:90%;height: 600px;">
+	                    <script id="editor" type="text/plain" style="width:90%;height:500px;"></script>
+	                </td>
+	            </tr>
+	            <!-- <tr align="center">
+	                <td colspan="3" style="text-align: center">
+	                    <a checkOnClick="true" groupName="search" class="mini-button" id="submit" onclick="save()">保存</a>
+	                    <a checkOnClick="true" groupName="search" class="mini-button" onclick="backtrack()">取消</a>
+	                </td>
+	            </tr> -->
+	        </table>
+	        <!-- bot btns -->
+	        <div class="bot_fixed">
+	        	<a checkOnClick="true" groupName="search" class="mini-button" id="submit" onclick="save()">保存</a>
+	            <a checkOnClick="true" groupName="search" class="mini-button" onclick="backtrack()">取消</a>
+	        </div>
+        </div>
+        <!-- 图片上传 -->
+        <script src="/resources/fileUpload/fileUpload.js" type="text/javascript"></script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var menuIds = [[${news.menuIds}]];
+            var newsContent = [[${news.newsContent}]];
+            var imgObj = [[${news.imgObj}]];
+            var newsTypeList = [[${newsTypeList}]];
+            var newsType = [[${news.newsType}]];
+            var videoUrl = [[${news.videoUrl}]];
+            var user_name = [[${user_name}]];
+            /*]]>*/
+        </script>
+        <script type="text/javascript">
+            mini.parse();
+            var ue = null;
+
+            var cpi_pathText = mini.get("newsImg");//首页图片
+            var fileVideo = mini.get("file");//视频路径
+            $(function(){
+                fileVideo.setText(videoUrl);
+                // 图片
+                $("#uploadImage").uploadFile({
+                    size : 1,
+                    type: "gif|jpg|jpeg|png|svg|GIF|JPG|PNG|SVG",       // 文件类型 |隔开 比如图片类型：
+                    fileSize:'2MB',
+                    imagePath:imgObj,
+                    success: function (data) {
+                        var fileObj;
+                        var fileName = '';
+                        var filePath = '';
+                        for (var i = 0; i < data.length; i++) {
+                            fileObj = data[i];
+                            fileName += fileObj.fileName+",";
+                            filePath += fileObj.path+",";
+                        }
+                        if(fileName != ""){
+                            fileName = fileName.substring(0, fileName.length-1);
+                            filePath = filePath.substring(0, filePath.length-1);
+                        }
+                        cpi_pathText.setValue(filePath);
+                        cpi_pathText.setText(fileName);
+                    }
+                });
+
+                //实例化编辑器
+                //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+                ue = UE.getEditor('editor',{"toolbars":toolbars});
+
+                UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+
+                //设置图片上传地址
+                UE.Editor.prototype.getActionUrl = function(action) {
+                    if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
+                        return '/web/v1/news/uploadFile'; //在这里返回我们实际的上传图片地址
+                    } else {
+                        return this._bkGetActionUrl.call(this, action);
+                    }
+                }
+
+                //设置初始化内容
+                ue.ready(function() {//编辑器初始化完成再赋值
+                    ue.setContent(newsContent);  //赋值给UEditor
+                });
+            });
+
+            //选择新闻栏目
+            function onSelectMenus(e){
+            	mini.open({
+            		url: "/web/v1/news/toSelectMenuPage",
+            		title: "选择栏目",
+            		width: 350,
+            		height: 450,
+            		ondestroy: function (action) { 
+                        if (action == "ok") {
+                            var iframe = this.getIFrameEl();
+                            var data = iframe.contentWindow.GetData();
+                             data = mini.clone(data);
+                             if (data) {
+                            	 mini.getByName("menuNames").setValue(data.menuName);
+                            	 mini.getByName("menuIds").setValue(data.menuId);
+                             }
+                         }
+                     }
+            	});
+            }
+
+            //加载新闻类型
+            var newsTypeMINI = mini.get("newsType");
+            newsTypeMINI.loadData(newsTypeList);
+
+            //给新闻类型设置值
+            newsTypeMINI.setValue(newsType);
+
+            //提交表单数据
+            function save(){
+                var newsContent = ue.getContent();
+                if(!newsContent){
+                    mini.alert("新闻内容不能为空");
+                    return;
+                }
+                var newsTypeVal = newsTypeMINI.getValue()+"";
+                var newsImgVal = cpi_pathText.getValue();
+                if(newsTypeVal.indexOf("t")>=0){
+                    //图片新闻，必填图片
+                    if(!newsImgVal){
+                        mini.alert("新闻类型为图片新闻时，首页图片不能为空!","系统提示");
+                        return;
+                    }
+                }
+
+                if(videoUrl != null && videoUrl != '' && !newsImgVal) {
+                    mini.alert("必须传视频封面图!", "系统提示");
+                    return;
+                }
+                var form = new mini.Form("#form1");
+                form.validate();//验证
+                if (form.isValid() == false) return;
+
+                var data = form.getData();      //获取表单多个控件的数据
+                data.newsContent = newsContent;
+                data.newsImgName = cpi_pathText.getText();//图片原名称
+                data.videoUrl = videoUrl;
+                var json = mini.encode(data);   //序列化成JSON
+                $("#submit").off("click");
+                $.ajax({
+                    url: "/web/v1/news/saveNews",
+                    type: "post",
+                    data: { 'json': json },
+                    dataType: "json",
+                    success: function (result) {
+                       if(result.state == 0){
+                           window.location.href = "/web/v1/news/queryListPage?menuId="+menuIds;
+                       }else{
+                          $("#submit").on("click", save);
+                           mini.alert(result.message,"系统提示");
+                       }
+                    }
+                });
+                $("#submit").on("click", save);
+            }
+
+            //取消
+            function backtrack(){
+                window.location.href = "/web/v1/news/queryListPage?menuId="+menuIds;
+            }
+
+
+            //视频操作
+            function onFileSelect(e) {
+                var standardSize = 30*1024*1024;
+                var fileSize = e.file.size;
+                if(fileSize > standardSize){
+                    mini.alert("视频最大不能超过30MB","系统提示");
+                    fileVideo.clear();
+                }
+            }
+            function onUploadSuccess(e) {
+                mini.alert("上传成功","系统提示");
+                var obj = JSON.parse(e.serverData);
+                this.setText(obj.path[0]);
+                videoUrl = obj.path[0];
+            }
+            function onUploadError(e) {
+                mini.alert("上传失败","系统提示");
+            }
+            //上传文件
+            function startUpload() {
+                fileVideo.startUpload();
+            }
+
+            //删除上传文件
+            function delUpload(){
+                if (confirm("是否确定删除视频！")) {
+                    fileVideo.setText("");
+                    videoUrl = "";
+                }
+            }
+        </script>
+    </body>
+</html>

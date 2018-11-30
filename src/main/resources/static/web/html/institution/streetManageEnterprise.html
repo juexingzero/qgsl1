@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>设置主管企业</title>
+<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+<script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="tabs" style="margin-top: 30px;">
+	<input class="mini-hidden" name="institution_id" id="institution_id" th:value="${institution_id}">
+	<table border="0" cellpadding="1" cellspacing="2">
+		<tr>
+			<td>
+				<span style="margin-right:8px;"></span>街镇名称：
+				<span id="institution_name_text"></span>
+			</td>
+		</tr>
+	</table>
+	<div id="serchFrom">
+		<table id="serchTab">
+			<tr>
+				<td>
+					<input id="industry_id" name="industry_id" url="/web/v1/industry/queryAllIndustry" class="mini-treeselect" multiSelect="false" valueFromSelect="true"   
+						style="width:200px; margin-left: 8px;" textField="industry_name" valueField="industry_id"  allowInput="false" emptyText="全部" value="0"/>
+					<input id="institution_name" name="institution_name" class="mini-textbox" style="width:200px;margin-left: 20px;" value="" emptyText="请输入企业名称"/>
+					<a class="mini-button" onclick="serch()"><i class="fa fa-search"></i>查询</a>
+					<a class="mini-button" onclick="clean()"><i class="fa fa-repeat"></i>重置</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="tabs1" class="mini-tabs" style="margin-top: 30px; width:100%;height: 93%;" onactivechanged="changeTabs">
+	    <div id="tab1" class="mini-tabs" activeIndex="0" title="主管企业" ></div>
+	    <div id="tab2" class="mini-tabs" activeIndex="1" title="其余企业" ></div>
+	</div>
+		<div id="datagrid" class="mini-datagrid" style="width:100%;height:450px;" sizeList="[10,20,50,100]" pageSize="10"
+			 url="/web/v1/institution/streetManageEnterpriseList" idField="institution_id" multiSelect="true">
+	        <div property="columns">
+	        	<div width="20%" headerAlign="center" align="center" renderer="onConvertOperation"><a class="mini-button" onclick="allCancel()" style="color:#0000FF">全部取消</a></div>
+	            <div field="institution_name" headerAlign="center" align="center">企业名称</div>
+	            <div field="industry_name" headerAlign="center" align="center">所属行业</div>
+	        </div>
+	    </div>
+	
+		<div id="datagrid1" class="mini-datagrid" style="width:100%;height:450px;display: none" sizeList="[10,20,50,100]" pageSize="10"
+			 url="/web/v1/institution/streetManageEnterpriseList" idField="institution_id" multiSelect="true" >
+	        <div property="columns">
+	        	<div width="20%" headerAlign="center" align="center" renderer="onConvertOperation1">操作</div>
+	            <div field="institution_name" headerAlign="center" align="center">企业名称</div>
+	            <div field="industry_name" headerAlign="center" align="center">所属行业</div>
+	        </div>
+	    </div>
+	</div>
+<script type="text/javascript" src="/resources/js/institution/streetManageEnterprise.js"></script>
+</body>
+</html>

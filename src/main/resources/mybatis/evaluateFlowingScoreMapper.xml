@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.EvaluateFlowingScoreMapper">
+
+    <resultMap type="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScoreDetailsUtil" id="resultDataListMap">
+        <result property="superior_name" column="superior_name"/>
+        <result property="superior_fraction" column="superior_fraction"/>
+        <result property="superior_actual_score" column="superior_actual_score"/>
+        <result property="content" column="content"/>
+        <collection property="detailsList" ofType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScoreSubordinateDetailsUtil">
+            <result property="name" column="name"/>
+            <result property="fraction" column="fraction"/>
+            <result property="actual_score" column="actual_score"/>
+        </collection>
+    </resultMap>
+
+<insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore" useGeneratedKeys="true" keyProperty="score_id">
+    insert into evaluate_flowing_score(
+      score_id,topic_id,topic_standard_id,topic_standard_detail_id,
+      topic_standard_detail_name,forthwith_id,forthwith_standard_id,
+      forthwith_standard_detail_id,forthwith_standard_detail_name,passive_id,
+      passive_name,actice_id,active_name,plan_score,real_score,create_time)
+      values (
+      #{score_id},#{topic_id},#{topic_standard_id},#{topic_standard_detail_id},
+      #{topic_standard_detail_name},#{forthwith_id},#{forthwith_standard_id},
+      #{forthwith_standard_detail_id},#{forthwith_standard_detail_name},#{passive_id},
+      #{passive_name},#{actice_id},#{active_name},#{plan_score},#{real_score},#{create_time})
+</insert>
+
+
+    <!--根据id 修改数据-->
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore">
+        update evaluate_flowing_score
+        <set>
+            <if test="topic_id!=null and topic_id !='' ">topic_id=#{topic_id},</if>
+            <if test="topic_standard_id!=null and topic_standard_id !='' ">topic_standard_id=#{topic_standard_id},</if>
+            <if test="topic_standard_detail_id!=null and topic_standard_detail_id !='' ">topic_standard_detail_id=#{topic_standard_detail_id},</if>
+            <if test="topic_standard_detail_name!=null and topic_standard_detail_name !='' ">topic_standard_detail_name=#{topic_standard_detail_name},</if>
+            <if test="forthwith_id!=null and forthwith_id !='' ">forthwith_id=#{forthwith_id},</if>
+            <if test="forthwith_standard_id!=null and forthwith_standard_id !='' ">forthwith_standard_id=#{forthwith_standard_id},</if>
+            <if test="forthwith_standard_detail_id!=null and forthwith_standard_detail_id !='' ">forthwith_standard_detail_id=#{forthwith_standard_detail_id},</if>
+            <if test="forthwith_standard_detail_name!=null and forthwith_standard_detail_name !='' ">forthwith_standard_detail_name=#{forthwith_standard_detail_name},</if>
+            <if test="passive_id!=null and passive_id !='' ">passive_id=#{passive_id},</if>
+            <if test="passive_name!=null and passive_name !='' ">passive_name=#{passive_name},</if>
+            <if test="actice_id!=null and actice_id !='' ">actice_id=#{actice_id},</if>
+            <if test="active_name!=null and active_name !='' ">active_name=#{active_name},</if>
+            <if test="active_name!=null and active_name !='' ">plan_score=#{plan_score},</if>
+            <if test="active_name!=null and active_name !='' ">real_score=#{real_score},</if>
+            <if test="create_time!=null and create_time !='' ">create_time=#{create_time},</if>
+        </set>
+        where score_id = #{score_id}
+    </update>
+
+    <!-- 根据 actice_id 分组查询数据-->
+    <select id="getEvaluateFlowingScoreGroupList" resultType="Map">
+        SELECT
+			tai.institution_id,
+			tai.institution_name,
+			tai.institution_type,
+			tai.institution_main_id,
+			tai.street_main_id,
+			tt.score_id,
+			tt.topic_id,
+			tt.topic_standard_id,
+			tt.passive_id,
+			tt.passive_name,
+			tt.actice_id,
+			tt.active_name,
+			CASE WHEN tt.real_score IS NULL THEN 0 ELSE tt.real_score END AS real_score,
+			CASE WHEN tt.actice_id IS NULL THEN 0 ELSE 1 END AS is_evaluate
+		FROM
+			topic_active_info tai
+		LEFT JOIN (
+			SELECT
+				efs.score_id,
+				efs.topic_id,
+				efs.topic_standard_id,
+				efs.passive_id,
+				efs.passive_name,
+				efs.actice_id,
+				efs.active_name,
+				SUM(efs.real_score) real_score
+			FROM
+				evaluate_flowing_score efs
+			WHERE
+				1 = 1
+			AND efs.topic_id = #{topic_id}
+			AND efs.standard_p_detail_id != '-1'
+			AND efs.passive_id = #{passive_id}
+			GROUP BY
+				efs.actice_id
+		) tt ON tai.institution_id = tt.actice_id
+		WHERE
+			1 = 1
+		AND tai.topic_id = #{topic_id}
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 根据主题id 和被评价方id 查询 评价流水合并总数-->
+    <select id="getEvaluateFlowingScoreGroupTotal" resultType="int">
+        SELECT
+			COUNT(*)
+		FROM
+			(
+		        SELECT
+					tai.institution_id,
+					tai.institution_name,
+					tai.institution_type,
+					tt.score_id,
+					tt.topic_id,
+					tt.topic_standard_id,
+					tt.passive_id,
+					tt.passive_name,
+					tt.actice_id,
+					tt.active_name,
+					CASE WHEN tt.real_score IS NULL THEN 0 ELSE tt.real_score END AS real_score,
+					CASE WHEN tt.actice_id IS NULL THEN 0 ELSE 1 END AS is_evaluate
+				FROM
+					topic_active_info tai
+				LEFT JOIN (
+					SELECT
+						efs.score_id,
+						efs.topic_id,
+						efs.topic_standard_id,
+						efs.passive_id,
+						efs.passive_name,
+						efs.actice_id,
+						efs.active_name,
+						FORMAT(SUM(efs.real_score), 2) real_score
+					FROM
+						evaluate_flowing_score efs
+					WHERE
+						1 = 1
+					AND efs.topic_id = #{topic_id}
+					AND efs.standard_p_detail_id != '-1'
+					AND efs.passive_id = #{passive_id}
+					GROUP BY
+						efs.actice_id
+				) tt ON tai.institution_id = tt.actice_id
+				WHERE
+					1 = 1
+				AND tai.topic_id = #{topic_id}
+			) t
+    </select>
+
+    <!--根据id查询数据-->
+    <select id="getevaluateFlowingScoreById" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore">
+        SELECT *
+        from evaluate_flowing_score where score_id = #{score_id}
+    </select>
+
+    <!--查询 主从详情数据-->
+    <select id="getEvaluateFlowingScoreDetails" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore"
+            resultMap="resultDataListMap">
+        select superior.*,sc.*,su.work_content content from
+        (select topic_id superior_topic_id,topic_standard_detail_name superior_name,sum(plan_score) superior_fraction,sum(real_score) superior_actual_score
+                from evaluate_flowing_score where topic_id = #{topic_id} and passive_id = #{passive_id} and actice_id = #{actice_id}) superior
+        INNER JOIN
+        (select topic_id ,forthwith_standard_detail_name name,plan_score fraction,real_score actual_score
+                from evaluate_flowing_score  where topic_id = #{topic_id} and passive_id = #{passive_id} and actice_id = #{actice_id}) sc
+        on superior.superior_topic_id = sc.topic_id
+        inner join evaluate_flowing_suggest su on su.topic_id = sc.topic_id and su.passive_id = #{passive_id} and su.actice_id = #{actice_id}
+    </select>
+    
+    <!--获取评价流水意见-->
+    <select id="getEvaluateFlowingSuggest" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingSuggest">
+        SELECT
+			efs.*
+		FROM
+			evaluate_flowing_suggest efs
+		WHERE
+			1 = 1
+		AND efs.topic_id = #{topic_id}
+		AND efs.topic_standard_id = #{topic_standard_id}
+		AND efs.passive_id = #{passive_id}
+		AND efs.actice_id = #{actice_id}
+    </select>
+    
+    <!--获取标准打分详情-->
+    <select id="getStandradScoreDetail" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore">
+        SELECT
+			efs.score_id,
+			efs.topic_id,
+			efs.topic_standard_id,
+			efs.topic_standard_detail_id,
+			efs.topic_standard_detail_name,
+			efs.standard_p_detail_id AS p_detail_id,
+			efs.plan_score,
+			efs.real_score,
+			efs.flag
+		FROM
+			evaluate_flowing_score efs
+		WHERE
+			1 = 1 
+			AND efs.topic_id = #{topic_id}
+			AND efs.topic_standard_id = #{topic_standard_id}
+			AND efs.passive_id = #{passive_id}
+			AND efs.actice_id = #{actice_id}
+    </select>
+    
+    <!--获取标准打分详情，用于excel导出-->
+    <select id="getStandradScoreDetailForExport" resultType="Map">
+        SELECT
+			score.passive_name,
+			score.active_name,
+			score.topic_standard_detail_name,
+			score.real_score,
+			score.flag,
+			suggest.work_content,
+			suggest.suggest_initiate 
+		FROM
+			evaluate_flowing_score score
+			LEFT JOIN evaluate_flowing_suggest suggest ON score.topic_id = suggest.topic_id 
+			AND score.topic_standard_id = suggest.topic_standard_id 
+			AND score.passive_id = suggest.passive_id 
+			AND score.actice_id = suggest.actice_id 
+		WHERE
+			1 = 1 
+			AND score.topic_id = #{topic_id}
+			AND score.topic_standard_id = #{topic_standard_id} 
+			AND score.standard_p_detail_id != '-1' 
+			AND score.passive_id = #{passive_id}
+			AND score.actice_id = #{actice_id}
+    </select>
+</mapper>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>消息添加</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<link type="text/css" rel="stylesheet" href="/resources/organizational/css/style.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+</head>
+
+<body>
+	<div id="form_messageInfoAdd" class="from">
+	    <input style="display: none;" name="message_id" value="" class="mini-textbox">
+	    <table style="width:98%;">
+	    
+            <tr>
+                <td width="16%" align="right">
+                	<label style="line-height:50px;"><span style="color:red;margin-right:2px;">*</span>消息类型：</label>
+                </td>
+                <td width="32%" align="left">
+                	<input name="message_type" class="mini-combobox" required="true" value="1" data="[{id:'1',text:'广播通知'},{id:'2',text:'工作任务'}]" />
+                </td>
+                <td width="16%" align="right">
+                	<label style="line-height:50px;"><span style="color:red;margin-right:2px;">*</span>消息形式：</label>
+                </td>
+                <td width="32%" align="left">
+                	<input name="message_mode" class="mini-combobox" required="true" value="1" data="[{id:'1',text:'文本'},{id:'2',text:'图片'},{id:'3',text:'语音'},{id:'4',text:'视频'},{id:'5',text:'混合'}]" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                	<label style="line-height:50px;"><span style="color:red;margin-right:2px;">*</span>消息形式：</label>
+                </td>
+                <td colspan="3" style="padding-top: 5px">
+               		<input name="message_content" emptyText="请输入消息内容（0~100字）" class="mini-textarea" style="width:100%;height:150px;" required="true" maxLength="100"/>
+                </td>
+            </tr>
+	    </table>
+	    
+	    <div class="mini-toolbar bot_btn">
+	        <a class="mini-button saveBut" style="width:60px;" onclick="save()">保存</a>
+	        <a class="mini-button cancelBut" style="width:60px;" onclick="CloseWindow('cancel')">取消</a>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/message/messageInfoAdd.js"></script>
+</body>
+</html>

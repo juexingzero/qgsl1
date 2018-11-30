@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.datareport.DataTemplteMapper">
+    <select id="queryDataTempleteList" parameterType="map" resultType="com.manhui.gsl.jbqgsl.model.datareport.DataTemplate">
+          select * from member_data_template where 1=1
+          <if test="title != null">and template_title LIKE CONCAT('%',#{title},'%')</if>
+          order by create_time desc
+          <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+          </if>
+    </select>
+
+    <select id="queryDataTemplateCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from member_data_template where 1=1
+        <if test="title != null"> and template_title LIKE CONCAT('%',#{title},'%')</if>
+        order by create_time desc
+    </select>
+
+    <select id="queryDataTemplateByTemplateId" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.datareport.DataTemplate">
+        select * from member_data_template where template_id = #{template_id}
+    </select>
+
+    <insert id="saveDataTemplate" parameterType="com.manhui.gsl.jbqgsl.model.datareport.DataTemplate">
+      insert into member_data_template
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            template_id,
+            template_title,
+            template_type,
+            start_time,
+            end_time,
+            <if test="introduce != null">introduce,</if>
+            <if test="state != null">state,</if>
+            <if test="create_time != null">create_time,</if>
+            <if test="update_time != null">update_time</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{template_id},
+            #{template_title},
+            #{template_type},
+            #{start_time},
+            #{end_time},
+            <if test="introduce != null">#{introduce},</if>
+            <if test="state != null">#{state},</if>
+            <if test="create_time != null">#{create_time},</if>
+            <if test="update_time != null">#{update_time}</if>
+        </trim>
+    </insert>
+
+    <update id="editDataTemplate" parameterType="com.manhui.gsl.jbqgsl.model.datareport.DataTemplate">
+        update member_data_template
+        <set>
+            <if test="template_title != null">template_title = #{template_title},</if>
+            <if test="template_type != null">template_type = #{template_type},</if>
+            <if test="start_time != null">start_time = #{start_time},</if>
+            <if test="end_time != null">end_time = #{end_time},</if>
+            <if test="introduce != null">introduce = #{introduce},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="create_time != null">create_time = #{create_time},</if>
+            <if test="update_time != null">update_time = #{update_time}</if>
+        </set>
+        where template_id = #{template_id}
+    </update>
+
+    <delete id="deleteDataTemplate" parameterType="java.lang.String">
+        delete from member_data_template where template_id = #{template_id}
+    </delete>
+
+    <select id="queryDataTemplateCheckState" resultType="com.manhui.gsl.jbqgsl.model.datareport.DataTemplate">
+        select * from member_data_template where state = 0
+    </select>
+    
+    <select id="getActiveListForSendMessage" parameterType="java.lang.String" resultType="map">
+        select qylxr.LXRXXZJ as user_id,qylxr.LXRXM as user_name from member_data_relation dr INNER JOIN member_qy_qylxrxx qylxr
+        where template_id = #{template_id} and dr.qy_id = qylxr.QYID and dr.report_state = '0'
+    </select>
+
+    <select id="getDataReportExcelData" parameterType="map" resultType="map">
+        select qy.QYMC,qy.TYSHXYDM,param.param_value as HYFL,mde.zyywly1,mde.zyszebl1,mde.zyywly2,mde.zyszebl2,mde.zyywly3,mde.zyszebl3,
+        mde.zycp,mde.bndysze,mde.sndysze,mde.bndlrze,mde.sndlrze,mde.bndshjlr,mde.sndshjlr,mde.bndzcze,mde.sndzcze,mde.bndgdzcjz,
+        mde.sndgdzcjz,mde.bndjzcze,mde.sndjzcze,mde.bndjsze,mde.sndjsze,mde.bndyffy,mde.sndyffy,mde.bndckze,mde.sndckze,mde.bndhwsr,
+        mde.bndhwsr,mde.bndnmygrs,mde.sndnmygrs,mde.bndnmhwgy,mde.sndnmhwgy
+        from member_data_enterprise mde
+        INNER JOIN member_qy_qyjbxx qy
+        left join sys_param param on qy.HYFL = param.param_key
+        where mde.qy_id = qy.JBXXZJ
+        and mde.template_id = #{template_id}
+    </select>
+</mapper>

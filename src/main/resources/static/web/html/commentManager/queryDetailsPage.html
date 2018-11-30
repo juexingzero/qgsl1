@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>评论详情</title>
+    <script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+    <script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+    <link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .text-span{
+            width: 400px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            word-break:keep-all;
+            display:block;
+        }
+        .body_wrappper {
+            padding-bottom: 60px;
+        }
+        .content {
+            height: 100%;
+            overflow-y: auto;
+        }
+        .bot_btns_layer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align:right;
+            padding:10px;
+            border-top: solid 1px #e1e1e1;
+        }
+    </style>
+</head>
+<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+<body class="body_wrappper">
+    <div class="content">
+        <div style="border-top:1px solid #000" th:each="operating : ${operatingList}">
+    <table border="0" cellpadding="1" cellspacing="2" style="border-collapse:separate; border-spacing:10px;">
+        <tr>
+         <td class="td1" style="width:150px;"><span style="color: red; margin-right:2px;"></span>类型：</td>
+            <td style="width:200px">
+                <span class="text-span" th:text="${operating.menuName}"></span>
+            </td>
+        </tr>
+        <tr>
+         <td class="td1" style="width:150px;"><span style="color: red; margin-right:2px;"></span>新闻标题：</td>
+            <td style="width:200px">
+                <span class="text-span" th:text="${operating.newsName}"></span>
+            </td>
+        </tr>
+        <tr>
+         <td class="td1" style="width:150px;"><span style="color: red; margin-right:2px;"></span>评论时间：</td>
+            <td style="width:200px">
+                <span class="text-span" th:text="${operating.createTime}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="td1" style="width:150px;"><span style="color: red; margin-right:2px;"></span>评论人：</td>
+            <td style="width:200px">
+                <span class="text-span" th:text="${operating.userName}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">评论内容：</td>
+            <td colspan="2" style="width:500px">
+                <span style="width:500px;height: 50px;" th:text="${operating.content}"></span>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    </div>
+    </div>
+    <div class="bot_btns_layer" id="isButton">
+        <a class="mini-button" onclick="onOk" style="width:80px;margin-right:20px;">同意</a>
+        <a class="mini-button" onclick="on" style="width:80px;margin-right:20px;">不同意</a>
+        <!--<a class="mini-button" onclick="CloseWindow('cancel')" style="width:80px;">不同意</a>-->
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var operatingIds = [[${operatingIds}]];
+        var query = [[${query}]];
+        /*]]>*/
+    </script>
+<script type="text/javascript">
+
+    mini.parse();
+    $(function(){
+        if(query == 'true'){
+            //隐藏按钮
+            $("#isButton").hide();
+        }
+    });
+    //同意
+    function onOk() {
+        if(confirm("是否同意评论内容？")) {
+            $.ajax({
+                url: "/web/v1/commentManager/passComment",
+                type: "post",
+                data: {operatingIds: operatingIds},
+                dataType: "json",
+                success: function (result) {
+
+                    if (result.state == 0) {
+                        CloseWindow("ok");
+                    } else {
+                        alert(result.message);
+                    }
+                }
+            });
+        }
+    }
+    
+    //不同意
+    function on() {
+        if(confirm("是否不同意评论内容？")) {
+            $.ajax({
+                url: "/web/v1/commentManager/vetoComment",
+                type: "post",
+                data: {operatingIds: operatingIds},
+                dataType: "json",
+                success: function (result) {
+
+                    if (result.state == 0) {
+                        CloseWindow("ok");
+                    } else {
+                        alert(result.message);
+                    }
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

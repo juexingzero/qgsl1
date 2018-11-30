@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyQyfrxxMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyfrxx">
+        <id column="FRXXZJ" jdbcType="VARCHAR" property="frxxzj" />
+        <result column="LXDH" jdbcType="VARCHAR" property="lxdh" />
+        <result column="XL" jdbcType="VARCHAR" property="xl" />
+        <result column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="GSLZW" jdbcType="VARCHAR" property="gslzw" />
+        <result column="XM" jdbcType="VARCHAR" property="xm" />
+        <result column="CSNY" jdbcType="VARCHAR" property="csny" />
+        <result column="ZZMM" jdbcType="VARCHAR" property="zzmm" />
+        <result column="SHZW" jdbcType="VARCHAR" property="shzw" />
+        <result column="SYQJYQSFHY" jdbcType="VARCHAR" property="syqjyqsfhy" />
+        <result column="XB" jdbcType="VARCHAR" property="xb" />
+        <result column="GSZW" jdbcType="VARCHAR" property="gszw" />
+        <result column="GQQK" jdbcType="VARCHAR" property="gqqk" />
+        <result column="MZ" jdbcType="VARCHAR" property="mz" />
+        <result column="QYID" jdbcType="VARCHAR" property="qyid" />
+        <result column="JG" jdbcType="VARCHAR" property="jg" />
+        <result column="IDENTITY" jdbcType="VARCHAR" property="identity" />
+        <result column="ZC" jdbcType="VARCHAR" property="zc" />
+        <result column="ZJ" jdbcType="VARCHAR" property="zj" />
+        <result column="STATE" jdbcType="VARCHAR" property="state" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyfrxx">
+       insert into member_qy_qyfrxx(FRXXZJ,LXDH,XL,JBXXZJ,GSLZW,XM,CSNY,ZZMM,SHZW,SYQJYQSFHY,XB,GSZW,GQQK,MZ,QYID,JG,IDENTITY,ZC,ZJ,STATE)
+       values
+       (#{frxxzj},#{lxdh},#{xl},#{jbxxzj},#{gslzw},#{xm},#{csny},#{zzmm},#{shzw},#{syqjyqsfhy},#{xb},#{gszw},#{gqqk},#{mz},
+        #{qyid},#{jg},#{identity},#{zc},#{zj},#{state})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyfrxx">
+        update member_qy_qyfrxx
+        <set>
+            <if test="frxxzj!=null and frxxzj != ''">FRXXZJ=#{frxxzj},</if>
+            <if test="lxdh!=null">LXDH=#{lxdh},</if>
+            <if test="xl!=null">XL=#{xl},</if>
+            <if test="jbxxzj!=null">JBXXZJ=#{jbxxzj},</if>
+            <if test="gslzw!=null">GSLZW=#{gslzw},</if>
+            <if test="xm!=null">XM=#{xm},</if>
+            <if test="csny!=null">CSNY=#{csny},</if>
+            <if test="zzmm!=null">ZZMM=#{zzmm},</if>
+            <if test="shzw!=null">SHZW=#{shzw},</if>
+            <if test="syqjyqsfhy!=null">SYQJYQSFHY=#{syqjyqsfhy},</if>
+            <if test="xb!=null">XB=#{xb},</if>
+            <if test="gszw!=null">GSZW=#{gszw},</if>
+            <if test="gqqk!=null">GQQK=#{gqqk},</if>
+            <if test="mz!=null">MZ=#{mz},</if>
+            <if test="qyid!=null">QYID=#{qyid},</if>
+            <if test="state!=null">STATE=#{state},</if>
+            <if test="jg!=null ">JG=#{jg},</if>
+            <if test="identity!=null ">IDENTITY=#{identity},</if>
+            <if test="zc!=null ">ZC=#{zc},</if>
+            <if test="zj!=null ">ZJ=#{zj},</if>
+        </set>
+        where FRXXZJ = #{frxxzj}
+    </update>
+
+    <!--根据企业基本信息表id查询数据-->
+    <select id="qeuryByQyid" parameterType="String" resultType="HashMap">
+        select a.frxxzj,a.xm,a.csny,a.xb,a.jg,a.identity,a.mz,a.zzmm,a.xl,a.gszw,a.zc,a.lxdh,a.zj,a.gqqk,a.syqjyqsfhy,a.state,
+        b.rdzw,b.zxzw,b.ttxhmc,b.ttxhzw,b.shzw
+         from member_qy_qyfrxx a
+         inner join member_ry_fgrszyzw b on b.PARAMID = a.frxxzj
+         where QYID = #{qyid}
+    </select>
+</mapper>

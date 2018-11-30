@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.NewsMapper">
+
+<insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.News" useGeneratedKeys="true" keyProperty="newsId">
+   insert into tb_news 
+     (newsId,newsName,newsImg,infoSource,priority,externalUrl,remark,newsContent,createTime,state,releaseUserId,
+      releaseArea,releaseTime,newsImgName,updateUserId,updateTime,newsType,videoUrl,imgType)
+   values 
+     (#{newsId},#{newsName},#{newsImg},#{infoSource},#{priority},#{externalUrl},#{remark},#{newsContent},#{createTime},#{state},#{releaseUserId},
+      #{releaseArea},#{releaseTime},#{newsImgName},#{updateUserId},#{updateTime},#{newsType},#{videoUrl},#{imgType})
+</insert>
+
+
+    <!--根据id 修改数据-->
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.News">
+        update tb_news
+        <set>
+            <if test="newsName!=null and newsName !='' ">newsName=#{newsName},</if>
+            <if test="newsImg!=null">newsImg=#{newsImg},</if>
+            <if test="infoSource!=null and infoSource !='' ">infoSource=#{infoSource},</if>
+            <if test="priority!=null">priority=#{priority},</if>
+            <if test="newsType!=null">newsType=#{newsType},</if>
+            <if test="externalUrl!=null and externalUrl !='' ">externalUrl=#{externalUrl},</if>
+            <if test="remark!=null">remark=#{remark},</if>
+            <if test="newsContent!=null">newsContent=#{newsContent},</if>
+            <if test="createTime!=null and createTime !='' ">createTime=#{createTime},</if>
+            <if test="state!=null">state=#{state},</if>
+            <if test="releaseUserId!=null and releaseUserId !='' ">releaseUserId=#{releaseUserId},</if>
+            <if test="releaseArea!=null and releaseArea !='' ">releaseArea=#{releaseArea},</if>
+            <if test="releaseTime!=null and releaseTime !='' ">releaseTime=#{releaseTime},</if>
+            <if test="newsImgName!=null">newsImgName=#{newsImgName},</if>
+            <if test="updateUserId!=null and updateUserId !='' ">updateUserId=#{updateUserId},</if>
+            <if test="updateTime!=null and updateTime !='' ">updateTime=#{updateTime},</if>
+
+            <if test="commentNums!=null">commentNums=ifnull(commentNums,0) + #{commentNums},</if>
+            <if test="collectionNums!=null">collectionNums=ifnull(collectionNums,0) + #{collectionNums},</if>
+            <if test="viewNums!=null">viewNums=ifnull(viewNums,0) + #{viewNums},</if>
+            <if test="likeNums!=null">likeNums=ifnull(likeNums,0) + #{likeNums},</if>
+
+            <if test="videoUrl!=null">videoUrl= #{videoUrl},</if>
+            <if test="imgType!=null">imgType= #{imgType},</if>
+        </set>
+        where newsId = #{newsId}
+    </update>
+
+    <!--查询列表-->
+    <select id="queryList" parameterType="com.manhui.gsl.jbqgsl.model.News"
+            resultType="com.manhui.gsl.jbqgsl.model.News">
+		    SELECT
+				a.*, GROUP_CONCAT(c.menuName) menuNames,
+				GROUP_CONCAT(c.menuId) menuIds,
+				c.menuModel,
+				u.user_name releaseUserName,
+				u.head_img,
+				d.dept_id deptId,
+				d.dept_name deptName
+			FROM
+				tb_news a
+			INNER JOIN tb_news_belong_menu b ON a.newsId = b.newsId
+			INNER JOIN tb_news_menu c ON c.menuId = b.menuId
+			AND c.state != 2
+			INNER JOIN sys_user u ON u.user_id = a.releaseUserId
+			INNER JOIN sys_user_position up ON up.user_id = a.releaseUserId
+			INNER JOIN sys_position p ON p.position_id = up.position_id
+			INNER JOIN sys_dept d ON d.dept_id = p.dept_id
+        <where>
+            <if test="stateList != null and stateList.size>0">
+                a.state in
+                <foreach collection="stateList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="menuNames != null and menuNames != ''">
+                and c.menuName like '%${menuNames}%'
+            </if>
+            <if test="newsName != null and newsName != ''">
+                and a.newsName like '%${newsName}%'
+            </if>
+            <if test="menuId != null">
+                and c.menuId = #{menuId}
+            </if>
+            <if test="newsType != null and newsType != ''">
+                and a.newsType like '%${newsType}%'
+            </if>
+            <if test="releaseUserId != null and releaseUserId != ''">
+                and a.releaseUserId = #{releaseUserId}
+            </if>
+            <if test="menuIdList != null and menuIdList.size() > 0">
+                and c.menuId in
+                <foreach collection="menuIdList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="deptId != null and deptId != ''">
+                and d.dept_id = #{deptId}
+            </if>
+        </where>
+        GROUP BY a.newsId
+        order  by a.releaseTime desc
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="queryById" parameterType="com.manhui.gsl.jbqgsl.model.News"
+            resultType="com.manhui.gsl.jbqgsl.model.News">
+         select n.*,menu.menuIds,menu.menuNames
+        from tb_news n ,(select GROUP_CONCAT(b.menuName)as menuNames, GROUP_CONCAT(b.menuId)as menuIds  from tb_news_belong_menu a
+          inner join tb_news_menu b on a.menuId = b.menuId where a.newsId = #{newsId} GROUP BY a.newsId) menu
+		where n.newsId = #{newsId}
+    </select>
+
+    <!--* app 搜索 新闻或栏目-->
+    <select id="getBlurryQueryNewsOrMenu" parameterType="Map" resultType="com.manhui.gsl.jbqgsl.model.CommonData">
+        select n.newsName name,n.newsId id,'news' type from tb_news n
+          where (n.newsName LIKE '%${name}%' or n.newsContent LIKE '%${name}%') and n.state = 2
+          UNion ALL
+        SELECT menuName name,menuId id,'menu' type from tb_news_menu where menuName LIKE '%${name}%' and state != 2
+    </select>
+</mapper>

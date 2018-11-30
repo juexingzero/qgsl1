@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.ForthwithEvaluateDetailMapper">
+	<select id="queryEvaluate" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluateDetail">
+		select * from forthwith_evaluate_detail where forthwith_id = #{forthwith_id}
+	</select>
+</mapper>

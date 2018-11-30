@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyQyjbxxMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyjbxx">
+        <id column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="QYMC" jdbcType="VARCHAR" property="qymc" />
+        <result column="QYJC" jdbcType="VARCHAR" property="qyjc" />
+        <result column="QYDMLX" jdbcType="VARCHAR" property="qydmlx" />
+        <result column="FDDBR" jdbcType="VARCHAR" property="fddbr" />
+        <result column="HYFL" jdbcType="VARCHAR" property="hyfl" />
+        <result column="HYDM" jdbcType="VARCHAR" property="hydm" />
+        <result column="HYXZ" jdbcType="VARCHAR" property="hyxz" />
+        <result column="QYLX" jdbcType="VARCHAR" property="qylx" />
+        <result column="QYZCDZ" jdbcType="VARCHAR" property="qyzcdz" />
+        <result column="QYSZXZS" jdbcType="VARCHAR" property="qyszxzs" />
+        <result column="QYSZXZS1" jdbcType="VARCHAR" property="qyszxzs1" />
+        <result column="QYSZXZQX" jdbcType="VARCHAR" property="qyszxzqx" />
+        <result column="QYSZXZXZ" jdbcType="VARCHAR" property="qyszxzxz" />
+        <result column="ZCZJ" jdbcType="DOUBLE" property="zczj" />
+        <result column="CLRQ" jdbcType="VARCHAR" property="clrq" />
+        <result column="JYQX" jdbcType="VARCHAR" property="jyqx" />
+        <result column="JYZT" jdbcType="VARCHAR" property="jyzt" />
+        <result column="GSH" jdbcType="VARCHAR" property="gsh" />
+        <result column="DSH" jdbcType="VARCHAR" property="dsh" />
+        <result column="LDRMZ" jdbcType="VARCHAR" property="ldrmz" />
+        <result column="GSZCPZH" jdbcType="VARCHAR" property="gszcpzh" />
+        <result column="ZYSY" jdbcType="VARCHAR" property="zysy" />
+        <result column="ZLBZ" jdbcType="VARCHAR" property="zlbz" />
+        <result column="QTZLBZ" jdbcType="VARCHAR" property="qtzlbz" />
+        <result column="ZTJZ" jdbcType="VARCHAR" property="ztjz" />
+        <result column="TYSHXYDM" jdbcType="VARCHAR" property="tyshxydm" />
+        <result column="COMPANY_CODE" jdbcType="VARCHAR" property="company_code" />
+        <result column="PERSON_ID" jdbcType="VARCHAR" property="person_id" />
+        <result column="PERSON_NEW" jdbcType="VARCHAR" property="person_new" />
+        <result column="SOURCE" jdbcType="VARCHAR" property="source" />
+        <result column="STATE" jdbcType="VARCHAR" property="state" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyjbxx">
+       insert into member_qy_qyjbxx(JBXXZJ,QYMC,QYJC,QYDMLX,FDDBR,HYFL,HYDM,HYXZ,QYLX,QYZCDZ,QYSZXZS,
+          QYSZXZS1,QYSZXZQX,QYSZXZXZ,ZCZJ,CLRQ,JYQX,JYZT,GSH,DSH,LDRMZ,GSZCPZH,ZYSY,ZLBZ,QTZLBZ,ZTJZ,TYSHXYDM,
+          COMPANY_CODE,PERSON_ID,PERSON_NEW,SOURCE,STATE)
+        values
+          (#{jbxxzj},#{qymc},#{qyjc},#{qydmlx},#{fddbr},#{hyfl},#{hydm},#{hyxz},#{qylx},#{qyzcdz},#{qyszxzs},#{qyszxzs1},
+          #{qyszxzqx},#{qyszxzxz},#{zczj},#{clrq},#{jyqx},#{jyzt},#{gsh},#{dsh},#{ldrmz},#{gszcpzh},#{zysy},#{zlbz},#{qtzlbz},
+          #{ztjz},#{tyshxydm},#{company_code},#{person_id},#{person_new},#{source},#{state})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyjbxx">
+        update member_qy_qyjbxx
+        <set>
+            <if test="qymc!=null">QYMC=#{qymc},</if>
+            <if test="qyjc!=null">QYJC=#{qyjc},</if>
+            <if test="qydmlx!=null">QYDMLX=#{qydmlx},</if>
+            <if test="fddbr!=null">FDDBR=#{fddbr},</if>
+            <if test="hyfl!=null">HYFL=#{hyfl},</if>
+            <if test="hydm!=null">HYDM=#{hydm},</if>
+            <if test="hyxz!=null">HYXZ=#{hyxz},</if>
+            <if test="qylx!=null">QYLX=#{qylx},</if>
+            <if test="qyzcdz!=null">QYZCDZ=#{qyzcdz},</if>
+            <if test="qyszxzs!=null">QYSZXZS=#{qyszxzs},</if>
+            <if test="qyszxzs1!=null">QYSZXZS1=#{qyszxzs1},</if>
+            <if test="qyszxzqx!=null">QYSZXZQX=#{qyszxzqx},</if>
+            <if test="qyszxzxz!=null">QYSZXZXZ=#{qyszxzxz},</if>
+            <if test="qyszxzxz!=null">ZCZJ=#{zczj},</if>
+            <if test="clrq!=null">CLRQ=#{clrq},</if>
+            <if test="jyqx!=null">JYQX=#{jyqx},</if>
+            <if test="jyzt!=null">JYZT=#{jyzt},</if>
+            <if test="gsh!=null">GSH=#{gsh},</if>
+            <if test="dsh!=null">DSH=#{dsh},</if>
+            <if test="ldrmz!=null">LDRMZ=#{ldrmz},</if>
+            <if test="gszcpzh!=null">GSZCPZH=#{gszcpzh},</if>
+            <if test="zysy!=null">ZYSY=#{zysy},</if>
+            <if test="zlbz!=null">ZLBZ=#{zlbz},</if>
+            <if test="qtzlbz!=null">QTZLBZ=#{qtzlbz},</if>
+            <if test="ztjz!=null">ZTJZ=#{ztjz},</if>
+            <if test="tyshxydm!=null ">TYSHXYDM=#{tyshxydm},</if>
+            <if test="company_code!=null">COMPANY_CODE=#{company_code},</if>
+            <if test="person_id!=null">PERSON_ID=#{person_id},</if>
+            <if test="person_new!=null">PERSON_NEW=#{person_new},</if>
+            <if test="source!=null">SOURCE=#{source},</if>
+            <if test="state!=null">STATE=#{state},</if>
+        </set>
+        where JBXXZJ = #{jbxxzj}
+    </update>
+
+    <!---->
+    <select id="queryById" parameterType="String" resultMap="BaseResultMap">
+        select * from member_qy_qyjbxx where JBXXZJ = #{jbxxzj}
+    </select>
+    
+    <!--查询企业入会基本信息-->
+    <select id="queryCompanyApplyData" parameterType="String" resultType="HashMap">
+        select a.joinId,a.createTime,a.memberType,a.memberId,a.state,a.joinObjId,a.position,a.joinObjName,
+        b.jbxxzj qyid,b.qymc,b.tyshxydm,b.hyfl,b.qylx,b.qyzcdz,b.zczj,b.clrq,b.STATE memberState,
+        c.qywz,c.phone,c.fax,c.zip_code,c.staff_number,c.party_number,c.college_number,c.is_society,c.qypp,c.jyfw,
+        d.lxrxm,d.lxrlxfs,
+        e.sfbrzwgxjsqy,e.gxjsqyrzjg,e.sfhdwmzyjckq,e.wmzyrzbm,e.sftgzlglrz,e.zlglrzmb,
+        g.approve_fail_info
+        from member_join_manager a
+        inner join member_qy_qyjbxx b on b.jbxxzj = a.memberId
+        left join member_qy_qyjs c on c.QYID = a.memberId
+        left join member_qy_qylxrxx d on d.QYID = a.memberId
+        left join member_qy_qyrzqk e on e.QYID = a.memberId
+        left join (select * from member_approve where member_id = #{joinId} order by approve_time desc limit 0,1) g on g.member_id = a.memberId
+        where a.joinId = #{joinId}
+    </select>
+</mapper>

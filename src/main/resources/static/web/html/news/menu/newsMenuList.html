@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>修改根栏目</title>
+    </head>
+    <script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+
+    <body>
+        <div class="mini-toolbar" style="margin:0;padding:0px;border-bottom:none;">
+            <table style="width:100%;">
+                <tr>
+                    <!--<td class="title">
+
+                        <a href="javascript:void(0)" >查看未使用栏目</a>&nbsp;&nbsp;
+                        <a href="javascript:void(0)" >查看所有栏目</a>&nbsp;&nbsp;
+                    </td>-->
+                    <td align="right">
+<!--                         <a href="javascript:void(0)" onclick="addRoot()"  style="text-decoration:none;">添加根栏目</a>&nbsp;&nbsp; -->
+						<a class="mini-button" onclick="addRoot()"><i class="fa fa-plus"></i>新增根栏目</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="treegrid" class="mini-treegrid" style="width:100%;height:800px;" url="/web/v1/newsMenu/queryListTree" treeColumn="name" idField="menuId" parentField="superiorId"
+        	resultAsTree="false" allowResize="true" expandOnLoad="false" showTreeIcon="true" showTreeLines="true" allowSelect="false" enableHotTrack="true" ondrawcell="createCell">
+            <div property="columns">
+                <div field="menuName" name="name" width="20%" headerAlign="center">栏目名称</div>
+                <div field="menuModel" width="10%" headerAlign="center" align="center" renderer="onConvertMenuModel">栏目模型</div>
+                <div field="remark" headerAlign="center">栏目说明</div>
+                <div field="createTime" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm">创建时间</div>
+                <div field="menuId" width="15%" headerAlign="center" align="center">操作</div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            mini.parse();
+            var treegrid = mini.get("treegrid");
+            $(function(){
+                // treegrid.load();
+            });
+
+          	//转换栏目模型
+          	function onConvertMenuModel(e) {
+          		if(e.record.menuModel == "articleType"){
+                	return "文章类型";
+              	}else if(e.record.menuModel == "listType"){
+                	return "列表类型";
+              	}
+          	}
+
+            //新增根节点
+            function addRoot(){
+                // window.location.href = "/web/v1/newsMenu/addRootPage";
+                mini.open({
+                    url: "/web/v1/newsMenu/addRootPage",
+                    title: "新增根栏目",
+                    width: 600,
+                    height: 620,
+                    ondestroy: function (action) {
+                        window.location.reload();
+                    }
+                });
+            }
+            function createCell(e){
+                if(e.field == "menuId"){
+                    var row = e.row;
+                    var menuId = row.menuId;
+                    if(row.type==0){//顶级父节点
+                        var record = e.record;
+                        var funs = record.functions;
+                        var html = '';
+                        html = createEdit(html,menuId);
+                        html = createChild(html,menuId);
+                        e.cellHtml = html;
+                    }else if(row.type==1){
+                        var record = e.record;
+                        var funs = record.functions;
+                        var html = '';
+                        html = createEdit(html,menuId);
+                        html = createChild(html,menuId);
+                        html = delChild(html,menuId);
+                        e.cellHtml = html;
+                    }
+                }
+            }
+
+            function createEdit(html,menuId){
+                html = html+ '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="edit('+menuId+')" style="text-decoration:none;" class="cus_btn_grid">编辑</a>'
+                return html;
+            }
+            function createChild(html,menuId){
+                html = html+ '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="addChild('+menuId+')" style="text-decoration:none;" class="cus_btn_grid">新增子栏目</a>'
+                return html;
+            }
+            function delChild(html,menuId){
+                html = html+ '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="del('+menuId+')" style="text-decoration:none;" class="cus_btn_grid_del">删除</a>'
+                return html;
+            }
+
+            //创建子节点页面跳转
+            function addChild(menuId) {
+                // window.location.href = "/web/v1/newsMenu/addChildPage?menuId="+menuId;
+                mini.open({
+                    url: "/web/v1/newsMenu/addChildPage?menuId=" + menuId,
+                    title: "新增子栏目",
+                    width: 600,
+                    height: 640,
+                    ondestroy: function (action) {
+                        window.location.reload();
+                    }
+                });
+            }
+            //删除节点
+            function del(menuId) {
+                if (confirm("是否确定删除！")) {
+                    $.ajax({
+                        url: "/web/v1/newsMenu/delMenu?menuId=" +menuId,
+                        success: function (result) {
+                            result = JSON.parse(result);
+                            if(result.state == 0){
+                                var treeNode = treegrid.getList ();//获得所有节点
+                                for(var i=0;i<treeNode.length;i++){
+                                    if(treeNode[i].menuId == menuId){
+                                        treegrid.removeNode(treeNode[i]);//删除节点
+                                    }
+                                }
+                            }else{
+                                alert(result.message)
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                }
+            }
+
+            //修改节点
+            function edit(menuId){
+                // window.location.href = "/web/v1/newsMenu/editPage?menuId="+menuId;
+                mini.open({
+                    url: "/web/v1/newsMenu/editPage?menuId="+menuId,
+                    title: "编辑根栏目",
+                    width: 600,
+                    height: 620,
+                    ondestroy: function (action) {
+                        window.location.reload();
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

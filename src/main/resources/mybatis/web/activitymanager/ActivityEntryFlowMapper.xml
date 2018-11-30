@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.activity.ActivityEntryFlowMapper">
+
+	<select id="getActivityEntryFlowLists" resultType="com.manhui.gsl.jbqgsl.model.activitymanager.ActivityEntryFlow">
+    	SELECT
+			*
+		FROM
+			activity_entry_flow
+		WHERE
+			activity_id=#{activity_id}
+			
+ 		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	  </select>
+	    
+	  <select id="queryActivityEntryFlowTotal" resultType="int">
+    	SELECT
+			count(*)
+		FROM
+			activity_entry_flow
+		WHERE 1=1
+		<if test="activity_id != null and activity_id != ''">
+			and activity_id=#{activity_id}		
+		</if>
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	  </select>
+	  
+	  <select id="queryActivityEntryFlowNum" resultType="int">
+	  	select
+	  	<if test="state==0">
+	  	 sum(entry_num) 
+	  	</if>
+	  	<if test="state==1">
+	  	count(*)
+	  	</if>
+	  	from activity_entry_flow
+	  </select>
+</mapper>

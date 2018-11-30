@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加用户</title>
+	<link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<script src="/resources/miniui/res/third-party/swfupload/swfupload.js" type="text/javascript"></script>
+	<style type="text/css">
+		.td1 {text-align: right;}
+	</style>
+</head>
+
+</body>
+	<div id="form1" class="from">
+	     <table>
+	        <input style="display: none;" name="user_id" id="user_id" value="" class="mini-textbox">
+	        <tr>
+	          	<td class="td1"><span style="color: red; margin-right:2px;">*</span>登录账号：</td>
+	            <td>
+	                <input name="login_name" id="login_name" class="mini-textbox" style="width: 180px;" required="true" />
+	            </td>
+	            <td style="width:100px;"></td>
+	            <td class="td1"><span style="color: red; margin-right:2px;">*</span>登录密码：</td>
+	            <td>
+	                <input name="password" id="password" class="mini-password" required="true" style="width: 180px;" />
+	            </td>
+	        </tr>
+	        <tr>
+	            <td class="td1"><span style="color: red; margin-right:2px;">*</span>用户名称：</td>
+	            <td>
+	                <input name="user_name" id="user_name" class="mini-textbox" style="width: 180px;" required="true" />
+	            </td>
+	            <td></td>
+	      	    <td class="td1"><span style="color: red; margin-right:2px;">*</span>用户工号：</td>
+	            <td>
+	                <input name="user_no" id="user_no" class="mini-textbox" vtype="float" style="width: 180px;" required="true" />
+	            </td>
+	        </tr>
+	          <tr>
+	            <td class="td1"><span style="color: red; margin-right:2px;">*</span>用户性别：</td>
+	            <td>
+	                <input name="user_sex" id="user_sex" class="mini-combobox" style="width:180px;" required="true" value="1" data="[{id:'0',text:'女'},{id:'1',text:'男'}]" />
+	            </td>   
+	            <td></td>
+	             	<td class="td1">用户头像：</td>
+	            <td>
+	                <input id="head_img" class="mini-fileupload" name="head_img" style="width:180px;" limitType="*.bmp;*.jpg;*.gif"
+					    flashUrl="/resources/miniui/res/third-party/swfupload/swfupload.swf"
+					     uploadUrl="/upload/backUserImg"
+					     onuploadsuccess="onUploadSuccess"
+	                     onuploaderror="onUploadError" onfileselect="onFileSelect"/>
+	              <a checkOnClick="true" groupName="search" class="mini-button" id="fileupload" onclick="startUpload()">上传</a>
+	              <a checkOnClick="true" groupName="search" class="mini-button" id="filedel" onclick="delUpload()">删除</a>
+	            </td>
+	        </tr>
+	        <tr>
+	         	<td class="td1">默认岗位：</td>
+	            <td>
+	                <input class="mini-buttonedit" name="position_id" id="position_id" style="width: 180px;" onbuttonclick="onButtonEdit" required="false" allowInput="false" />
+	            </td>
+	            <td></td>
+	            <td class="td1">所属部门：</td>
+	            <td>
+	                <input name="dept_name" id="dept_name" class="mini-textbox" style="width: 180px;" allowInput="false" />
+	            </td>
+	        </tr>
+	        <tr>
+	         	<td class="td1"><span style="color: red; margin-right:2px;">*</span>账号状态：</td>
+	            <td>
+	                <input name="account_status" id="account_status" class="mini-combobox" style="width:180px;" required="true" value="1" data="[{id:'1',text:'启用'},{id:'0',text:'禁用'}]" />
+	            </td>
+	            <td></td>
+	            <td class="td1"><span style="color: red; margin-right:2px;">*</span>超级用户：</td>
+	            <td>
+	                <input name="user_type" id="user_type" class="mini-combobox" style="width:180px;" required="true" value="0" data="[{id:'1',text:'是'},{id:'0',text:'否'}]" />
+	            </td>
+	        </tr>
+	        <tr>
+	           	<td class="td1">手机号码：</td>
+	            <td>
+	                <input name="mobile_no" id="mobile_no" class="mini-textbox"  style="width: 180px;"  />
+	            </td>
+	            <td></td>
+	            <td class="td1">电子邮箱：</td>
+	            <td>
+	                <input name="email" id="email" class="mini-textbox" style="width: 180px;" vtype="email" />
+	            </td>
+	        </tr>
+	        <tr>
+	            <td class="td1">办公电话：</td>
+	            <td>
+	                <input name="work_phone" id="work_phone" class="mini-textbox" style="width: 180px;" vtype="float;maxLength:13;" />
+	            </td>
+	            <td></td>
+	            <td class="td1">家庭电话：</td>
+	            <td>
+	                <input name="home_phone" id="home_phone" vtype="float;maxLength:13;" class="mini-textbox" style="width: 180px;" />
+	            </td>												
+	        </tr>
+	        <tr>
+	            <td class="td1">备注说明：</td>
+	            <td colspan="5">
+	                <input name="memo" id="memo" class="mini-textarea" style="height:80px;width:545px;" />
+	            </td>
+	        </tr>
+	    </table>
+	    
+	    <div class="mini-toolbar bot_btn">
+	        <a class="mini-button" style="width:60px;" onclick="save()">保存</a>
+	        <a class="mini-button" style="width:60px;" onclick="CloseWindow('cancel')">取消</a>
+	    </div>
+	</div>
+	
+	<script src="/resources/organizational/js/addUser.js" type="text/javascript"></script>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发起评价</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<link type="text/css" rel="stylesheet" href="/resources/organizational/css/style.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style>
+ 		body {overflow-y: auto;}
+		body .mini-grid-rows-view {overflow-x: hidden;}
+		.left {float: left;}
+		.right {float: right; margin-right:25px;}
+		.td_check {padding-bottom: 20px;}
+		.item_div {padding: 0 25px 10px 25px;border-bottom: solid 1px #e1e1e1;}
+		.item_div > h4 {line-height: 30px;overflow: hidden;font-size: 14px;}
+		.item_div > h4 .blue_text {color: #87CEFA;font-size: 20px;}
+		.item_row {line-height: 25px;overflow: hidden;}
+		.asterisk {color:red;margin-right:2px;}
+		.sel_div {margin:5px 0px 5px 0px;padding:0px;border-bottom:none;}
+		.table_edit td { padding-bottom: 4px; }
+		label{
+			text-align: right;
+		}
+		body .mini-resizer-trigger,
+		body .mini-grid-vscroll{
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="initiateForm" style="overflow-y:auto;">
+		<input class="mini-hidden" name="topic_id" th:value="${topic_id}">
+		<input class="mini-hidden" name="operation_flag" th:value="${operation_flag}">
+		<!-- 主题信息 -->
+	    <div class="table_edit" style="margin:5px 5px 5px 5px;padding:0px;border-bottom:none;">
+	        <table style="width:100%; table-layout:fixed;background-color:#ffffff;">
+	            <tr>
+	                <td width="350">
+	                	<label style="font-family:Verdana;"><span class="asterisk">*</span>评价主题:</label>
+	                    <input name="topic_name" emptyText="请输入评价主题" class="mini-textbox" style="width:75%" required="true" maxLength="30"/>
+	                </td>
+	                <td width="350">
+	                	<label style="font-family:Verdana; vertical-align: middle"><span class="asterisk">*</span>主题类型:</label>
+	                	<input name="topic_type" class="mini-radiobuttonlist" style="vertical-align: middle; display: inline-block" data="[{id:1, text:'半年评价'}, {id:2, text:'年度评价'}]" value="1"/>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td width="350">
+	                	<label style="font-family:Verdana;"><span class="asterisk">*</span>标准分类:</label>
+	                    <select name="standard_type" class="mini-combobox" style="width:75%" value="1" onvaluechanged="onLoadStandardName">
+	                        <option value="1">评政府</option>
+	                        <option value="2">评企业</option>
+	                    </select>
+	                </td>
+	                <td width="350">
+	                	<label style="font-family:Verdana;"><span class="asterisk">*</span>标准名称:</label>
+	                    <select name="standard_name" class="mini-combobox" style="width:60%" valueField="standard_id" textField="standard_name" onvaluechanged="onLoadStandardList">
+	                        <option value="0">--请选择--</option>
+	                    </select>
+	                    <a id="standardDetail" onclick="onToStandardDetail()" style="color:blue;">标准详情</a>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td width="700" colspan="2">
+	                	<label style="font-family:Verdana;"><span class="asterisk">*</span>评价时间:</label>
+			            <input name="evaluate_start_time" emptyText="开始时间" class="mini-datepicker" style="width:17.5%" allowInput="false" format="yyyy-MM-dd H:mm" timeFormat="H:mm" showTime="true" ondrawdate="onDrawDate" required="true"/>&nbsp;-
+			            <input name="evaluate_end_time" emptyText="结束时间" class="mini-datepicker" style="width:17.5%" allowInput="false" format="yyyy-MM-dd HH:mm" timeFormat="HH:mm" showTime="true" ondrawdate="onDrawDate" required="true"/>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td width="700" colspan="2">
+	                	<label style="font-family:Verdana;"><span class="asterisk">*</span>主题描述:</label>
+                		<input name="topic_describe" emptyText="请输入评价描述（0~200字）" class="mini-textarea" style="width:90%;height:80px;" required="true" maxLength="200"/>
+	                </td>
+	            </tr>
+	        </table>
+	    </div>
+	    
+		<!-- 机构信息 -->
+	    <div style="padding:0px;border-bottom:none;">
+			<div id="passive_active_tabs" class="mini-tabs" style="margin-top:20px;width:100%;" onactivechanged="onInstitutionShow">
+			    <div id="id_passive" class="mini-tabs" title="被评价方"></div>
+			    <div id="id_active" class="mini-tabs" title="评价方"></div>
+			</div>
+	    	<!-- 被评价方 -->
+	    	<div id="passive_div" class="mini-toolbar no_bor">
+			    <div class="sel_div">
+			    	<a class="mini-button"><span onclick="onInstitutionSelect('passive_div')">+选择</span></a>&nbsp;
+			    	<a class="mini-button">已选<span id="passive_total">0</span>家 | <span onclick="onInstitutionClear('passive_div', 'passive_total')">清空</span></a>
+			    </div>
+			    <div id="datagrid_passiveList" class="mini-datagrid" style="height:300px;"
+			    	sizeList="[10,20,50,100]" pageSize="10" idField="topic_id" multiSelect="true" showPager="false">
+			        <div property="columns">
+        				<div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div> 
+			            <div field="institution_name" headerAlign="center">机构名称</div>
+			            <div field="industry_name" headerAlign="center" align="center" visible="false">关联行业</div>
+			            <div field="institution_linkman_name" headerAlign="center" align="center">联系人姓名</div>
+			            <div field="institution_linkman_phone" headerAlign="center" align="center">联系人电话</div>
+			            <div name="operation_but" width="10%" headerAlign="center" align="center" renderer="onPassiveOperation">操作</div>
+			            <div field="institution_id" headerAlign="center" align="center" visible="false">机构ID</div>
+			            <div field="institution_type" headerAlign="center" align="center" visible="false">机构类型</div>
+			        </div>
+			    </div>
+	    	</div>
+	    	<!-- 评价方 -->
+	    	<div id="active_div" class="mini-toolbar no_bor" style="display:none;">
+			    <div class="sel_div">
+			    	<a class="mini-button"><span onclick="onInstitutionSelect('active_div')">+选择</span></a>&nbsp;
+			    	<a class="mini-button">已选<span id="active_total">0</span>家 | <span onclick="onInstitutionClear('active_div', 'active_total')">清空</span></a>
+			    </div>
+			    <div id="datagrid_activeList" class="mini-datagrid" style="width:100%;height:300px;" 
+			    	sizeList="[10,20,50,100]" pageSize="10" idField="topic_id" multiSelect="true" showPager="false">
+			        <div property="columns">
+        				<div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div> 
+			            <div field="institution_name" headerAlign="center">机构名称</div>
+			            <div field="industry_name" headerAlign="center" align="center" visible="false">关联行业</div>
+			            <div field="institution_linkman_name" headerAlign="center" align="center">联系人姓名</div>
+			            <div field="institution_linkman_phone" headerAlign="center" align="center">联系人电话</div>
+			            <div field="operation_but" width="10%" headerAlign="center" align="center" renderer="onActiveOperation">操作</div>
+			            <div field="institution_id" headerAlign="center" align="center" visible="false">机构ID</div>
+			            <div field="institution_type" headerAlign="center" align="center" visible="false">机构类型</div>
+			            <div field="is_evaluate" name="is_evaluate" headerAlign="center" align="center" visible="false" renderer="onConvertIsEvaluate">是否完成评价</div>
+			            <div field="evaluate_time" name="evaluate_time" width="20%" headerAlign="center" align="center" visible="false" renderer="onConvertEvaluateTime">完成评价时间</div>
+			        </div>
+			    </div>
+	    	</div>
+	    </div>
+	    
+	    <div class="mini-toolbar bot_btn">
+		    <a class="mini-button saveBut" style="width:60px;" onclick="onSave()">确定</a>
+		    <a class="mini-button cancelBut" style="width:60px;" onclick="onCancel()">取消</a>
+		    <a class="mini-button closeBut" style="width:60px;display:none;" onclick="onCancel()">关闭</a>
+	    </div>
+	</div>
+	
+    <script type="text/javascript" src="/resources/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="/resources/js/topicEvaluate/initiateEvaluate.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.datareport.DataRelationMapper">
+    <select id="queryDataReportList" parameterType="map" resultType="map">
+        select mdr.template_id,mdr.qy_id,mdr.report_time,mdr.data_report_id,qy.QYMC
+        from member_data_relation mdr INNER JOIN member_qy_qyjbxx qy
+        where mdr.qy_id = qy.JBXXZJ
+        and template_id = #{template_id}
+        <if test="qymc != null and qymc != ''">
+            and qy.QYMC = #{qymc}
+        </if>
+        and report_state = '1'
+        order by mdr.report_time desc
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryDataReportListCount" parameterType="map" resultType="integer">
+        select count(mdr.id)
+        from member_data_relation mdr INNER JOIN member_qy_qyjbxx qy
+        where mdr.qy_id = qy.JBXXZJ
+        and template_id = #{template_id}
+        <if test="qymc != null and qymc != ''">
+            and qy.QYMC = #{qymc}
+        </if>
+        and report_state = '1'
+        order by mdr.report_time desc
+    </select>
+
+    <select id="queryEnterpriseDataReportDetail" parameterType="java.lang.String" resultType="map">
+        select qy.QYMC,qy.TYSHXYDM,param.param_value as HYFL,mde.zyywly1,mde.zyszebl1,mde.zyywly2,mde.zyszebl2,mde.zyywly3,mde.zyszebl3,
+        mde.zycp,mde.bndysze,mde.sndysze,mde.bndlrze,mde.sndlrze,mde.bndshjlr,mde.sndshjlr,mde.bndzcze,mde.sndzcze,mde.bndgdzcjz,
+        mde.sndgdzcjz,mde.bndjzcze,mde.sndjzcze,mde.bndjsze,mde.sndjsze,mde.bndyffy,mde.sndyffy,mde.bndckze,mde.sndckze,mde.bndhwsr,
+        mde.sndhwsr,mde.bndnmygrs,mde.sndnmygrs,mde.bndnmhwgy,mde.sndnmhwgy
+        from member_data_enterprise mde
+        INNER JOIN member_qy_qyjbxx qy
+        left join sys_param param on qy.HYFL = param.param_key
+        where mde.qy_id = qy.JBXXZJ
+        and mde.id = #{data_report_id}
+    </select>
+
+    <select id="saveEnterpriseData" parameterType="com.manhui.gsl.jbqgsl.model.datareport.DataRelation">
+      insert into member_data_relation
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            id,
+            template_id,
+            <if test="qy_id !=null and qy_id != ''">qy_id,</if>
+            <if test="gr_id !=null and gr_id != ''">gr_id,</if>
+            <if test="tt_id !=null and tt_id != ''">tt_id,</if>
+            <if test="report_time !=null and report_time != ''">report_time,</if>
+            data_report_id,
+            <if test="report_state !=null and report_state != ''">report_state,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{id},
+            #{template_id},
+            <if test="qy_id !=null and qy_id != ''">#{qy_id},</if>
+            <if test="gr_id !=null and gr_id != ''">#{gr_id},</if>
+            <if test="tt_id !=null and tt_id != ''">#{tt_id},</if>
+            <if test="report_time !=null and report_time != ''">#{report_time},</if>
+            #{data_report_id},
+            <if test="report_state !=null and report_state != ''">#{report_state},</if>
+        </trim>
+    </select>
+</mapper>

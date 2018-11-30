@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.ry.MemberRyXlyxwMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyXlyxw">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="RYBM" jdbcType="VARCHAR" property="rybm" />
+        <result column="XLDM" jdbcType="VARCHAR" property="xldm" />
+        <result column="XLMC" jdbcType="VARCHAR" property="xlmc" />
+        <result column="BYRQ" jdbcType="VARCHAR" property="byrq" />
+        <result column="XXMC" jdbcType="VARCHAR" property="xxmc" />
+        <result column="SXZYDM" jdbcType="VARCHAR" property="sxzydm" />
+        <result column="XXWCQK" jdbcType="VARCHAR" property="xxwcqk" />
+        <result column="XWMC" jdbcType="VARCHAR" property="xwmc" />
+        <result column="XWDM" jdbcType="VARCHAR" property="xwdm" />
+        <result column="XWSYRQ" jdbcType="VARCHAR" property="xwsyrq" />
+        <result column="XWSYDW" jdbcType="VARCHAR" property="xwsydw" />
+        <result column="RYID" jdbcType="VARCHAR" property="ryid" />
+    </resultMap>
+
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyXlyxw">
+       insert into member_ry_xlyxw(ID,RYBM,XLDM,XLMC,BYRQ,XXMC,SXZYDM,XXWCQK,XWMC,XWDM,XWSYRQ,XWSYDW,RYID)
+       values
+       (#{id},#{rybm},#{xldm},#{xlmc},#{byrq},#{xxmc},#{sxzydm},#{xxwcqk},#{xwmc},#{xwdm},#{xwsyrq},#{xwsydw},#{ryid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyXlyxw">
+        update member_ry_xlyxw
+        <set>
+            <if test="rybm!=null">RYBM = #{rybm},</if>
+            <if test="xldm!=null">XLDM = #{xldm},</if>
+            <if test="xlmc!=null">XLMC = #{xlmc},</if>
+            <if test="byrq!=null">BYRQ = #{byrq},</if>
+            <if test="xxmc!=null ">XXMC = #{xxmc},</if>
+            <if test="sxzydm!=null">SXZYDM = #{sxzydm},</if>
+            <if test="xxwcqk!=null">XXWCQK = #{xxwcqk},</if>
+            <if test="xwmc!=null">XWMC = #{xwmc},</if>
+            <if test="xwdm!=null">XWDM = #{xwdm},</if>
+            <if test="xwsyrq!=null">XWSYRQ = #{xwsyrq},</if>
+            <if test="xwsydw!=null">XWSYDW = #{xwsydw},</if>
+            <if test="ryid!=null and ryid !='' ">RYID = #{ryid},</if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!--根据 人员表 id 查询数据-->
+    <select id="appQueryMapByRyid" parameterType="String" resultType="HashMap">
+        select id,rybm,xldm,xlmc,byrq,xxmc,sxzydm,xxwcqk,xwmc,xwdm,xwsyrq,xwsydw
+         from member_ry_xlyxw where RYID = #{ryid}
+    </select>
+
+    <!---->
+    <update id="updateByRyid" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyXlyxw">
+        update member_ry_xlyxw
+        <set>
+            <if test="rybm!=null">RYBM = #{rybm},</if>
+            <if test="xldm!=null">XLDM = #{xldm},</if>
+            <if test="xlmc!=null">XLMC = #{xlmc},</if>
+            <if test="byrq!=null">BYRQ = #{byrq},</if>
+            <if test="xxmc!=null">XXMC = #{xxmc},</if>
+            <if test="sxzydm!=null">SXZYDM = #{sxzydm},</if>
+            <if test="xxwcqk!=null">XXWCQK = #{xxwcqk},</if>
+            <if test="xwmc!=null">XWMC = #{xwmc},</if>
+            <if test="xwdm!=null">XWDM = #{xwdm},</if>
+            <if test="xwsyrq!=null">XWSYRQ = #{xwsyrq},</if>
+            <if test="xwsydw!=null">XWSYDW = #{xwsydw},</if>
+            <if test="ryid!=null and ryid != ''">RYID = #{ryid},</if>
+        </set>
+        where RYID = #{ryid}
+    </update>
+</mapper>

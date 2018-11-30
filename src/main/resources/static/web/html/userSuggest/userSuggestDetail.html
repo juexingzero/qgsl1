@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发起评价2</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<link type="text/css" rel="stylesheet" href="/resources/organizational/css/style.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+		body .mini-grid-rows-view {overflow-x: hidden;}
+		.pb_10 {
+			padding-bottom: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="form_userSuggestDetail" style="overflow-y:auto;">
+	    <div class="table_edit" style="margin:5px 5px 5px 5px;padding:0px;border-bottom:none;">
+	        <table style="width:100%; table-layout:fixed;background-color:#ffffff;">
+	            <tr>
+	                <td width="80" align="right"><label style="line-height: 30px;">联系人：</label></td>
+	                <td align="left"><span id="user_name"></span></td>
+	                <td width="80" align="right"><label>联系电话：</label></td>
+	                <td align="left"><span id="user_phone"></span></td>
+	            </tr>
+	            <tr>
+	                <td align="right"><label>反馈时间：</label></td>
+	                <td align="left"><span id="create_time"></span></td>
+	            </tr>
+	            <tr>
+	                <td align="right"><label>反馈内容：</label></td>
+	                <td colspan="3" style="padding-bottom: 15px; padding-top: 5px;">
+                		<input name="content" class="mini-textarea" style="width:96%;height:200px;" th:value="${userSuggest.content}" enabled="false"/>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td align="right"><label>回复内容：</label></td>
+	                <td colspan="3" >
+                		<input name="answer_content" emptyText="请输入回复内容（0~200字）" class="mini-textarea" style="width:96%;height:200px;" required="true" maxLength="200" th:value="${userSuggest.answer_content}"/>
+	                </td>
+	            </tr>
+	        </table>
+	    </div>
+	    
+	    <div class="mini-toolbar bot_btn">
+		    <a class="mini-button saveBut" style="width:60px;" onclick="save()">提交</a>
+		    <a class="mini-button cancelBut" style="width:60px;" onclick="onCancel()">取消</a>
+		    <a class="mini-button closeBut" style="width:60px;display:none;" onclick="onCancel()">关闭</a>
+	    </div>
+	</div>
+	
+    <script th:inline="javascript">
+        function init(){
+        	$("#user_name").text([[${userSuggest.user_name}]]);
+        	$("#user_phone").text([[${userSuggest.user_phone}]]);
+        	$("#create_time").text([[${userSuggest.create_time}]]);
+        }
+		var id = [[${userSuggest.id}]];
+		var user_id = [[${userSuggest.user_id}]];
+		var user_name= [[${userSuggest.user_name}]];
+		var is_answer = [[${userSuggest.is_answer}]];
+		var content = [[${userSuggest.content}]];
+    </script>
+    <script type="text/javascript">
+	    mini.parse();
+	    init();
+	    
+    	$(function(){
+    		if(is_answer == "0"){
+    			$(".saveBut").show();
+    			$(".cancelBut").show();
+    			$(".closeBut").hide();
+    			mini.getByName("answer_content").setEnabled(true);
+    		}else if(is_answer == "1"){
+    			$(".saveBut").hide();
+    			$(".cancelBut").hide();
+    			$(".closeBut").show();
+    			mini.getByName("answer_content").setEnabled(false);
+    		}
+    	});
+
+    	//提交回复内容
+    	function save(){
+    		var form = new mini.Form("#form_userSuggestDetail");
+    	  	form.validate();
+    	  	if (form.isValid() == false){
+    	  		return;
+    	  	}
+    	  	var answer_content = mini.getByName("answer_content").getValue();
+    	  	$.ajax({
+    			type : "POST",
+    			url : "/web/v1/userSuggest/saveUserSuggest",
+    			data : {
+    				id		: id,
+    				user_id : user_id,
+    				user_name :user_name,
+    				content	: content,
+    				answer_content	: answer_content
+    			},
+    			success : function(msg) {
+    				if (msg.state == "1") {
+    				  	$(".saveBut").attr("disabled",true);
+    					CloseWindow("ok");
+    				}else{
+    	            	alert("操作失败");
+    	            }
+    			}
+    		});
+    	}
+    	
+    	//取消
+    	function onCancel() {
+    	  CloseWindow("cancel");
+    	}
+    </script>
+</body>
+</html>

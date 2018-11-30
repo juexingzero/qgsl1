@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.manhui.gsl.jbqgsl.dao.app.meetingmanager.AppMeetingReceptMapper">
+	<select id="queryMeetingReceptDetail"
+		resultType="com.manhui.gsl.jbqgsl.model.MeetingReceipt"
+		parameterType="map">
+		SELECT
+			meeting_id,
+			receipt_id,
+			member_id,
+			participate_state,
+			is_leave,
+			leave_reason,
+			company_name,
+			person,
+			person_num,
+			person_content,
+			plate_number
+		FROM
+		meeting_receipt
+		<where>
+			<if test="meeting_id !=null and meeting_id !=''">
+				and meeting_id = #{meeting_id}
+			</if>
+			<if test="member_id !=null and member_id !=''">
+				and member_id = #{member_id}
+			</if>
+		</where>
+	</select>
+	<insert id="saveMeetingRecept">
+		INSERT INTO meeting_receipt (
+		meeting_id,
+		member_id,
+		receipt_id,
+		participate_state,
+		is_leave,
+		leave_reason,
+		company_name,
+		person,
+		person_num,
+		person_content,
+		plate_number,
+		create_time,
+		update_time
+		)
+		VALUES
+		(
+		#{meeting_id},
+		#{member_id},
+		#{receipt_id},
+		#{participate_state},
+		#{is_leave},
+		#{leave_reason},
+		#{company_name},
+		#{person},
+		#{person_num},
+		#{person_content},
+		#{plate_number},
+		#{create_time},
+		#{update_time}
+		)
+	</insert>
+	<update id="meetingReceptLeave">
+		UPDATE 
+			meeting_receipt
+		SET 
+			is_leave = #{is_leave},
+			leave_reason = #{leave_reason},
+			update_time = #{update_time}
+		<where>
+			<if test="meeting_id !=null and meeting_id !=''">
+				and meeting_id = #{meeting_id}
+			</if>
+			<if test="member_id !=null and member_id !=''">
+				and member_id = #{member_id}
+			</if>
+		</where>
+	</update>
+
+</mapper>

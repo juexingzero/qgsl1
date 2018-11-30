@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.st.MemberJgStjbxxMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.st.MemberJgStjbxx">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="STBM" jdbcType="VARCHAR" property="stbm" />
+        <result column="SZSBM" jdbcType="VARCHAR" property="szsbm" />
+        <result column="SZSBM02" jdbcType="VARCHAR" property="szsbm02" />
+        <result column="SZXBM" jdbcType="VARCHAR" property="szxbm" />
+        <result column="STMC" jdbcType="VARCHAR" property="stmc" />
+        <result column="YWZGBM" jdbcType="VARCHAR" property="ywzgbm" />
+        <result column="CLSJ" jdbcType="VARCHAR" property="clsj" />
+        <result column="PZDJJG" jdbcType="VARCHAR" property="pzdjjg" />
+        <result column="STFRZSHM" jdbcType="VARCHAR" property="stfrzshm" />
+        <result column="STFRJGDMZHM" jdbcType="VARCHAR" property="stfrjgdmzhm" />
+        <result column="STLXR" jdbcType="VARCHAR" property="stlxr" />
+        <result column="STFRDB" jdbcType="VARCHAR" property="stfrdb" />
+        <result column="DH" jdbcType="VARCHAR" property="dh" />
+        <result column="DZ" jdbcType="VARCHAR" property="dz" />
+        <result column="QYWZ" jdbcType="VARCHAR" property="qywz" />
+        <result column="TTJJ" jdbcType="VARCHAR" property="ttjj" />
+        <result column="BZ" jdbcType="VARCHAR" property="bz" />
+        <result column="STYWMC" jdbcType="VARCHAR" property="stywmc" />
+        <result column="ZJLX" jdbcType="VARCHAR" property="zjlx" />
+        <result column="ZJHM" jdbcType="VARCHAR" property="zjhm" />
+        <result column="CYSL" jdbcType="INTEGER" property="cysl" />
+        <result column="MSCGZRYXM" jdbcType="VARCHAR" property="mscgzryxm" />
+        <result column="MSCGZRYZW" jdbcType="VARCHAR" property="mscgzryzw" />
+        <result column="MSCGZRYDH" jdbcType="VARCHAR" property="mscgzrydh" />
+        <result column="ZIP_CODE" jdbcType="INTEGER" property="zip_code" />
+        <result column="FAX" jdbcType="VARCHAR" property="fax" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.st.MemberJgStjbxx">
+        insert into member_jg_stjbxx(ID,STBM,SZSBM,SZSBM02,SZXBM,STMC,YWZGBM,CLSJ,PZDJJG,STFRZSHM,STFRJGDMZHM,
+          STLXR,STFRDB,DH,DZ,QYWZ,TTJJ,BZ,STYWMC,ZJLX,ZJHM,CYSL,MSCGZRYXM,MSCGZRYZW,MSCGZRYDH,ZIP_CODE,FAX)
+        values (#{id},#{stbm},#{szsbm},#{szsbm02},#{szxbm},#{stmc},#{ywzgbm},#{clsj},#{pzdjjg},#{stfrzshm},
+          #{stfrjgdmzhm},#{stlxr},#{stfrdb},#{dh},#{dz},#{qywz},#{ttjj},#{bz},#{stywmc},#{zjlx},#{zjhm},#{cysl},
+          #{mscgzryxm},#{mscgzryzw},#{mscgzrydh},#{zip_code},#{fax})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.st.MemberJgStjbxx">
+        update member_jg_stjbxx
+        <set>
+            <if test="stbm!=null ">STBM=#{stbm},</if>
+            <if test="szsbm!=null ">SZSBM=#{szsbm},</if>
+            <if test="szsbm02!=null ">SZSBM02=#{szsbm02},</if>
+            <if test="szxbm!=null ">SZXBM=#{szxbm},</if>
+            <if test="stmc!=null ">STMC=#{stmc},</if>
+            <if test="ywzgbm!=null  ">YWZGBM=#{ywzgbm},</if>
+            <if test="clsj!=null  ">CLSJ=#{clsj},</if>
+            <if test="pzdjjg!=null  ">PZDJJG=#{pzdjjg},</if>
+            <if test="stfrzshm!=null ">STFRZSHM=#{stfrzshm},</if>
+            <if test="stfrjgdmzhm!=null ">STFRJGDMZHM=#{stfrjgdmzhm},</if>
+            <if test="stlxr!=null  ">STLXR=#{stlxr},</if>
+            <if test="stfrdb!=null ">STFRDB=#{stfrdb},</if>
+            <if test="dh!=null ">DH=#{dh},</if>
+            <if test="dz!=null  ">DZ=#{dz},</if>
+            <if test="qywz!=null  ">QYWZ=#{qywz},</if>
+            <if test="ttjj!=null  ">TTJJ=#{ttjj},</if>
+            <if test="bz!=null  ">BZ=#{bz},</if>
+            <if test="stywmc!=null">STYWMC=#{stywmc},</if>
+            <if test="zjlx!=null ">ZJLX=#{zjlx},</if>
+            <if test="zjhm!=null ">ZJHM=#{zjhm},</if>
+            <if test="cysl!=null">CYSL=#{cysl},</if>
+            <if test="mscgzryxm!=null ">MSCGZRYXM=#{mscgzryxm},</if>
+            <if test="mscgzryzw!=null  ">MSCGZRYZW=#{mscgzryzw},</if>
+            <if test="mscgzrydh!=null  ">MSCGZRYDH=#{mscgzrydh},</if>
+            <if test="zip_code!=null">ZIP_CODE=#{zip_code},</if>
+            <if test="fax!=null">FAX=#{fax},</if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!---->
+    <select id="queryById" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.member.st.MemberJgStjbxx">
+        select  * from member_jg_stjbxx where ID = #{id}
+    </select>
+
+    <!--查询入会基本数据-->
+    <select id="queryLeaguelMemberData" parameterType="String" resultType="HashMap">
+      SELECT a.joinId,a.createTime,a.memberType,a.memberId stid,a.state,a.joinObjId,a.position,a.joinObjName,
+      b.stmc,b.stywmc,b.zjlx,b.zjhm,b.pzdjjg,b.ywzgbm,b.clsj,b.cysl,b.mscgzryxm,b.mscgzryzw,b.mscgzrydh,b.dh,b.dz,b.qywz,b.zip_code,b.fax,
+      g.approve_fail_info
+       from member_join_manager a
+        INNER JOIN member_jg_stjbxx b on a.memberId = b.id
+        left join (select * from member_approve where member_id = #{joinId} order by approve_time desc limit 0,1) g on g.member_id = b.id
+      where a.joinId = #{joinId}
+    </select>
+</mapper>

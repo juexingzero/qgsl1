@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.meetingmanager.MeetingVoteMapper">
+	    
+    <insert id="insertMeetingVote" parameterType="com.manhui.gsl.jbqgsl.model.MeetingVote">
+		insert into meeting_vote 
+			(
+			meeting_id,
+			vote_id,
+			meeting_name,
+			vote_starttime,
+			vote_endtime,
+			allow_item,
+			meetings,
+			create_time
+			)
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			#{meeting_id},
+			#{vote_id},
+			#{meeting_name},
+			#{vote_starttime},
+			#{vote_endtime},
+			#{allow_item},
+			#{meetings},
+			now()
+		</trim>
+	</insert>
+	
+	<select id="queryMeetingVote" resultType="com.manhui.gsl.jbqgsl.model.MeetingVote">
+    	SELECT
+			*
+		FROM
+			meeting_vote
+		WHERE
+         meeting_id=#{meeting_id}
+	    </select>
+	    
+	   <update id="updateMeetingVote" parameterType="com.manhui.gsl.jbqgsl.model.MeetingVote">
+        UPDATE meeting_vote
+        <set>
+	        <if test="meeting_name != null and meeting_name != ''">
+            	meeting_name=#{meeting_name},
+	        </if>
+	        <if test="vote_starttime != null and vote_starttime != ''">
+            	vote_starttime=#{vote_starttime},
+	        </if>
+	        <if test="vote_endtime != null and vote_endtime != ''">
+            	vote_endtime=#{vote_endtime},
+	        </if>
+            	meetings=#{meetings},
+	        <if test="update_time != null and update_time != ''">
+            	update_time=#{update_time},
+	        </if>
+        </set>
+        WHERE meeting_id=#{meeting_id}
+    </update>
+</mapper> 

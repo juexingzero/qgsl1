@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加菜单</title>
+</head>
+<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+<link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+	.td1 {
+		text-align: right;
+	}
+</style>
+<body>
+	<div id="form1" class="from">
+	    <table>
+	        <input style="display: none;" name="update_bools" id="update_bools" value="false" class="mini-textbox">
+	        <tr>
+	            <td class="td1">父级菜单ID：</td>
+	            <td>
+	                <input name="p_menu_id" id="p_menu_id" class="mini-textbox" style="width: 180px;" required="true" allowInput="false" />
+	            </td>
+	            <td style="width: 30px;"></td>
+	            <td class="td1">父级菜单名称：</td>
+	            <td>
+	                <input name="p_menu_name" id="p_menu_name" class="mini-textbox" style="width: 180px;" allowInput="false" />
+	            </td>
+	        </tr>
+	        <tr>
+	        	<td class="td1">
+	        		<span style="color: red; margin-right:2px;">*</span>菜单ID：
+	        	</td>
+	            <td>
+	                <input name="p_menu_text" id="p_menu_text" class="mini-textbox" style="width: 110px;" allowInput="false" />
+	                <input name="menu_id" id="menu_id" class="mini-textbox" style="width: 65px;" required="true" />
+	            </td>
+	            <td style="width: 30px;"></td>
+	        	<td class="td1">
+	        		<span style="color: red; margin-right:2px;">*</span>菜单名称：
+	        	</td>
+	            <td>
+	                <input name="menu_name" id="menu_name" class="mini-textbox" style="width: 180px;" required="true" />
+	            </td>
+	        </tr>
+	        <tr>
+	            <td class="td1">菜单URL：</td>
+	            <td colspan="5">
+	                <input name="menu_url" id="menu_url" class="mini-textbox" style="width: 500px;" />
+	            </td>
+	        </tr>
+	        <tr>
+	            <td class="td1">图标样式：</td>
+	            <td>
+	                <input name="menu_pic_css" id="menu_pic_css" class="mini-buttonedit" onbuttonclick="onIconEdit" style="width: 180px;"/>
+	            </td>
+	            <td style="width: 30px;"></td>
+	            <td class="td1">
+	        		<span style="color: red; margin-right:2px;">*</span>菜单序号：
+	        	</td>
+	            <td>
+	                <input name="order_no" id="order_no" class="mini-textbox" style="width: 180px;" required="true" />
+	            </td>
+	        </tr>
+	    </table>
+	    
+	    <div class="mini-toolbar bot_btn">
+	        <a class="mini-button" style="width:60px; margin-right: 10px" onclick="save()">保存</a>
+	        <a class="mini-button" style="width:60px;" onclick="CloseWindow('cancel')">取消</a>
+	    </div>
+	</div>
+
+	<script src="/resources/organizational/js/addMenu.js" type="text/javascript"></script>
+</body>
+</html>

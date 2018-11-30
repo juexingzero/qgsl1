@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>企业之声列表</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+	</style>
+</head>
+
+<body>
+	<div class="flow_hidden">
+		<div id="searchForm" style="margin-bottom:1px;">
+			<table class="search_table_border">
+				<tr>
+					<td>
+						<label style="font-family:Verdana;padding-left:5px;">企业名称</label>
+						<input name="company_name" emptyText="请输入企业名称" class="mini-textbox" width="200px" onenter="loadGridData"/>
+						<label style="font-family:Verdana;padding-left:10px;">问题类型</label>
+	                    <select name="feedback_type" class="mini-combobox" style="width:120px" valueField="param_key" textField="param_value" onvaluechanged="loadGridData">
+	                        <option value="0">--请选择--</option>
+	                        <option value="1">经济服务</option>
+	                        <option value="2">政策咨询</option>
+	                        <option value="3">法律维权</option>
+	                        <option value="4">商会建设</option>
+	                        <option value="5">党建工作</option>
+	                        <option value="6">人事人才</option>
+	                        <option value="7">其他</option>
+	                    </select>
+	                	<label style="font-family:Verdana;padding-left:10px;">反馈时间</label>
+			            <input name="feedback_start_time" emptyText="开始时间" class="mini-datepicker" style="width:150px" allowInput="false" format="yyyy-MM-dd H:mm" timeFormat="H:mm" showTime="true"/>&nbsp;-
+			            <input name="feedback_end_time" emptyText="结束时间" class="mini-datepicker" style="width:150px" allowInput="false" format="yyyy-MM-dd HH:mm" timeFormat="HH:mm" showTime="true" />
+						<a class="mini-button searchBtn"><i class="fa fa-search"></i>查询</a>
+				    	<a class="mini-button cleanBtn"><i class="fa fa-repeat"></i>重置</a>
+	                </td>
+				</tr>
+			</table>
+		</div>
+		
+		<div id="evaluate_state_tabs" class="mini-tabs" style="margin-top:10px;width:100%;" onactivechanged="queryState">
+			<div class="mini-tabs"  id="-1" name="-1" title="全部"></div>
+			<div class="mini-tabs" id="0" name="0" title="未读"></div>
+			<div class="mini-tabs" id="1" name="1" title="已读"></div>
+			<div class="mini-tabs" id="2" name="2" title="已回复"></div>
+		</div>
+	</div>
+
+	<div id="mini-fit" class="mini-fit">
+		<div id="datagrid_companyFeedbackList" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[10,20,50,100]" pageSize="20"
+			 url="/web/v1/companyFeedback/getCompanyFeedbackList" idField="feedback_id" multiSelect="true" autoLoad="true">
+	        <div property="columns">
+				<div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div>
+				<div field="feedback_content" width="15%" headerAlign="center">问题</div>
+
+				<div field="feedback_type" headerAlign="center" align="center" renderer="onConvertFeedbackType">资讯类型</div>
+				<div field="company_name" headerAlign="center">来信企业</div>
+	           <!-- <div field="company_linkman_name" headerAlign="center" align="center">联系人</div>-->
+	            <div field="company_linkman_phone" headerAlign="center" align="center">联系电话</div>
+				<div field="feedback_time" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm:ss">来信时间</div>
+				<div field="is_answer" width="6%" headerAlign="center" align="center" renderer="onConvertState">状态</div>
+				<!--<div field="feedback_man_name" headerAlign="center" align="center">反馈人</div>
+
+                <div field="feedback_time" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm:ss">反馈时间</div>
+                <div field="answer_man_name" headerAlign="center" align="center">回复人</div>
+                <div field="answer_content" width="15%" headerAlign="center">回复内容</div>
+                <div field="answer_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm:ss">回复时间</div>-->
+	            <div width="6%" headerAlign="center" align="center" renderer="onConvertOperation">操作</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/companyFeedback/feedbackList.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>岗位选择</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+		body .mini-grid-rows-view {overflow-x: hidden;}
+	</style>
+</head>
+
+<body>
+	<div class="mini-toolbar" style="text-align:center;line-height:20px;" borderStyle="border:0;">
+	    <select id="id_institution_type" class="mini-combobox" valueField="institution_id" textField="institution_type" style="width:20%;" onvaluechanged="onKeyEnter">
+	        <option value="0">--请选择--</option>
+        </select>
+        <input id=id_institution_name emptyText="请输入机构名称" defaultText="sss" class="mini-textbox" style="width:120px;margin-right:100px;" maxlength="30" onenter="onKeyEnter"/>
+	    <a class="mini-button" style="width:60px;" onclick="search()">查询</a>
+	    <a class="mini-button" style="width:60px;" onclick="clean()">重置</a>
+	</div>
+	
+	<div class="mini-fit">
+	    <div id="datagrid_institutionList" class="mini-datagrid" url="/web/v1/institution/institutionList" style="width:100%;height:100%;" idField="id" borderStyle="border-left:0;border-right:0;">
+	        <div property="columns">
+	            <div type="checkcolumn" width="50px" headerAlign="center" align="center" renderer="onSelectRow">
+	            	<span style="color:#0000FF;cursor:pointer;" onclick="selectAll()">全选</span>
+	            </div>
+	            <div field="institution_name" headerAlign="center" align="center">机构名称</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="mini-toolbar" style="text-align:center;padding-top:10px;padding-bottom:5px; margin-top: 15px;" borderStyle="border-left:0;border-right:0;border-bottom:0;">
+	    <a class="mini-button" style="width:60px;" onclick="onOk()">确定</a>
+	    <a class="mini-button" style="width:60px;" onclick="onCancel()">取消</a>
+	</div>
+
+	<script type="text/javascript" src="/resources/js/topicEvaluate/institutionSelect.js"></script>
+</body>
+</html>

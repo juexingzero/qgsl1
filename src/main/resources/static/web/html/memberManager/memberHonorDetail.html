@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+	<title>会员管理-荣誉详情</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+		.td1{
+			text-align: right;
+	    	vertical-align: middle;
+		}
+		.cus_table {border-spacing: 0;}
+		.cus_table td,.cus_table th {border-bottom: solid 1px #ccc;border-right: solid 1px #ccc;}
+		.cus_table td {padding: 5px 0;}
+	</style>
+</head>
+
+<body>
+	<div id="form_ryxq" class="from">
+		<div style="display:none;">
+			<input class="mini-hidden" name="id" th:value="${id}">
+			<input class="mini-hidden" name="pageType" th:value="${pageType}">
+		</div>
+		
+		<!-- 个人荣誉详情 -->
+		<div id="div_grryxq" style="height:300px; overflow: auto">
+		    <table align="center" cellpadding="2" >
+		        <tr>
+		            <td class="td1" style="width:120px;">荣誉类别：</td>
+		            <td><input class="mini-combobox" name="zyrylb" style="width:160px;" th:value="${zyrylb}" textField="param_value" valueField="param_key" value="XB-01" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.16"/></td>
+		      	    <td class="td1" style="width:120px;">荣誉级别：</td>
+		            <td><input class="mini-combobox" name="ryjb" style="width:160px;" th:value="${ryjb}" textField="param_value" valueField="param_key" value="XB-01" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.17"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">获取界别：</td>
+		            <td><input class="mini-datepicker" name="je" style="width:160px" th:value="${je}" format="yyyy" allowInput="false" showTime="false"/></td>
+		          	<td class="td1">获取年份：</td>
+		            <td><input class="mini-datepicker" name="hqsj" style="width:160px" th:value="${hqsj}" format="yyyy" allowInput="false" showTime="false"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">证书编号：</td>
+		            <td><input class="mini-textbox" name="ryzsbh" style="width:160px;" th:value="${ryzsbh}"/></td>
+		          	<td class="td1">颁发单位：</td>
+		            <td><input class="mini-textbox" name="bfdw" style="width:160px;" th:value="${bfdw}"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">获得原因：</td>
+		            <td colspan="3"><input class="mini-textarea" name="hdyy" style="width:98%;height:100px;" th:value="${hdyy}" maxLength="100"/></td>
+		        </tr>
+		    </table>
+		</div>
+		
+		<!-- 企业荣誉详情 -->
+		<div id="div_qyryxq" style="height:300px; overflow: auto; display:none;">
+		    <table align="center" cellpadding="2" >
+		        <tr>
+		            <td class="td1" style="width:120px;">授奖名称：</td>
+		            <td><input class="mini-textbox" name="rymc" style="width:160px;" th:value="${rymc}"/></td>
+		      	    <td class="td1" style="width:120px;">授奖级别：</td>
+		            <td><input class="mini-combobox" name="ryjb" style="width:160px;" th:value="${ryjb}" textField="param_value" valueField="param_key" value="XB-01" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.17"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">授奖年份：</td>
+		            <td><input class="mini-datepicker" name="hqsj" style="width:160px" th:value="${hqsj}" format="yyyy" allowInput="false" showTime="false"/></td>
+		      	    <td class="td1">证书编号：</td>
+		            <td><input class="mini-textbox" name="ryzsbh" style="width:160px;" th:value="${ryzsbh}"/></td>
+		        </tr>
+		        <tr>
+		          	<td class="td1">颁发单位：</td>
+		            <td><input class="mini-textbox" name="bfdw" style="width:160px;" th:value="${bfdw}"/></td>
+		        </tr>
+		    </table>
+		</div>
+	    
+	    <div class="mini-toolbar bot_btn">
+			<a class="mini-button cancel" onclick="onClose()">关闭</a>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/memberManager/memberHonorDetail.js"></script>
+</body>
+</html>

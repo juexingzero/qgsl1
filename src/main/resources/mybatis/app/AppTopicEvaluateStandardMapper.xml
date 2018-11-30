@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppTopicEvaluateStandardMapper">
+	
+	<select id="showTopicEvaluateStandard" resultType="com.manhui.gsl.jbqgsl.model.TopicEvaluateStandard">
+		select 
+			* 
+		from 
+			topic_evaluate_standard 
+		where  
+			standard_id = #{standard_id} and topic_id=#{topic_id}
+	</select>
+	
+	<select id="queryStandardIds" resultType="String">
+		select 
+			DISTINCT standard_id
+		from 
+			topic_evaluate_standard 
+		<where>
+			<if test="topicEvaluateIdsList !=null and topicEvaluateIdsList.size()>0 ">
+				and topic_id in
+				<foreach collection="topicEvaluateIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
+</mapper>

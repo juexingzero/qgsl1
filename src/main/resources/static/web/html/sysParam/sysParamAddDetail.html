@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>新建参数</title>
+    <script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+    <link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+    <script src="/resources/organizational/js/util.js"type="text/javascript"></script>
+    <style type="text/css">
+        .td1 {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div id="form1" class="from">
+    <input class="mini-hidden" name="p_param_id" id="p_param_id" th:value="${p_param_id}">
+    <input class="mini-hidden" name="param_id" id="param_id" th:value="${param_id}">
+    <input class="mini-hidden" name="flag" id="flag" th:value="${flag}">
+    <table>
+        <tr>
+            <td class="td1"><span style="color: red; margin-right:2px;">*</span>参数名称：</td>
+            <td>
+                <input name="param_key" id="param_key" class="mini-textbox" style="width: 180px;" required="true" />
+            </td>
+            <td style="width: 30px;"></td>
+            <td class="td1"><span style="color: red; margin-right:2px;">*</span>参数值：</td>
+            <td>
+                <input name="param_value" id="param_value" class="mini-textbox" style="width: 180px;" required="true" />
+            </td>
+        </tr>
+        <tr>
+            <td class="td1">
+                参数描述：
+            </td>
+            <td>
+                <input name="param_describe" id="param_describe" class="mini-textbox" style="width: 180px;"/>
+            </td>
+            <td style="width: 30px;"></td>
+            <td class="td1">
+                <span style="color: red; margin-right:2px;">*</span>参数排序：
+            </td>
+            <td>
+                <input name="param_order" id="param_order" class="mini-textbox" style="width: 180px;" required="true" maxlength="4"/>
+            </td>
+        </tr>
+    </table>
+    <div class="mini-toolbar bot_btn">
+        <a class="mini-button" style="" onclick="save()" th:if="${flag} == 'add'">保存</a>
+        <a class="mini-button" style="" onclick="edit()" th:if="${flag} == 'edit'">保存</a>
+        <a class="mini-button" style="width:60px;" onclick="CloseWindow('ok')">取消</a>
+    </div>
+</div>
+<script src="/resources/js/sysParam/sysParamAdd.js" type="text/javascript"></script>
+</body>
+</html>

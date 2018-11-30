@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.CompanyFeedbackMapper">
+    <!-- 获取企业之声列表 -->
+    <select id="getCompanyFeedbackList" resultType="com.manhui.gsl.jbqgsl.model.CompanyFeedback">
+    	SELECT
+			cf.*
+		FROM
+			company_feedback cf
+		WHERE
+			1 = 1
+        <if test="company_name != null and company_name != ''">
+            AND cf.company_name LIKE CONCAT('%',#{company_name},'%')
+        </if>
+        <if test="feedback_type != null and feedback_type != ''">
+            AND cf.feedback_type = #{feedback_type}
+        </if>
+       	<if test="is_answer != null and is_answer != ''">
+           	AND cf.is_answer = #{is_answer}
+       	</if>
+        <if test="feedback_start_time != null and feedback_start_time != ''">
+            AND cf.feedback_time &gt; #{feedback_start_time}
+        </if>
+        <if test="feedback_end_time != null and feedback_end_time != ''">
+            AND cf.feedback_time &lt;= #{feedback_end_time}
+        </if>
+		ORDER BY
+			cf.feedback_time DESC
+    </select>
+    
+    <!-- 获取企业之声列表，用于APP -->
+    <select id="getCompanyFeedbackListForApp" resultType="com.manhui.gsl.jbqgsl.controller.app.companyfeedback.CompanyFeedbackResult">
+    	SELECT
+			cf.*
+		FROM
+			company_feedback cf
+		WHERE
+			1 = 1
+			AND cf.is_answer = '2'
+        <if test="feedback_type != null and feedback_type != ''">
+            AND cf.feedback_type = #{feedback_type}
+        </if>
+		ORDER BY
+			cf.answer_time DESC
+    </select>
+    
+    <!-- 获取企业之声详情 -->
+    <select id="getCompanyFeedbackDetail" resultType="com.manhui.gsl.jbqgsl.model.CompanyFeedback">
+    	SELECT
+			cf.*
+		FROM
+			company_feedback cf
+		WHERE
+			1 = 1
+            AND cf.feedback_id = #{feedback_id}
+    </select>
+    
+    <!-- 获取企业之声详情，用于APP -->
+    <select id="getCompanyFeedbackDetailForApp" resultType="com.manhui.gsl.jbqgsl.controller.app.companyfeedback.CompanyFeedbackResult">
+    	SELECT
+			cf.*
+		FROM
+			company_feedback cf
+		WHERE
+			1 = 1
+            AND cf.feedback_id = #{feedback_id}
+    </select>
+    
+    <!-- 获取当前最大的反馈编号 -->
+    <select id="getMaxFeedbackNumber" resultType="string">
+        SELECT
+			MAX(cf.feedback_number)
+		FROM
+			company_feedback cf
+    </select>
+    
+    <!-- 插入反馈信息 -->
+    <insert id="insertCompanyFeedback">
+        INSERT INTO company_feedback (
+			feedback_id,
+			feedback_number,
+			feedback_type,
+			company_name,
+			company_linkman_name,
+			company_linkman_phone,
+			feedback_man_id,
+			feedback_man_name,
+			feedback_time,
+			feedback_content,
+			is_answer
+		)
+		VALUES
+        (
+          #{feedback_id},
+          #{feedback_number},
+          #{feedback_type},
+          #{company_name},
+          #{company_linkman_name},
+          #{company_linkman_phone},
+          #{feedback_man_id},
+          #{feedback_man_name},
+          #{feedback_time},
+          #{feedback_content},
+          #{is_answer}
+        )
+    </insert>
+    
+    <!-- 更新反馈信息 -->
+    <update id="updateCompanyFeedback" parameterType="com.manhui.gsl.jbqgsl.model.CompanyFeedback">
+        UPDATE company_feedback
+        <set>
+            <if test="is_answer != null and is_answer != ''">
+                is_answer=#{is_answer},
+            </if>
+            answer_man_id=#{answer_man_id},
+            answer_man_name=#{answer_man_name},
+            answer_time=#{answer_time},
+	        <if test="answer_content != null and answer_content != ''">
+            	answer_content=#{answer_content}
+	        </if>
+        </set>
+        WHERE 1=1
+        and feedback_id=#{feedback_id}
+    </update>
+    
+    <!-- 删除反馈信息 -->
+    <delete id="deleteCompanyFeedback">
+        DELETE FROM company_feedback WHERE 1=1 and feedback_id=#{feedback_id}
+    </delete>
+</mapper>

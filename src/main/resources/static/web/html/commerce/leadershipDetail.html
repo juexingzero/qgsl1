@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>领导班子详细</title>
+    <script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+    <script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+    <link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<input class="mini-hidden" id="shbmid" name="shbmid" th:value="${shbmid}">
+	<input class="mini-hidden" id="jie" name="jie" th:value="${jie}">
+	<input class="mini-hidden" id="px" name="px" th:value="${px}">
+	<span style="font-size: 16px;font-weight:bold;">届别：</span>
+	<span id="jietext" name="jietext" style="font-size: 16px;font-weight:bold;" th:text="${jie}"></span>
+	<table style="width:100%; table-layout:fixed;">
+		<tr>
+			<td align="left" nowrap="nowrap">
+				<a id="btnNew" class="mini-button" onclick="btnNew()"><i class="fa fa-plus"></i>添加</a>
+				<!--<a id="btnModInpot" class="mini-button" iconCls="" onclick="btnModInpot()"><i class="fa fa-upload"></i>批量导入</a>
+				<a id="btnModDown" class="mini-button" iconCls="" onclick="btnModDown()"><i class="fa fa-download"></i>下载模板</a>-->
+			</td>
+		</tr>
+	</table>
+<!--	<form id="form1" action="/web/v1/institution/fileInport" enctype="multipart/form-data" method="post">
+		<input type="file" id="btn_file" name="myfile" style="display:none" accept=".xls,.xlsx" onchange="uploadFile()">
+	</form>-->
+	<div id="serchFrom">
+		<table id="serchTab">
+			<tr>
+				<td>
+					<input id="SHZWLX" name="SHZWLX" class="mini-combobox" emptyText="--请选择--" style="width: 180px;"
+						   url="/common/v1/sysParam/getSysParamList?p_param_id=4.2.8" textField="param_value" valueField="param_key"/>
+					<input id="XM" name="XM" class="mini-textbox" style="width:200px;" value="" emptyText="请输入姓名"/>
+					<a class="mini-button" onclick="serch()"><i class="fa fa-search"></i>查询</a>
+					<a class="mini-button" onclick="clean()"><i class="fa fa-repeat"></i>重置</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="mini-fit" >
+		<div id="datagrid" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[10,20,50,100]"
+			pageSize="20" url="/web/v1/leadership/queryLeadershipDetail" idField="ID" multiSelect="true">
+		    <div property="columns">
+			    <div type="indexcolumn" width="5%" headerAlign="center">序号</div>
+			    <div field="SHZWLX" headerAlign="center" align="center" renderer="onLxModel">职务</div>
+			    <div field="XM" headerAlign="center" align="center">姓名</div>
+			    <div field="YDDH" headerAlign="center" align="center">电话</div>
+			    <div width="10%" headerAlign="center" align="center" renderer="onActionRenderer">操作</div>
+		    </div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/commerceList/leadershipDetail.js"></script>
+</body>
+</html>

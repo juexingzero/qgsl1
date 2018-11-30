@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="icon" href="/resources/images/title_logo.png" type="image/x-icon">
+	<title>忘记密码</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+</head>
+
+<body>
+	<div id="form_forgetPwd" class="from">
+	    <input style="display: none;" name="message_id" value="" class="mini-textbox">
+	    <table style="width:100%;">
+            <tr>
+                <td width="16%" align="right">
+                	<label style="line-height:30px;"><span style="color:red;margin-right:2px;">*</span>登录账号：</label>
+                </td>
+                <td width="32%" align="left">
+                	<input name="login_name" class="mini-textbox" emptyText="请输入登录账号" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="16%" align="right">
+                	<label style="line-height:30px;"><span style="color:red;margin-right:2px;">*</span>联系手机：</label>
+                </td>
+                <td width="32%" align="left">
+                	<input name="mobile_no" class="mini-textbox" emptyText="请输入联系手机" maxlength="11" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="16%" align="right">
+                	<label style="line-height:30px;"><span style="color:red;margin-right:2px;">*</span>验证码：</label>
+                </td>
+                <td width="32%" align="left">
+                	<input name="checkMessage" class="mini-textbox" emptyText="请输入验证码" maxlength="6" required="true"/>
+                	<input id="getMessage" name="getMessage" type="button" value="获取验证码"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="16%" align="right">
+                	<label style="line-height:30px;"><span style="color:red;margin-right:2px;">*</span>新密码：</label>
+                </td>
+                <td width="32%" align="left">
+                	<input name="password" class="mini-password" emptyText="请输入新密码(6-16)" vtype="minLength:6" requiredErrorText="密码长度6-16位，必须包含数字和字母！" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="16%" align="right">
+                	<label style="line-height:30px;"><span style="color:red;margin-right:2px;">*</span>确认新密码：</label>
+                </td>
+                <td width="32%" align="left">
+                	<input name="makeNewpassword" class="mini-password" emptyText="再次输入新密码(6-16)" vtype="minLength:6" requiredErrorText="密码长度6-16位，必须包含数字和字母！" required="true"/>
+                </td>
+            </tr>
+	    </table>
+	    
+	    <div style="margin:20px 0px 20px 0px;padding:0px;border-bottom:none;" align="center">
+	        <a class="mini-button saveBut" style="width:60px;" onclick="submitForm()">提交</a>
+	        <a class="mini-button cancelBut" style="width:60px;" onclick="CloseWindow('cancel')">取消</a>
+	    </div>
+	</div>
+	
+	<script type="text/javascript">
+		mini.parse();
+		
+		$(function(){
+		    mini.getByName("login_name").setValue(getQueryString("login_name"));
+		});
+
+		//获取验证码
+		$("#getMessage").click(function() {
+			var login_name = $.trim(mini.getByName("login_name").getValue());
+			var mobile_no = $.trim(mini.getByName("mobile_no").getValue());
+			if (login_name == null || "" == login_name) {
+				mini.alert("登录帐号不能为空！");
+				return;
+			}
+			if (mobile_no == null || "" == mobile_no) {
+				mini.alert("联系手机不能为空！");
+				return;
+			}else{
+				if (!isMobile(mobile_no)) {
+					mini.alert("请输入正确的手机号码！");
+					return;
+				}
+			}
+			
+			//账号信息是否存在
+			$.ajax({
+				type : "POST",
+				url : "/login/checkSysUser",
+				data : {
+					login_name: login_name,
+					mobile_no : mobile_no
+				},
+				cache: false,
+				async: false,
+				success : function(msg) {
+					if (msg.code == 200) {
+						getMessage(mobile_no);
+					} else {
+						mini.alert(msg.data);
+					}
+				}
+			});
+		});
+		
+		//获取验证码
+		function getMessage(mobile_no) {
+			$.ajax({
+				type : "POST",
+				url : "/app/v1/appSms/appSendSms",
+				data : {
+					phoneNumber  : mobile_no,
+					valiCodeType : '3'
+				},
+				success : function(msg) {
+					if (msg.state == 0) {
+						settime($("#getMessage"));
+					} else {
+						mini.alert("获取验证码失败！");
+					}
+				}
+			});
+		}
+
+		//验证码按钮状态
+		var countdown = 60;
+		function settime(obj) { //发送验证码倒计时
+			if (countdown == 0) {
+				obj.attr('disabled', false);
+				obj.val("获取验证码");
+				countdown = 60;
+				return;
+			} else {
+				obj.attr('disabled', true);
+				obj.val("重新发送(" + countdown + ")");
+				countdown--;
+			}
+			setTimeout(function() {
+				settime(obj)
+			}, 1000)
+		}
+		
+		//提交
+		function submitForm() {
+			var form = new mini.Form("#form_forgetPwd");
+			form.validate();
+			if (form.isValid() == false){
+				return;
+			}
+			var data = form.getData();
+
+			if (!isMobile(data.mobile_no)) {
+				mini.alert("请输入正确的手机号码！");
+				return;
+			}
+			
+			var password = data.password;
+			var makeNewpassword = data.makeNewpassword;
+			if (password != makeNewpassword) {
+				mini.alert("两次密码输入不一致！");
+				return;
+			}else{
+				if (!(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$/.test(password))) {
+					mini.alert("密码长度6-16位，必须包含数字和字母！");
+					return false;
+				}
+			}
+			
+			//校验验证码
+			$.ajax({
+				type : "POST",
+				url : "/app/v1/appSms/smsCodeVerification",
+				data : {
+					phoneNumber : $.trim(data.mobile_no),
+					code 		: $.trim(data.checkMessage)
+				},
+				success : function(msg) {
+					if (msg.state == 0) {
+						//修改密码
+						$.ajax({
+							type : "POST",
+							url : "/login/updatePwd",
+							data : {
+								login_name	: data.login_name,
+								mobile_no	: data.mobile_no,
+								password	: data.password
+							},
+							success : function(data) {
+								if (data.code == 200) {
+									mini.alert(data.message);
+									CloseWindow( "ok" )
+								} else {
+									mini.alert(data.message);
+								}
+							}
+						});
+					} else {
+						mini.alert(msg.message);
+					}
+				}
+			}); 
+		}
+	</script>
+</body>
+</html>

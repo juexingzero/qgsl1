@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>评价详情</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<link type="text/css" rel="stylesheet" href="/resources/organizational/css/style.css"/>
+	<link type="text/css" rel="stylesheet" href="/resources/css/countdown.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style>
+ 		body {overflow-y: auto;}
+		.left {float: left;}
+		.right {float: right; margin-right:25px;}
+		.td_check {padding-bottom: 20px;}
+		.item_div {padding: 0 25px 10px 25px;border-bottom: solid 1px #e1e1e1;}
+		.item_div > h4 {line-height: 30px;overflow: hidden;font-size: 14px;}
+		.item_div > h4 .blue_text {color: #87CEFA;font-size: 20px;}
+		.item_row {line-height: 25px;overflow: hidden;}
+		.asterisk {color:red;margin-right:2px;}
+	</style>
+</head>
+
+<body>
+	<div id="initiateForm" class="mini-toolbar" style="overflow-y:auto;position:absolute;">
+		<input class="mini-hidden" name="topic_id" id="topic_id" th:value="${topic_id}">
+		<input class="mini-hidden" name="evaluate_state" id="evaluate_state" th:value="${evaluate_state}">
+	    <div style="float:right;margin:20px 20px 40px 0px;padding:0px;border-bottom:none;">
+	    	<a class="mini-button" iconCls="" style="background-color:#FFFFFF;" href="/web/v1/topicEvaluate/toTopicEvaluateListPage">取消</a>
+	    </div>
+	    
+		<!-- 主题信息 -->
+	    <div style="margin:20px;">
+	    	<p id="timer" class="countdown_wrapper">距离<span id="startOrEnd">开始</span>: <span class="show_countdown" id="showCountdown">--</span></p>
+	    	<label style="font-family:Verdana;font-size:15px;margin:0px 5px 25px 5px;">评价主题：<span id="topic_name"></span></label><br>
+	    	<label style="font-family:Verdana;font-size:15px;margin:0px 5px 25px 5px;">开始时间：<span id="evaluate_start_time"></span></label><br>
+	    	<label style="font-family:Verdana;font-size:15px;margin:0px 5px 20px 5px;">结束时间：<span id="evaluate_end_time"></span></label>
+	    </div>
+	    
+		<!-- 机构信息 -->
+	    <div style="padding:0px;border-bottom:none;">
+	    	<!-- 被评价方 -->
+			<div id="passive_active_tabs" class="mini-tabs" style="margin-top:20px;width:100%;">
+			    <div id="id_passive" class="mini-tabs" title="被评价方"></div>
+			</div>
+	    	<div id="passive_div" class="mini-toolbar">
+			    <div id="datagrid_passiveList" class="mini-datagrid" style="width:99.5%;height:350px;" 
+			    	sizeList="[10,20,50,100]" pageSize="10" idField="topic_id" multiSelect="true" showPager="false">
+			        <div property="columns">
+        				<div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div> 
+			            <div field="institution_name" headerAlign="center" align="center">机构名称</div>
+			            <div field="industry_name" headerAlign="center" align="center">关联行业</div>
+			            <div field="institution_linkman_name" headerAlign="center" align="center">联系人姓名</div>
+			            <div field="institution_linkman_phone" headerAlign="center" align="center">联系人电话</div>
+			        </div>
+			    </div>
+	    	</div>
+	    	<!-- 评价方 -->
+			<div id="active_active_tabs" class="mini-tabs" style="margin-top:20px;width:100%;">
+			    <div id="id_active" class="mini-tabs" title="评价方"></div>
+			</div>
+	    	<div id="active_div" class="mini-toolbar">
+			    <div id="datagrid_activeList" class="mini-datagrid" style="width:99.5%;height:350px;" 
+			    	sizeList="[10,20,50,100]" pageSize="10" idField="topic_id2" multiSelect="true" showPager="false">
+			        <div property="columns">
+        				<div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div> 
+			            <div field="institution_name" headerAlign="center" align="center">机构名称</div>
+			            <div field="industry_name" headerAlign="center" align="center">关联行业</div>
+			            <div field="institution_linkman_name" headerAlign="center" align="center">联系人姓名</div>
+			            <div field="institution_linkman_phone" headerAlign="center" align="center">联系人电话</div>
+			            <div field="is_evaluate" headerAlign="center" align="center" renderer="onConvertIsEvaluate">是否完成评价</div>
+			            <div field="evaluate_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm" renderer="onConvertEvaluateTime">完成评价时间</div>
+			        </div>
+			    </div>
+	    	</div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/topicEvaluate/topicEvaluateDetail.js"></script>
+</body>
+</html>

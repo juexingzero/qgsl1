@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>参评机构</title>
+    <script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+    <script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+    <link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+    <script src="/resources/js/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="/resources/js/jquery.form.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/resources/js/jquery.cookie.js"></script>
+</head>
+
+<body>
+<div class="mini-toolbar" style="margin:0;padding:0px;">
+    <table style="width:100%; table-layout:fixed;">
+        <tr>
+       	 	<td align="left" nowrap="nowrap">
+               <a id="btnNew" class="mini-button" onclick="btnNew()"><i class="fa fa-plus"></i>新增</a>
+               <a id="btnModInpot" class="mini-button" iconCls="" onclick="btnModInpot()"><i class="fa fa-upload"></i>批量导入</a>
+               <a id="btnModDown" class="mini-button" iconCls="" onclick="btnModDown()"><i class="fa fa-download"></i>下载模板</a>
+           </td>
+        </tr>
+    </table>
+    <form id="form1" action="/web/v1/institution/fileInport" enctype="multipart/form-data" method="post">
+    	<input type="file" id="btn_file" name="myfile" style="display:none" accept=".xls,.xlsx" onchange="uploadFile()">
+    </form>
+</div>
+<div id="tabs1" class="mini-tabs" style="margin-top: 30px; width:100%;height: 93%;" onactivechanged="load">
+    <div id="tab1" class="mini-tabs" activeIndex="0" title="区级部门" url="/web/v1/institution/toInstitutionListPages"></div>
+    <div id="tab2" class="mini-tabs" activeIndex="1" title="街镇" url="/web/v1/institution/toStreetListPages"></div>
+    <div id="tab3" class="mini-tabs" activeIndex="2" title="企业" url="/web/v1/institution/toEnterpriseListPages"></div>
+</div>
+<script type="text/javascript" src="/resources/js/institution/institutionTab.js"></script>
+</body>
+</html>

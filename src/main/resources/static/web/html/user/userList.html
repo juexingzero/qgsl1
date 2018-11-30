@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+	<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+	<style type="text/css">
+		.td1 {text-align: right;}
+	</style>
+</head>
+
+<body>
+	<div id="searchForm">
+	    <div class="mini-toolbar">
+	        <table id="normalTable" style="width:100%; table-layout:fixed;background-color:#ffffff;" class="search_table_border">
+	            <tr>
+					<td>
+						<label style="font-family:Verdana;padding-left:5px;" >用户状态</label>
+						<select name="user_status" class="mini-combobox" style="width:100px;" value="1" onvaluechanged="loadGridData">
+	                        <option value="1">正常用户</option>
+	                        <option value="0">已禁用用户</option>
+	                        <option value="2">已离职用户</option>
+	                    </select>
+						<label style="font-family:Verdana;padding-left:5px;">查找按</label>
+						<select id="keyWord" name="keyWord" class="mini-combobox" style="width:100px;">
+	                        <option value="user_name">用户名称</option>
+	                        <option value="user_no">工号</option>
+	                    </select>
+						<label style="font-family:Verdana;padding-left:5px;" >关键字</label>
+			            <input name="keyValue" class="mini-textbox" style="width:200px;" onenter="loadGridData"/>
+						<a class="mini-button searchBtn"><i class="fa fa-search"></i>查询</a>
+						<a class="mini-button cleanBtn"><i class="fa fa-repeat"></i>重置</a>
+					</td>
+	            </tr>
+	        </table>
+	    </div>
+	</div>
+	
+	<div class="mini-toolbar" style="margin:0;padding:0px;">
+	    <table style="width:100%; table-layout:fixed;">
+	        <tr>
+	            <td align="left" width="60" nowrap="nowrap"><label style="font-family:Verdana;padding-left:5px;" >用户列表</label></td>
+	            <td align="right" nowrap="nowrap">
+	                <a id="btnNew" class="mini-button" iconCls=""><i class="fa fa-plus"></i>新增</a>
+	                <a id="btnModPwd" class="mini-button" iconCls=""><i class="fa fa-pencil-square-o"></i>修改密码</a>
+	                <a id="btnDelete" class="cus_btn_del" iconCls=""><i class="fa fa-trash"></i>删除</a>
+	            </td>
+	        </tr>
+	    </table>
+	</div>
+	
+	<div id="mini-fit" class="mini-fit" >
+	    <div id="datagrid1" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[5,10,20,50]" pageSize="20"
+	         url="/user/userList" idField="user_id" multiSelect="true" onrowdblclick="onRowDblClick">
+	        <div property="columns">
+	            <div type="checkcolumn" width="50px" headerAlign="center" align="center"></div>
+	            <div field="user_name" headerAlign="center" align="center">用户名称</div>
+	            <div field="user_sex" renderer="onGenderRenderer" headerAlign="center" align="center">性别</div>
+	            <div field="login_name" headerAlign="center" align="center">登录账号</div>
+	            <div field="user_no" headerAlign="center" align="center">用户工号</div>
+	            <div field="dept_name" headerAlign="center">所属部门</div>
+	            <div field="position_name" headerAlign="center">默认岗位</div>
+	            <div field="email" headerAlign="center" align="center">电子邮箱</div>
+	            <div field="mobile_no" headerAlign="center" align="center">手机号码</div>
+	            <div field="account_status" width="10%" headerAlign="center" align="center" renderer="onActionRenderer">状态</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<!--修改密码编辑框-->
+	<div id="editWindow" class="mini-window" title="修改密码" style="width:300px;" showModal="true" allowResize="false" allowDrag="true">
+	    <div id="editform" class="form" style="max-height:300px;overflow-y:auto;">
+	        <input name="user_id" class="mini-hidden"/>
+	        <table class="editTable" border="0" cellpadding="1" cellspacing="2" style="width:100%;table-layout:fixed;">
+	            <tr>
+	                <td width="80" class="td1">登录名：</td>
+	                <td>
+	                    <input name="user_name" class="mini-textbox" style="width:100%;" enabled="false"/>
+	                </td>
+	            </tr>
+	            <tr>
+	            <td class="td1"><span style="color: red; margin-right: 2px;">*</span>新密码：
+				</td>
+	                <td>
+	                    <input name="password" class="mini-password" style="width:100%;"  required="true" vtype="maxLength:100"/>
+	                </td>
+	            </tr>
+	        </table>
+	        <div class="mini-fit"></div>
+	        <div class="mini-toolbar" style="border-left:0;border-bottom:0;border-right:0;text-align:center;">
+	            <a class="mini-button" iconCls="" href="javascript:pastSave()">确定</a>
+	            <span style="display:inline-block;width:15px;"></span>
+	            <a class="mini-button" iconCls="" href="javascript:cancel()">取消</a>
+	        </div>
+	    </div>
+	</div>
+	<!--end of 修改密码编辑框-->
+	
+	<script type="text/javascript">
+	    mini.parse();
+	    var datagrid = mini.get("datagrid1");
+	    function onActionRenderer(e) {
+	        if(e.record.account_status == "0"){
+	            e.cellStyle = "color:red;";
+	            return "禁用";
+	        }
+	        return "启用";
+	    }
+	    
+	    //性别转换
+	    var Genders = [{ id: '0', text: '女' }, { id: '1', text: '男'}];
+	    function onGenderRenderer(e) {
+	        for (var i = 0, l = Genders.length; i < l; i++) {
+	            var g = Genders[i];
+	            if (g.id == e.value) return g.text;
+	        }
+	        return "";
+	    }
+	    
+	    function loadGridData(){
+	        var form = new mini.Form("#searchForm");
+	        form.validate();
+	        if (form.isValid() == false){
+	            return;
+	        }
+	        var data = form.getData(true);
+	        var json = mini.encode(data);
+	        datagrid.load({json:json});
+	    }
+	
+	    //新增
+	    $("#btnNew").click(function(){
+	        edit();
+	    });
+	
+	    function edit(user_id){
+	        if(user_id == null){
+	            user_id = "";
+	        }
+	        mini.open({
+	            url: "/user/toAddUserPage?user_id="+ empty(user_id),
+	            title: "用户信息",
+	            width: 800,
+	            height: 550,
+	            onload: function () {
+	                var iframe = this.getIFrameEl();
+	            },
+	            ondestroy: function (action) {
+	                datagrid.reload();
+	            }
+	        });
+	    }
+	
+	    function onRowDblClick(e){
+	        edit(e.record.user_id);
+	    }
+	
+	    //删除
+	    $("#btnDelete").click(function(){
+	        var rows = datagrid.getSelected();
+	        if(confirm("删除用户可能导致业务数据的用户信息丢失，确定要删除吗？？")) {
+	            Ajax({
+	                type : "post",
+	                url : "/user/deleteUser",
+	                data : {
+	                    user_id : rows.user_id
+	                },
+	                success : function(msg) {
+	                    if (errorCheck(msg)) {
+	                        datagrid.reload();
+	                    }
+	                }
+	            });
+	        }
+	    });
+	
+	    //begin of 修改密码----------------------------------------------------------
+	    $("#btnModPwd").click(function(){
+	        var row = datagrid.getSelected();
+	        if(!row){
+	            alert("请选择需要修改密码的用户!");
+	            return;
+	        }
+	        setFormData("editform",{user_id:row.user_id, user_name:row.user_name, password:""});
+	        mini.get("editWindow").show();
+	    });
+	    function pastSave(){
+	        var form = new mini.Form("#editform");
+	        form.validate();
+	        if (form.isValid() == false) return;
+	        var data = form.getData();
+	        Ajax({
+	            type : "post",
+	            url : "/user/updateUserPassWord",
+	            data : data,
+	            success : function(msg) {
+	                if (errorCheck(msg)) {
+	                    mini.get("editWindow").hide();
+	                }
+	            }
+	        });
+	    }
+	
+	    function cancel(){
+	        mini.get("editWindow").hide();
+	    }
+	    //end of 修改密码----------------------------------------------------------
+	
+		//重置
+		$(".cleanBtn").click(function(){
+			mini.getByName("user_status").setValue("1");
+			mini.getByName("keyWord").setValue("user_name");
+			mini.getByName("keyValue").setValue("");
+		    loadGridData();
+		}).click();
+	
+	    $(function(){
+	        //搜索按钮
+	        $(".searchBtn").click(function(){
+	            loadGridData();
+	        }).click();
+	    });
+	</script>
+</body>
+</html>

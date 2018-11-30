@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人员选择</title>
+	<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+</head>
+
+<body>
+	<div class="mini-toolbar" style="text-align:center;line-height:30px;" borderStyle="border:0;">
+	    <label>姓名：</label>
+	    <input id="key" class="mini-textbox" style="width:150px;" onenter="onKeyEnter"/>
+	    <a class="mini-button" onclick="search()"><i class="fa fa-search"></i>查询</a>
+		<a class="mini-button" onclick="clean()"><i class="fa fa-repeat"></i>重置</a>
+	</div>
+	<div class="mini-fit">
+	    <div id="user_list" class="mini-datagrid" url="/user/userList" style="width:100%;height:100%;" idField="id" allowResize="true" borderStyle="border-left:0;border-right:0;" onrowdblclick="onRowDblClick">
+	        <div property="columns">
+	            <div type="indexcolumn" width="50px">序号</div>
+	            <div field="user_name" headerAlign="center" align="center">姓名</div>
+	            <div field="position_name" headerAlign="center">岗位名称</div>
+	            <div field="dept_name" headerAlign="center">所属部门</div>
+	        </div>
+	    </div>
+	</div>
+	<div class="mini-toolbar bot_btn">
+	    <a class="mini-button" style="width:60px;" onclick="onOk()">确定</a>
+	    <a class="mini-button" style="width:60px;" onclick="onCancel()">取消</a>
+	</div>
+	
+	<script type="text/javascript">
+	    var grid = null;
+	    $(function(){
+	        mini.parse();
+	        grid = mini.get("user_list");
+	        grid.load();
+	    });
+	
+	    function GetData() {
+	        var row = grid.getSelected();
+	        return row;
+	    }
+	    
+	    function search() {
+	        var key = mini.get("key").getValue();
+	        grid.load({ key: key });
+	    }
+	    
+	    function clean() {
+		  	mini.get("key").setValue("");
+	        grid.load({ key: "" });
+	    }
+
+	    function onKeyEnter(e) {
+	        search();
+	    }
+	    function onRowDblClick(e) {
+	        onOk();
+	    }
+	    //////////////////////////////////
+	    function CloseWindow(action) {
+	        if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+	        else window.close();
+	    }
+	
+	    function onOk() {
+	        CloseWindow("ok");
+	    }
+	    function onCancel() {
+	        CloseWindow("cancel");
+	    }
+	</script>
+</body>
+</html>

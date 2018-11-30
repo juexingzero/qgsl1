@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<contextName>jbqgsl</contextName>
+
+	 <!-- 日志输出的通道 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder 默认配置为PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+	<!-- 输出到文件 -->
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/${LOG_FILE}</file>
+		<encoder>
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%-5level] [%thread] %logger{40} - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 按天分文件夹存放 ，并压缩 -->
+			<fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/%i.${LOG_FILE} </fileNamePattern>
+			<!-- 每个文件的最大值 10MB,超过则编号,生成新文件 -->
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- 例如，假设每天滚动，且 maxHistory 是 7，则只 保留最近 7 天的归档文件，删除之前的文件。 -->
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+	</appender>
+	
+	<!-- 设置日志级别 -->
+	<root level="warn">
+		<appender-ref ref="console"/>
+		<appender-ref ref="file"/>
+	</root>
+	
+	<logger name="com.manhui.gsl.jbqgsl" level="DEBUG"/>
+</configuration>

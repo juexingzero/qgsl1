@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.commerce.CommerceManagerMapper">
+
+    <!--获取商会列表-->
+    <select id="queryCommerceList" resultType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShxx">
+      select * from member_jg_shxx order by  PX
+    </select>
+
+    <!--获取商会详细数据-->
+    <select id="queryCommerceDetail" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShxx">
+        select * from member_jg_shxx where ID = #{ID}
+    </select>
+
+    <select id="queryCommerceData" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShxx">
+        select * from member_jg_shxx where LYZJ = #{LYZJ}
+    </select>
+
+    <!-- 插入商会类别 -->
+    <insert id="insertCommerceCategory" parameterType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShxx">
+        INSERT INTO member_jg_shxx (
+			ID,
+			SHMC,
+			<if test="SHLX != null">SHLX,</if>
+            <if test="PX != null">PX</if>
+		)
+		VALUES
+        (
+          #{ID},
+          #{SHMC},
+            <if test="SHLX != null">#{SHLX},</if>
+            <if test="PX != null"> #{PX}</if>
+        )
+    </insert>
+
+    <!--修改商会类别-->
+    <update id="updateCommerceCategory" parameterType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShxx">
+        update member_jg_shxx
+        <set>
+            SHMC = #{SHMC},
+            <if test="SHLX != null">SHLX = #{SHLX},</if>
+            <if test="PX != null">PX = #{PX},</if>
+        </set>
+        where ID = #{ID}
+    </update>
+
+    <!--删除商会-->
+    <delete id="deleteCommerce" parameterType="String" >
+      delete from member_jg_shxx where ID = #{ID}
+    </delete>
+
+    <insert id="saveCommerce" parameterType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShxx">
+        INSERT INTO member_jg_shxx
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+        ID,
+        <if test="SHBM != null">SHBM,</if>
+        SHMC,
+        <if test="ZZJGBM != null">ZZJGBM,</if>
+        <if test="SHLX != null">SHLX,</if>
+        <if test="SFZMZBMDJ != null">SFZMZBMDJ,</if>
+        <if test="SFJLDZZ != null">SFJLDZZ,</if>
+        <if test="DJMZ != null">DJMZ,</if>
+        <if test="DJGRDH != null">DJGRDH,</if>
+        <if test="JJZS != null">JJZS,</if>
+        <if test="CZ != null">CZ,</if>
+        <if test="ZZJLN != null">ZZJLN,</if>
+        <if test="ZZJLSJ != null">ZZJLSJ,</if>
+        <if test="BGDD != null">BGDD,</if>
+        <if test="LYZJ != null">LYZJ,</if>
+        <if test="LXR != null">LXR,</if>
+        <if test="SJ != null">SJ,</if>
+        <if test="DH != null">DH,</if>
+        <if test="YX != null">YX,</if>
+        <if test="DZ != null">DZ,</if>
+        <if test="PX != null">PX,</if>
+        <if test="JS != null">JS</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{ID},
+        <if test="SHBM != null">#{SHBM},</if>
+        #{SHMC},
+        <if test="ZZJGBM != null">#{ZZJGBM},</if>
+        <if test="SHLX != null">#{SHLX},</if>
+        <if test="SFZMZBMDJ != null">#{SFZMZBMDJ},</if>
+        <if test="SFJLDZZ != null">#{SFJLDZZ},</if>
+        <if test="DJMZ != null">#{DJMZ},</if>
+        <if test="DJGRDH != null">#{DJGRDH},</if>
+        <if test="JJZS != null">#{JJZS},</if>
+        <if test="CZ != null">#{CZ},</if>
+        <if test="ZZJLN != null">#{ZZJLN},</if>
+        <if test="ZZJLSJ != null">#{ZZJLSJ},</if>
+        <if test="BGDD != null">#{BGDD},</if>
+        <if test="LYZJ != null">#{LYZJ},</if>
+        <if test="LXR != null">#{LXR},</if>
+        <if test="SJ != null">#{SJ},</if>
+        <if test="DH != null">#{DH},</if>
+        <if test="YX != null">#{YX},</if>
+        <if test="DZ != null">#{DZ},</if>
+        <if test="PX != null">#{PX},</if>
+        <if test="JS != null">#{JS}</if>
+        </trim>
+    </insert>
+
+    <update id="updateCommerce" parameterType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShxx">
+      update member_jg_shxx
+      <set>
+          <if test="SHBM != null">SHBM = #{SHBM},</if>
+          SHMC = #{SHMC},
+          <if test="ZZJGBM != null">ZZJGBM = #{ZZJGBM},</if>
+          <if test="SHLX != null">SHLX = #{SHLX},</if>
+          <if test="SFZMZBMDJ != null">SFZMZBMDJ = #{SFZMZBMDJ},</if>
+          <if test="SFJLDZZ != null">SFJLDZZ = #{SFJLDZZ},</if>
+          <if test="DJMZ != null">DJMZ = #{DJMZ},</if>
+          <if test="DJGRDH != null">DJGRDH = #{DJGRDH},</if>
+          <if test="JJZS != null">JJZS = #{JJZS},</if>
+          <if test="CZ != null">CZ = #{CZ},</if>
+          <if test="ZZJLN != null">ZZJLN = #{ZZJLN},</if>
+          <if test="ZZJLSJ != null">ZZJLSJ = #{ZZJLSJ},</if>
+          <if test="BGDD != null">BGDD = #{BGDD},</if>
+          <if test="LYZJ != null">LYZJ = #{LYZJ},</if>
+          <if test="LXR != null">LXR = #{LXR},</if>
+          <if test="SJ != null">SJ = #{SJ},</if>
+          <if test="DH != null">DH = #{DH},</if>
+          <if test="YX != null">YX = #{YX},</if>
+          <if test="DZ != null">DZ = #{DZ},</if>
+          <if test="PX != null">PX = #{PX},</if>
+          <if test="JS != null">JS = #{JS}</if>
+      </set>
+        where ID = #{ID}
+    </update>
+    <select id="checkCommerceName" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShxx">
+        select * from member_jg_shxx where SHMC = #{SHMC}
+    </select>
+</mapper>

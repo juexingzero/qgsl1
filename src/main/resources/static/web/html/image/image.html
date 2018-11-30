@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片上传测试</title>
+</head>
+<script src="/resources/fileUpload/fileUpload.js" type="text/javascript"></script>
+<script>
+    $(function(){
+       $(".center").uploadFile({
+           type: "",
+           imagePath: "",
+           submutUrl: "/upload/saveFile",
+           success: function () {
+           },
+       });
+    });
+</script>
+<body>
+<div class="center">
+
+</div>
+</body>
+</html>

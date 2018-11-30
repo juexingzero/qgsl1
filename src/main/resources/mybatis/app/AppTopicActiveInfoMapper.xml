@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppTopicActiveInfoMapper">
+		<update id="updateState" >
+			update
+			 	topic_active_info 
+			set 
+				is_evaluate = '1',evaluate_time=#{evaluate_time}
+			 where 
+			 	topic_id=#{topic_id} and institution_id = #{actice_id}
+	</update>
+	
+</mapper>

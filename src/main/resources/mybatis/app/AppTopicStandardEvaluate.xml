@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppTopicStandardEvaluateMapper">
+	<select id="queryStandardId" resultType="string">
+		select 
+			standard_id 
+		from 
+			topic_evaluate_standard 
+		<where>
+			<if test="topic_id !=null and topic_id !=''">
+				and topic_id = #{topic_id}
+			</if>		
+		</where>
+			limit 0,1
+	</select>
+	
+</mapper>

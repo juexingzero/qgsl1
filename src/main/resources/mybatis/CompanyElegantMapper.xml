@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.CompanyElegantMapper">
+	<!-- 获取企业之声列表 -->
+    <select id="getCompanyElegantList" resultType="com.manhui.gsl.jbqgsl.model.CompanyElegant">
+    	SELECT
+			ce.*
+		FROM
+			company_elegant ce
+		WHERE
+			1 = 1
+        <if test="company_name != null and company_name != ''">
+            AND ce.company_name LIKE CONCAT('%',#{company_name},'%')
+        </if>
+        <if test="company_type != null and company_type != ''">
+            AND ce.company_type = #{company_type}
+        </if>
+		ORDER BY
+			ce.order_no ASC
+    </select>
+    
+    <!-- 获取企业列表，用于APP -->
+    <select id="getCompanyElegantListForApp" resultType="com.manhui.gsl.jbqgsl.controller.app.companyelegant.CompanyElegantResult">
+    	SELECT
+			ce.*
+		FROM
+			company_elegant ce
+		WHERE
+			1 = 1
+        <if test="company_name != null and company_name != ''">
+            AND ce.company_name LIKE CONCAT('%',#{company_name},'%')
+        </if>
+        <if test="company_type != null and company_type != ''">
+            AND ce.company_type = #{company_type}
+        </if>
+		ORDER BY
+			ce.order_no ASC
+    </select>
+    
+    <!-- 获取企业之声详情 -->
+    <select id="getCompanyElegantDetail" resultType="com.manhui.gsl.jbqgsl.model.CompanyElegant">
+    	SELECT
+			ce.*
+		FROM
+			company_elegant ce
+		WHERE
+			1 = 1
+            AND ce.elegant_id = #{elegant_id}
+    </select>
+    
+    <!-- 获取企业详情，用于APP -->
+    <select id="getCompanyElegantDetailForApp" resultType="com.manhui.gsl.jbqgsl.controller.app.companyelegant.CompanyElegantResult">
+    	SELECT
+			ce.*
+		FROM
+			company_elegant ce
+		WHERE
+			1 = 1
+            AND ce.elegant_id = #{elegant_id}
+    </select>
+    
+    <!-- 插入企业信息 -->
+    <insert id="insertCompanyElegant">
+        INSERT INTO company_elegant (
+			elegant_id,
+			company_name,
+			company_type,
+			company_logo,
+			company_image,
+			company_describe,
+			order_no,
+			release_time
+		)
+		VALUES
+        (
+          #{elegant_id},
+          #{company_name},
+          #{company_type},
+          #{company_logo},
+          #{company_image},
+          #{company_describe},
+          #{order_no},
+          #{release_time}
+        )
+    </insert>
+    
+    <!-- 更新企业信息 -->
+    <update id="updateCompanyElegant" parameterType="com.manhui.gsl.jbqgsl.model.CompanyElegant">
+        UPDATE company_elegant
+        <set>
+            company_name=#{company_name},
+            company_type=#{company_type},
+            company_logo=#{company_logo},
+            company_image=#{company_image},
+            company_describe=#{company_describe},
+            order_no=#{order_no},
+            release_time=#{release_time}
+        </set>
+        WHERE 1=1
+        and elegant_id=#{elegant_id}
+    </update>
+    
+    <!-- 删除企业信息 -->
+    <delete id="deleteCompanyElegant">
+        DELETE FROM company_elegant WHERE 1=1 and elegant_id=#{elegant_id}
+    </delete>
+</mapper>

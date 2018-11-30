@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>企业之声列表</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+</head>
+
+<body>
+	<div align="center">
+	   <img id="tp" class="MyLogo" alt="LOGO">
+	</div>
+	<div align="center">
+		<label style="font-family:Verdana;padding-left:5px;">活动名称：</label>
+	    <input th:value="${a.activity_name}" class="mini-textbox" width="200px" onenter="loadGridData" readonly="readonly"/>
+	 </div>
+	<script type="text/javascript" >
+	$(function(){
+		/*<![CDATA[*/
+	    var or_code = "[[${a.sign_qrcode}]]";
+	    /*]]>*/	
+		$("#tp").attr("src","/resources/images/"+or_code);
+	});
+    </script>
+</body>
+</html>

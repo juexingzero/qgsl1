@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+	<title>会员管理-审批页面</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+		.td1{
+			text-align: right;
+	    	vertical-align: middle;
+		}
+		.cus_table {border-spacing: 0;}
+		.cus_table td,.cus_table th {border-bottom: solid 1px #ccc;border-right: solid 1px #ccc;}
+		.cus_table td {padding: 5px 0;}
+	</style>
+</head>
+
+<body>
+	<div id="form_approve" class="from">
+		<input class="mini-hidden" name="joinId" th:value="${joinId}">
+		<input class="mini-hidden" name="app_user_id" th:value="${app_user_id}">
+		<input class="mini-hidden" name="app_user_name" th:value="${app_user_name}">
+		<input class="mini-hidden" name="member_id" th:value="${member_id}">
+		<input class="mini-hidden" name="member_type" th:value="${member_type}">
+		<input class="mini-hidden" name="approve_fail_info" th:value="${approve_fail_info}">
+		
+		<div>
+			<span style="margin:10px 0px 0px 20px;">请勾选审批拒绝的资料类别：</span>
+		    <div id="div_info_text" style="margin-left:20px;"></div>
+		    <div style="margin:10px 20px 10px 20px;">
+                <input class="mini-textarea" name="approve_fail_reason" emptyText="请输入审批拒绝的具体原因（0~100字）" style="width:100%;height:175px;" maxLength="100" required="true"/>
+		    </div>
+		</div>
+	    
+	    <div class="mini-toolbar bot_btn">
+			<a class="mini-button cancel" onclick="onSave()">确定</a>
+			<a class="mini-button cancel" onclick="onClose()">取消</a>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/memberManager/memberApprove.js"></script>
+</body>
+</html>

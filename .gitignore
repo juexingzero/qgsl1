@@ -1,0 +1,10 @@
+/transaction-logs/
+/.git/
+/.settings/
+/target/
+/bin/
+.class
+.classpath
+.project
+.gitgnore
+.git

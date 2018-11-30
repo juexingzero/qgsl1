@@ -1,0 +1,362 @@
+/* 常用组合样式开始 */
+
+/*----------清除浮动----------*/
+.clearfix:after
+{
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+/* 转化为行块元素 */
+.inline_block {
+  display: inline-block;
+}
+.ver_middle {
+  vertical-align: middle;
+}
+
+/*  */
+.flow_hidden {
+  overflow: hidden;
+}
+
+.hover_style:hover {
+  /* cursor: pointer; */
+  box-shadow: 0 0 15px #e1e1e1;
+}
+
+.full_size {
+  width: 100%;
+  height: 100%;
+}
+
+.text_left {
+  text-align: left;
+}
+
+.text_right {
+  text-align: right;
+}
+
+.f_left {
+  float: left;
+}
+
+.f_right {
+  float: right;
+}
+
+.c_hide, .hide {
+  display: none;
+}
+
+.c_show {
+  display: block;
+}
+
+.vis_hide {
+  visibility: hidden;
+}
+
+.vis_show {
+  visibility: visible;
+}
+
+/* 文本溢出显示省略号 */
+.text_ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
+/* 不可编辑 */
+.js_disabled {
+  cursor: not-allowed !important;
+}
+
+/* 常用字体颜色 */
+.stress {
+  color: #e84e11;
+}
+
+.stress_bold {
+  color: #e84e11;
+  font-weight: bold;
+}
+
+.c_blue0 {
+  color: #4d98fb;
+}
+
+.c_warn {
+  color: #f82c2c;
+}
+
+.c_gray {
+  color: #848484;
+}
+
+/* 常用组合样式结束 */
+
+/* 公共按钮样式(自定义) */
+.cus_btn,
+.cus_btn_default,
+.cus_btn_state,
+.cus_btn_del,
+.cus_btn_default_del,
+.cus_btn_grid,
+.cus_btn_grid_del {
+  display: inline-block;
+  vertical-align: middle;
+  border-style: solid;
+  border-width: 1px;
+  outline: none;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.cus_btn,
+.cus_btn_default,
+.cus_btn_state,
+.cus_btn_del,
+.cus_btn_default_del {
+  height: 28px;
+  line-height: 26px;
+  font-size: 13px;
+  padding: 0 15px;
+}
+
+.cus_btn.small,
+.cus_btn_default.small,
+.cus_btn_state.small,
+.cus_btn_del.small,
+.cus_btn_default_del.small,
+.cus_btn_grid,
+.cus_btn_grid_del {
+  height: 20px;
+  line-height: 18px;
+  font-size: 12px;
+  padding: 0 10px;
+}
+
+.cus_btn i,
+.cus_btn_default i,
+.cus_btn_state i,
+.cus_btn_del i,
+.cus_btn_default_del i {
+  margin-right: 5px;
+}
+
+/* .cus_btn.medium {
+  height: 24px;
+  line-height: 22px;
+  font-size: 12px;
+} */
+
+.cus_btn {
+  border-color: #3ba6ee;
+  color: #fff;
+  background-color: #3ba6ee;
+}
+.cus_btn:hover {
+  background-color: #1999ef;
+}
+
+.cus_btn_default {
+  border-color: #ccc;
+  color: #606266;
+  background-color: transparent;
+}
+.cus_btn_default:hover {
+  background-color: #eee;
+}
+
+.cus_btn_state {
+  border-color: #ccc;
+  color: #333;
+  background: #fff;
+  border-radius: 14px;
+}
+.cus_btn_state:hover,
+.cus_btn_state:focus,
+.cus_btn_state:active,
+.cus_btn_state:visited,
+.cus_btn_state.active {
+  background: #2687c8;
+  border-color: #2687c8;
+  color: #fff;
+}
+
+.cus_btn_del {
+  background: #c9302c;
+  border-color: #c9302c;
+  color: #fff;
+}
+.cus_btn_del:hover {
+  background-color: #ac2925;
+}
+
+.cus_btn_default_del {
+  border-color: #c9302c;
+  color: #c9302c;
+  background: transparent;
+}
+.cus_btn_default_del:hover {
+  background-color: #c9302c;
+  color: #fff;
+}
+
+.cus_btn_grid,
+.cus_btn_grid_del {
+  margin: 0 5px;
+  border-radius: 0;
+  background: #fff;
+}
+
+.cus_btn_grid {
+  border-color: #ccc;
+  color: #333;
+}
+.cus_btn_grid:hover {
+  background: #2687c8;
+  border-color: #2687c8;
+  color: #fff;
+}
+
+.cus_btn_grid_del {
+  border-color: #c9302c;
+  color: #c9302c;
+}
+.cus_btn_grid_del:hover {
+  background: #c9302c;
+  color: #fff;
+}
+
+/* 公共按钮样式(基于mini-ui) */
+body .mini-button {
+  border-color: transparent; 
+  background: none;
+  background-color: #3ba6ee;
+  color: #fff;
+  border-radius: 3px;
+}
+
+body .mini-button .fa {
+	margin-right: 5px;
+}
+
+body .mini-button.default {
+  border: 1px solid #ccc;
+  color: #606266;
+  background-color: transparent;
+}
+
+body .mini-pager .mini-button,
+body .mini-pager .mini-button:hover,
+body .mini-pager .mini-button:focus {
+  background: none;
+}
+
+body .mini-button-pressed, 
+body a:hover.mini-button-pressed, 
+body .mini-button-checked, 
+body a:hover.mini-button-checked, 
+body a.mini-button-popup, 
+body a:hover.mini-button-popup {
+  color: #fff;
+}
+
+html body a.mini-button {
+  transition: all 0.6s;
+}
+html body a:hover.mini-button,
+html body a:focus.mini-button {
+  border-color: transparent; 
+  background: none;
+  background-color: #2687c8;
+  color: #fff;
+  transition: all 0.6s;
+}
+
+html body a:hover.mini-button.default,
+html body a:focus.mini-button.default {
+    border-color: #ccc;
+    color: #606266;
+    background: #eee;
+}
+
+html body a.mini-button-disabled,
+html body a:hover.mini-button-disabled,
+html body a:focus.mini-button-disabled {
+  border: 1px solid #ccc;
+  line-height: 26px;
+  color: #777;
+  background: #F8F9FA repeat-x 0 0px;
+}
+
+body .mini-button-inner {
+  padding: 0 15px;
+  line-height: 26px;
+  vertical-align: middle;
+}
+
+/* 字体图标颜色设置 */
+body .mini-state-default .mini-icon {
+  color: #fff;
+}
+body .mini-pager .mini-state-default .mini-icon {
+  color: #888;
+}
+
+/* 弹框(面板) */
+body .mini-window .mini-panel-header {
+  border-color: #ccc;
+}
+
+body .mini-panel-header-inner {
+  padding: 10px 4px 10px 8px;
+  background: #89b7d2;
+  color: #fff;
+}
+
+body .mini-window .mini-panel-header-inner {
+  background: #fff;
+  color: #333;
+}
+
+/* mini-ui Tree */
+body .mini-tree-node-hover .mini-tree-nodeshow,
+body .mini-tree-selectedNode .mini-tree-nodeshow {
+  border-color: transparent;
+  background: none;
+  color: #3ba6ee;
+}
+
+body .mini-tree-selectedNode .mini-icon {
+  color: #3ba6ee;
+}
+
+/* mini-ui TreeGrid */
+body .mini-grid-row-selected .mini-tree-nodeshow > .mini-icon {
+  color: #3ba6ee;
+}
+
+body .mini-grid-row-selected .mini-tree-nodeshow .mini-tree-nodetext {
+  color: #3ba6ee;
+}
+
+/* 页面结构公共样式 */
+.wrapper {
+  padding: 15px;
+  background: #fff;
+}
+
+table {
+  /*border-collapse: separate;*/
+}

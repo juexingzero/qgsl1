@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>添加标准</title>
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+	<script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<div id="addForm" class="addForm" style="height:100%;overflow-y:auto;">
+		<div
+			style="padding: 10px; border-top: 0; border-left: 0; border-right: 0;">
+			<table class="form-table" border="0" cellpadding="1" cellspacing="2">
+				<tr>
+					<td class="title noEmpty" style="width: 80px;">
+						<span style="color:red;margin-right:2px;">*</span>标准名称：
+					</td>
+					<td style="width: 200px">
+						<input id="standard_name" name="standard_name" class="mini-textbox" required="true" emptyText="请输入标准名称"/>
+					</td>
+					<td class="title noEmpty">
+						<span style="color:red;margin-right:2px;">*</span>标准分类：
+					</td>
+					<td>
+						<input id="standard_type" name="standard_type" class="mini-combobox" emptyText="--请选择--" 
+							data="[{id: 1, text: '企业评价政府'}, {id: 2, text: '政府评价企业'}]" textField="text" valueField="id" onvaluechanged="valuechanged()" required="true"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="form-label" style="width:70px;" colspan="3"></td>
+					<td>
+						<input id="standard_belongeds" name="standard_belongeds" class="mini-checkbox" text="同时设置为即时评价的评价标准" onvaluechanged="onValueChanged" hidden="true"/>
+						<input id="standard_belonged" name="standard_belonged" class="mini-hidden" value=""/>
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+		<!-- bot btns -->
+		<div class="mini-toolbar bot_btn">
+			<a class="mini-button" onclick="save()">保存</a>
+			<a class="mini-button" onclick="returns('ok')">取消</a>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/standardLibrary/standardAdd.js"></script>
+</body>
+</html>

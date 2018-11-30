@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>岗位授权</title>
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+	<style>
+	    .mini-grid-cell-inner input[type="button"]{
+	        float: left;
+	        margin-right: 8px;
+	    }
+	    .function-item {
+	        height: 22px;
+	        line-height: 25px;
+	        margin-top: 0px;
+	        display: block;
+	        float: left;
+	        margin-right: 5px;
+	    }
+	    .function-item input[type="checkbox" i]{
+	        float: left;
+	        margin-top: 5px;
+	    }
+	    .function-item .checkText{
+	        float: left;
+	    }
+	</style>
+</head>
+
+<body>
+    <div class="mini-splitter" style="width:100%;height:100%;">
+        <div size="200" showCollapseButton="false">
+            <div class="mini-toolbar" style="margin:0 -5px 0 -5px;padding:0px;border-top:0;border-left:0;border-right:0;">
+                <table style="width:100%; table-layout:fixed;">
+                    <tr>
+                        <td align="left" width="60" nowrap="nowrap"><label style="font-family:Verdana;padding-left:5px;">部门岗位</label></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="mini-fit">
+                <ul id="tree1" class="mini-tree" url="/organ/queryPositionTree" style="width:100%;height:100%;" resultAsTree="false"
+                    showTreeLines="true" showTreeIcon="true" expandOnLoad="0" idField="position_id" parentField="p_position_id" textField="position_name"
+                    ondrawnode="onDrawNode" onnodecheck="onNodeCheck" onbeforenodecheck="onBeforeNodeCheck" checkOnTextClick="true">
+                </ul>
+            </div>
+        </div>
+        <div showCollapseButton="false">
+            <div class="mini-toolbar toolbar-header" style="padding:0px;border-top:0;border-left:0;border-right:0;">
+                <table style="width:100%;">
+                    <tr>
+                        <td align="left">模块功能</td>
+                        <td align="right">
+                            <!--
+                            <a id="importRole" class="mini-button" iconCls="">覆盖引入角色</a>
+                            <a id="importRole1" class="mini-button" iconCls="">增量引入角色</a>
+                            -->
+                            <a id="btnSave" class="mini-button" iconCls="">保存</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="treegrid1" class="mini-treegrid" style="width:100%;height:95%;" borderStyle="border:none;" resultAsTree="false"  showTreeIcon="true" allowResize="true" expandOnLoad="true" enableHotTrack="false"
+                 allowSelect="false" allowCellWrap="true" ondrawcell="ondrawcell" showExpandButtons="true" expandOnDblClick="false" url="/organ/jurisdictionList" treeColumn="menu_name" idField="menu_id" parentField="p_menu_id">
+                <div property="columns">
+                    <div field="menu_name" name="menu_name" width="30%" headerAlign="center">菜单名称</div>
+                    <div field="functions" width="70%" headerAlign="center">功能清单</div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script src="/resources/organizational/js/positionAuthList.js" type="text/javascript"></script>
+</body>
+</html>

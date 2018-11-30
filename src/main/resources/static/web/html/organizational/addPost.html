@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加岗位</title>
+</head>
+<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+
+<link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+	.td1 {
+		text-align: right;
+	}
+</style>
+<body>
+<div id="form1" class="from">
+    <table>
+        <tr style="display: none;">
+            <td class="td1" style="color: #FF6666;">岗位编码：</td>
+            <td>
+                <input name="position_id" id="position_id" class="mini-textbox" style="width: 230px;" required="true" />
+            </td>
+        </tr>
+        <tr>
+           <td class="td1">
+        		<span style="color: red; margin-right:2px;">*</span>岗位名称：
+        	</td>
+            <td>
+                <input name="position_name" id="position_name" class="mini-textbox" style="width: 230px;" required="true" />
+            </td>
+        </tr>
+        <tr>
+       	   <td class="td1">
+        		<span style="color: red; margin-right:2px;">*</span>岗位序号：
+        	</td>
+            <td>
+                <input name="order_no" id="order_no" class="mini-textbox" style="width: 230px;" required="true" />
+            </td>
+        </tr>
+        <tr>
+            <td class="td1">
+        		<span style="color: red; margin-right:2px;">*</span>所属部门：
+        	</td>
+            <td>
+                <input name="dept_id" id="dept_id" class="mini-buttonedit" required="true" onbuttonclick="onButtonEdit" style="width: 230px;"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="td1">岗位说明：</td>
+            <td>
+                <input name="memo" id="memo" class="mini-textarea" style="width:90%;height:80px;" vtype="maxLength:400"/>
+            </td>
+        </tr>
+    </table>
+    <div class="mini-toolbar bot_btn">
+        <a class="mini-button" style="" onclick="save()">保存</a>
+        <a class="mini-button" style="width:60px;" onclick="CloseWindow('cancel')">取消</a>
+    </div>
+</div>
+<script src="/resources/organizational/js/addPost.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.UserMapper">
+
+    <!-- 开启基于redis的二级缓存 -->
+    <!--<cache type="com.manji.gongshanglianan.redis.RedisCache"/>-->
+
+    <!-- useCache="true" true 开启缓存 false 不开起缓存 默认true开启缓存  flushCache="true" 清空缓存 -->
+
+    <!-- 部门树 -->
+    <select id="queryDeptTree" resultType="com.manhui.gsl.jbqgsl.model.Dept">
+        SELECT * FROM sys_dept ORDER BY find_in_set(dept_id,treeDept(#{dept_id}))
+    </select>
+
+    <!-- 查询部门表 -->
+    <select id="querySysDept" resultType="com.manhui.gsl.jbqgsl.model.Dept">
+        SELECT sd.*,su.user_name AS leader_name FROM sys_dept AS sd
+        LEFT JOIN sys_user AS su ON sd.leader_id = su.user_id WHERE 1=1
+        <if test="dept_id != null and dept_id != ''">
+          AND dept_id = #{dept_id}
+        </if>
+        <if test="p_dept_id != null and p_dept_id != ''">
+          AND dept_id = #{p_dept_id}
+        </if>
+        <if test="dept_name != null and dept_name != ''">
+          AND dept_name like CONCAT('%',#{dept_name},'%')
+        </if>
+        and p_dept_id != '0'
+        ORDER BY sd.order_no
+    </select>
+
+    <!-- 根据条件部门 -->
+    <select id="queryDeptWhere" resultType="com.manhui.gsl.jbqgsl.model.Dept">
+        SELECT * FROM sys_dept WHERE 1=1
+        <if test="p_dept_id != null and p_dept_id != ''">
+            AND p_dept_id = #{p_dept_id}
+        </if>
+        <if test="dept_id != null and dept_id != ''">
+            AND dept_id = #{dept_id}
+        </if>
+        <if test="inner_outer_dept != null and inner_outer_dept != ''">
+            AND inner_outer_dept = #{inner_outer_dept}
+        </if>
+    </select>
+
+    <!-- 部门总数 -->
+    <select id="querySysDeptSize" resultType="int">
+        SELECT COUNT(1) as size FROM sys_dept
+    </select>
+
+    <!-- 部门岗位 -->
+    <select id="queryPosition" resultType="com.manhui.gsl.jbqgsl.model.Position">
+        SELECT * FROM sys_position AS sp
+        LEFT JOIN sys_dept AS sd ON sp.dept_id = sd.dept_id WHERE 1=1
+        <if test="dept_id != null and dept_id != ''">
+            AND sp.dept_id = #{dept_id}
+        </if>
+        <if test="position_id != null and position_id != ''">
+            AND sp.position_id = #{position_id}
+        </if>
+        ORDER BY sp.order_no
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 部门岗位 -->
+    <select id="queryPositionCount" resultType="int">
+        SELECT COUNT(1) FROM sys_position AS sp
+        LEFT JOIN sys_dept AS sd ON sp.dept_id = sd.dept_id WHERE 1=1
+        <if test="dept_id != null and dept_id != ''">
+            AND sp.dept_id = #{dept_id}
+        </if>
+        <if test="position_id != null and position_id != ''">
+            AND sp.position_id = #{position_id}
+        </if>
+    </select>
+
+    <!-- 部门人员 -->
+    <select id="queryPositionUser" resultType="com.manhui.gsl.jbqgsl.model.User">
+        SELECT su.*,up.is_primary FROM sys_position AS sp
+        JOIN sys_user_position as up ON sp.position_id = up.position_id
+        JOIN sys_user AS su ON su.user_id = up.user_id WHERE 1=1
+        <if test="position_id != null and position_id != ''">
+            AND sp.position_id = #{position_id}
+        </if>
+        <if test="user_id != null and user_id != ''">
+            AND su.user_id = #{user_id}
+        </if>
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 部门人员总数 -->
+    <select id="queryPositionUserCount" resultType="int">
+        SELECT COUNT(1) FROM sys_position AS sp
+        JOIN sys_user_position as up ON sp.position_id = up.position_id
+        JOIN sys_user AS su ON su.user_id = up.user_id WHERE 1=1
+        <if test="position_id != null and position_id != ''">
+            AND sp.position_id = #{position_id}
+        </if>
+        <if test="user_id != null and user_id != ''">
+            AND su.user_id = #{user_id}
+        </if>
+    </select>
+
+    <!-- 人员列表 -->
+    <select id="queryUserList" resultType="com.manhui.gsl.jbqgsl.model.User">
+        SELECT su.*,sd.dept_name,sp.position_name FROM sys_user as su
+        LEFT JOIN sys_user_position AS up ON su.user_id = up.user_id
+        LEFT JOIN sys_position AS sp ON sp.position_id = up.position_id
+        LEFT JOIN sys_dept AS sd ON sd.dept_id = sp.dept_id WHERE 1=1
+        <if test="where != null and where != ''">
+            AND (su.user_name like CONCAT('%',#{where},'%') OR sp.position_name like CONCAT('%',#{where},'%') OR sd.dept_name like CONCAT('%',#{where},'%') )
+        </if>
+        <if test="user_name != null and user_name != ''">
+            AND su.user_name like CONCAT('%',#{user_name},'%')
+        </if>
+        <if test="user_no != null and user_no != ''">
+            AND su.user_no like CONCAT('%',#{user_no},'%')
+        </if>
+        <if test="user_status != null and user_status != ''">
+            AND su.user_status=#{user_status}
+        </if>
+        AND su.login_name != 'sys_admin'
+        AND su.user_type IN ('0','1')
+        GROUP BY su.user_id
+        ORDER BY su.create_time DESC
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 人员列表总数 -->
+    <select id="queryUserListCount" resultType="int">
+        SELECT COUNT(1) FROM sys_user as su
+        LEFT JOIN sys_user_position AS up ON su.user_id = up.user_id
+        LEFT JOIN sys_position AS sp ON sp.position_id = up.position_id
+        LEFT JOIN sys_dept AS sd ON sd.dept_id = sp.dept_id WHERE 1=1
+        <if test="where != null and where != ''">
+            AND (su.user_name like CONCAT('%',#{where},'%') OR sp.position_name like CONCAT('%',#{where},'%') OR sd.dept_name like CONCAT('%',#{where},'%') )
+        </if>
+        <if test="user_name != null and user_name != ''">
+            AND su.user_name like CONCAT('%',#{user_name},'%')
+        </if>
+        <if test="user_no != null and user_no != ''">
+            AND su.user_no like CONCAT('%',#{user_no},'%')
+        </if>
+        <if test="user_status != null and user_status != ''">
+            AND su.user_status=#{user_status}
+        </if>
+        AND su.login_name != 'sys_admin'
+        AND su.user_type IN ('0','1')
+    </select>
+
+    <!-- 根据条件查询人员信息 -->
+    <select id="queryUserWhere" resultType="com.manhui.gsl.jbqgsl.model.User">
+        SELECT su.*,sd.dept_name,sp.position_name FROM sys_user as su
+        LEFT JOIN sys_user_position AS up ON su.user_id = up.user_id
+        LEFT JOIN sys_position AS sp ON sp.position_id = up.position_id
+        LEFT JOIN sys_dept AS sd ON sd.dept_id = sp.dept_id WHERE 1=1
+        <if test="user_id != null and user_id != ''">
+            AND su.user_id=#{user_id}
+        </if>
+        GROUP BY su.user_id
+        LIMIT 1
+    </select>
+    <!-- 机构导入时查询人员信息 -->
+    <select id="queryUser" resultType="com.manhui.gsl.jbqgsl.model.User">
+	      SELECT
+				*
+		  FROM
+				sys_user
+		<where>
+			<if test="institution_linkman_phone !=null and institution_linkman_phone !=''">
+				and login_name = #{institution_linkman_phone}
+			</if>
+		</where>
+    </select>
+    <!-- 机构数据修改时验证人员信息 -->
+    <select id="checkUser" resultType="com.manhui.gsl.jbqgsl.model.User">
+	      SELECT
+				*
+		  FROM
+				sys_user
+		<where>
+			<if test="institution_id !=null and institution_id !=''">
+				and user_id = #{institution_id}
+			</if>
+		</where>
+    </select>
+
+    <!-- 添加部门 -->
+    <insert id="insertDept">
+        INSERT INTO sys_dept
+        (
+            dept_id,
+            dept_code,
+            dept_name,
+            dept_type,
+            p_dept_id,
+            leader_id,
+            leader_type,
+            inner_outer_dept,
+            keyword,
+            order_no,
+            memo,
+            creator_id,
+            create_time,
+            alter_time
+        )
+        VALUES
+        (
+          #{dept_id},
+          #{dept_code},
+          #{dept_name},
+          #{dept_type},
+          #{p_dept_id},
+          #{leader_id},
+          #{leader_type},
+          #{inner_outer_dept},
+          #{keyword},
+          #{order_no},
+          #{memo},
+          #{creator_id},
+          NOW(),
+          NOW()
+        )
+    </insert>
+
+    <!-- 删除部门 -->
+    <delete id="deleteDept">
+        DELETE FROM sys_dept WHERE dept_id = #{dept_id}
+    </delete>
+
+    <!-- 修改部门 -->
+    <update id="updateDept">
+        UPDATE sys_dept
+        <set>
+            <if test="dept_code != null">dept_code=#{dept_code},</if>
+            <if test="dept_name != null">dept_name=#{dept_name},</if>
+            <if test="dept_type != null">dept_type=#{dept_type},</if>
+            <if test="p_dept_id != null">p_dept_id=#{p_dept_id},</if>
+            <if test="leader_id != null">leader_id=#{leader_id},</if>
+            <if test="leader_type != null">leader_type=#{leader_type},</if>
+            <if test="inner_outer_dept != null">inner_outer_dept=#{inner_outer_dept},</if>
+            <if test="order_no != null">order_no=#{order_no},</if>
+            <if test="memo != null">memo=#{memo},</if>
+            <if test="alter_time != null">alter_time=#{alter_time},</if>
+        </set>
+        WHERE dept_id = #{dept_id}
+    </update>
+
+    <!-- 插入岗位 -->
+    <insert id="insertPosition">
+        INSERT INTO sys_position
+        (
+            position_id,
+            position_name,
+            dept_id,
+            leader_id,
+            leader_type,
+            keyword,
+            order_no,
+            memo,
+            creator_id,
+            create_time,
+            alter_time
+        )
+        VALUES
+        (
+            #{position_id},
+            #{position_name},
+            #{dept_id},
+            #{leader_id},
+            #{leader_type},
+            #{keyword},
+            #{order_no},
+            #{memo},
+            #{creator_id},
+            NOW(),
+            NOW()
+        )
+    </insert>
+
+    <!-- 修改岗位 -->
+    <update id="updatePosition">
+        UPDATE sys_position
+        <set>
+            <if test="position_id != null and position_id != ''">position_id=#{position_id},</if>
+            <if test="position_name != null and position_name != ''">position_name=#{position_name},</if>
+            <if test="order_no != null and order_no != ''">order_no=#{order_no},</if>
+            <if test="dept_id != null and dept_id != ''">dept_id=#{dept_id},</if>
+            <if test="memo != null and memo != ''">memo=#{memo},</if>
+        </set>
+        WHERE position_id = #{position_id}
+    </update>
+
+    <!-- 删除岗位 -->
+    <delete id="deletePosition">
+        DELETE FROM sys_position
+         <where>
+         	<if test="position_id !=null and position_id !=''">
+         		and position_id=#{position_id}
+         	</if>
+         	<if test="user_id !=null and user_id !=''">
+         		and user_id=#{user_id}
+         	</if>
+         
+         </where>
+    </delete>
+    
+    <!-- 岗位添加人员 -->
+    <insert id="insertPositionToUser">
+        INSERT INTO sys_user_position
+        (
+            user_id,
+            position_id,
+            is_primary
+        )
+        VALUES
+        (
+            #{user_id},
+            #{position_id},
+            #{is_primary}
+        )
+    </insert>
+
+    <!-- 删除岗位人员 -->
+    <delete id="deletePositionToUser">
+        DELETE FROM sys_user_position
+        <where>
+            <if test="user_id != null and user_id != ''">user_id=#{user_id}</if>
+            <if test="position_id != null and position_id != ''">
+              <if test="user_id == null or user_id == ''">
+                position_id=#{position_id}
+              </if>
+                <if test="user_id != null and user_id != ''">
+                    AND position_id=#{position_id}
+                </if>
+            </if>
+        </where>
+    </delete>
+
+    <!-- 功能菜单列表 -->
+    <select id="queryMenuList" resultType="com.manhui.gsl.jbqgsl.model.Menu">
+        SELECT * FROM sys_menu
+    </select>
+
+    <!-- 菜单树形结构列表 -->
+    <select id="queryMenuTree" resultType="com.manhui.gsl.jbqgsl.model.Menu">
+        SELECT * FROM sys_menu WHERE find_in_set(menu_id,getChild(#{menu_id}));
+    </select>
+
+    <!-- 根据条件查询功能菜单 -->
+    <select id="queryMenuWhere" resultType="com.manhui.gsl.jbqgsl.model.Menu">
+        SELECT * FROM sys_menu WHERE 1=1
+        <if test="menu_id != null and menu_id != ''">
+        AND menu_id = #{menu_id}
+        </if>
+        <if test="p_menu_id != null and p_menu_id != ''">
+        AND p_menu_id = #{p_menu_id}
+        </if>
+    </select>
+    
+    <!-- 插入菜单 -->
+    <insert id="insertMenu">
+        INSERT INTO sys_menu
+        (
+            menu_id,
+            menu_name,
+            p_menu_id,
+            menu_url,
+            menu_pic_css,
+            order_no,
+            creator_id,
+            create_time
+        )
+        VALUES
+        (
+            #{menu_id},
+            #{menu_name},
+            #{p_menu_id},
+            #{menu_url},
+            #{menu_pic_css},
+            #{order_no},
+            #{creator_id},
+            NOW()
+        )
+    </insert>
+
+    <!-- 修改菜单 -->
+    <insert id="updateMenu">
+        UPDATE sys_menu
+        <set>
+            <if test="menu_name != null and menu_name != ''">menu_name=#{menu_name},</if>
+            <if test="p_menu_id != null and p_menu_id != ''">p_menu_id=#{p_menu_id},</if>
+            <if test="menu_url != null and menu_url != ''">menu_url=#{menu_url},</if>
+            <if test="menu_pic_css != null and menu_pic_css != ''">menu_pic_css=#{menu_pic_css},</if>
+            <if test="order_no != null and order_no != ''">order_no=#{order_no},</if>
+            <if test="creator_id != null and creator_id != ''">creator_id=#{creator_id},</if>
+        </set>
+        WHERE menu_id=#{menu_id}
+    </insert>
+
+    <!-- 删除菜单 -->
+    <delete id="deleteMenu">
+        DELETE FROM sys_menu WHERE menu_id=#{menu_id}
+    </delete>
+
+    <!-- 功能配置列表 -->
+    <select id="queryFuncList" resultType="com.manhui.gsl.jbqgsl.model.Func">
+        SELECT * FROM sys_func WHERE 1=1
+        <if test="menu_id != null and menu_id != ''">
+        AND menu_id=#{menu_id}
+        </if>
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 功能配置列表 -->
+    <select id="queryFuncListCount" resultType="int">
+        SELECT COUNT(1) FROM sys_func WHERE 1=1
+        <if test="menu_id != null and menu_id != ''">
+        AND menu_id=#{menu_id}
+        </if>
+    </select>
+
+    <!-- 根据条件查询功能 -->
+    <select id="queryFuncWhere" resultType="com.manhui.gsl.jbqgsl.model.Func">
+        SELECT * FROM sys_func WHERE 1=1
+        <if test="func_id != null and func_id != ''">
+        AND func_id=#{func_id}
+        </if>
+        LIMIT 1
+    </select>
+
+    <!-- 添加功能配置 -->
+    <insert id="insertFunction">
+        INSERT INTO sys_func
+        (
+          func_id,
+          menu_id,
+          func_name,
+          func_desc,
+          order_no,
+          auth_flag,
+          creator_id,
+          create_time
+        )
+        VALUES 
+        (
+          #{func_id},
+          #{menu_id},
+          #{func_name},
+          #{func_desc},
+          #{order_no},
+          #{auth_flag},
+          #{creator_id},
+          NOW()
+        )
+    </insert>
+
+    <!-- 修改功能配置 -->
+    <update id="updateFunc">
+        UPDATE sys_func
+        <set>
+            <if test="menu_id != null and menu_id != ''">menu_id=#{menu_id},</if>
+            <if test="func_name != null and func_name != ''">func_name=#{func_name},</if>
+            <if test="func_desc != null and func_desc != ''">func_desc=#{func_desc},</if>
+            <if test="order_no != null and order_no != ''">order_no=#{order_no},</if>
+            <if test="auth_flag != null and auth_flag != ''">auth_flag=#{auth_flag},</if>
+            <if test="func_level != null and func_level != ''">func_level=#{func_level},</if>
+        </set>
+        WHERE
+        func_id = #{func_id}
+    </update>
+
+    <!-- 删除功能配置 -->
+    <delete id="deleteFunc">
+        DELETE FROM sys_func WHERE func_id=#{func_id}
+    </delete>
+
+    <!-- 添加功能url -->
+    <insert id="insertFuncUrl">
+        INSERT INTO sys_func_url
+        (
+          url_id,
+          func_id,
+          func_url,
+          record_log,
+          order_no,
+          creator_id,
+          create_time
+        )
+        VALUES
+        (
+          #{url_id},
+          #{func_id},
+          #{func_url},
+          #{record_log},
+          #{order_no},
+          #{creator_id},
+          NOW()
+        )
+    </insert>
+
+    <!-- 修改功能URL -->
+    <update id="updateFuncUrl">
+        UPDATE sys_func_url
+        <set>
+            <if test="func_id != null and func_id != ''">func_id=#{func_id},</if>
+            <if test="func_url != null and func_url != ''">func_url=#{func_url},</if>
+            <if test="record_log != null and record_log != ''">record_log=#{record_log},</if>
+            <if test="order_no != null and order_no != ''">order_no=#{order_no},</if>
+            <if test="creator_id != null and creator_id != ''">creator_id=#{creator_id},</if>
+        </set>
+        WHERE url_id = #{url_id}
+    </update>
+
+    <!-- 删除功能URL -->
+    <delete id="deleteFuncUrl">
+        DELETE FROM sys_func_url WHERE url_id = #{url_id}
+    </delete>
+
+    <!-- 功能URL列表 -->
+    <select id="queryFuncUrlList" resultType="com.manhui.gsl.jbqgsl.model.FuncUrl">
+        SELECT fu.*,sf.func_name FROM sys_func_url as fu
+        LEFT JOIN sys_func as sf ON fu.func_id = sf.func_id  WHERE 1=1
+        <if test="func_id != null and func_id != ''">
+            AND fu.func_id=#{func_id}
+        </if>
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 功能URL列表 -->
+    <select id="queryFuncUrlListCount" resultType="int">
+        SELECT COUNT(1) FROM sys_func_url as fu
+        LEFT JOIN sys_func as sf ON fu.func_id = sf.func_id  WHERE 1=1
+        <if test="func_id != null and func_id != ''">
+            AND fu.func_id=#{func_id}
+        </if>
+    </select>
+
+    <!-- 根据条件查询功能URL -->
+    <select id="queryFuncUrlWhere" resultType="com.manhui.gsl.jbqgsl.model.FuncUrl">
+        SELECT * FROM sys_func_url WHERE 1=1
+        <if test="url_id != null and url_id != ''">
+            AND url_id=#{url_id}
+        </if>
+        LIMIT 1
+    </select>
+
+    <!-- 岗位树 -->
+    <select id="queryPositionTree" resultType="com.manhui.gsl.jbqgsl.model.Position">
+        SELECT
+            position_id,
+            position_name,
+            t1.dept_id AS p_position_id,
+            'P' AS position_type
+        FROM
+            sys_position t1
+            JOIN sys_dept t2 ON t2.dept_id = t1.dept_id
+            AND dept_type IN ( '1', '2', '3' )
+        <if test="dept_id != null and dept_id != ''">
+            AND t2.dept_id=#{dept_id}
+        </if>
+        UNION
+        SELECT
+            dept_id,
+            dept_name,
+            p_dept_id,
+            'D' AS position_type
+        FROM
+            sys_dept
+        WHERE
+            dept_type IN ( '1', '2', '3' )
+        <if test="dept_id != null and dept_id != ''">
+            AND dept_id=#{dept_id}
+        </if>
+    </select>
+
+    <!-- 权限菜单 -->
+    <select id="queryMenuJurisdiction" resultType="com.manhui.gsl.jbqgsl.model.Menu">
+        SELECT menu_id, menu_name, p_menu_id,(SELECT count(1) FROM sys_menu WHERE p_menu_id=a.menu_id) AS child_count FROM sys_menu a ORDER BY order_no
+    </select>
+
+    <!-- 权限功能 -->
+    <select id="queryMenuFunction" resultType="com.manhui.gsl.jbqgsl.model.Func">
+        select func_id, func_name,func_level from sys_func where auth_flag='Y' and menu_id=#{menu_id} order by order_no
+    </select>
+
+    <!-- 权限查询 -->
+    <select id="queryPositionFunc" resultType="com.manhui.gsl.jbqgsl.model.PositionFunc">
+        select func_id from  sys_position_func where position_id=#{position_id}
+    </select>
+
+    <!-- 插入职位权限 -->
+    <insert id="insertPositionFunc">
+        INSERT INTO sys_position_func
+        (
+          position_id,
+          func_id
+        )
+        VALUES
+        (
+          #{position_id},
+          #{func_id}
+        )
+    </insert>
+
+    <!-- 删除职位权限 -->
+    <delete id="deletePositionFunc">
+        DELETE FROM sys_position_func WHERE position_id=#{position_id}
+    </delete>
+
+    <!-- 根据岗位查询部门 -->
+    <select id="queryPositionToDept" resultType="com.manhui.gsl.jbqgsl.model.Position">
+        SELECT * FROM sys_position AS sp
+        LEFT JOIN sys_dept AS sd ON sp.dept_id = sd.dept_id
+        <where>
+	       <if test="position_name !=null and position_name !=''">
+	       		and sp.position_name like CONCAT('%',#{position_name},'%')
+	       </if>
+	       <if test="dept_name !=null and dept_name !=''">
+	       		and sd.dept_name like CONCAT('%',#{dept_name},'%')
+	       </if>
+        </where>
+         <if test="sortField != null and sortField != '' and sortOrder !=null and sortOrder !=''">
+       	 	order by  ${sortField} ${sortOrder}
+	      </if>
+         <if test="pageNo != null and pageSize != null">
+	            LIMIT #{pageNo},#{pageSize}
+	      </if>
+    </select>
+
+    <!-- 根据岗位查询部门总数 -->
+    <select id="queryPositionToDeptCount" resultType="int">
+        SELECT COUNT(1) FROM sys_position AS sp
+        LEFT JOIN sys_dept AS sd ON sp.dept_id = sd.dept_id
+    </select>
+
+    <!-- 添加用户 -->
+    <insert id="insertUser">
+        INSERT INTO sys_user
+        (
+          user_id,
+          user_name,
+          user_no,
+          login_name,
+          password,
+          email,
+          work_phone,
+          mobile_no,
+          home_phone,
+          keyword,
+          order_no,
+          memo,
+          user_type,
+          account_status,
+          user_status,
+          last_login_time,
+          creator_id,
+          create_time,
+          alter_time,
+          head_img,
+          user_sex
+        )
+        VALUES
+        (
+          #{user_id},
+          #{user_name},
+          #{user_no},
+          #{login_name},
+          #{password},
+          #{email},
+          #{work_phone},
+          #{mobile_no},
+          #{home_phone},
+          #{keyword},
+          #{order_no},
+          #{memo},
+          #{user_type},
+          #{account_status},
+          #{user_status},
+          #{last_login_time},
+          #{creator_id},
+          NOW(),
+          NOW(),
+          #{head_img},
+          #{user_sex}
+        )
+    </insert>
+
+    <!-- 修改用户 -->
+    <update id="updateUser">
+        UPDATE sys_user
+        <set> 
+            <if test="user_name != null and user_name != ''">user_name=#{user_name},</if>
+            <if test="user_no != null and user_no != ''">user_no=#{user_no},</if>
+            <if test="login_name != null and login_name != ''">login_name=#{login_name},</if>
+            <if test="password != null and password != ''">password=#{password},</if>
+            <if test="email != null and email != ''">email=#{email},</if>
+            <if test="work_phone != null ">work_phone=#{work_phone},</if>
+            <if test="mobile_no != null ">mobile_no=#{mobile_no},</if>
+            <if test="home_phone != null ">home_phone=#{home_phone},</if>
+            <if test="keyword != null and keyword != ''">keyword=#{keyword},</if>
+            <if test="order_no != null and order_no != ''">order_no=#{order_no},</if>
+            <if test="memo != null and memo != ''">memo=#{memo},</if>
+            <if test="user_type != null and user_type != ''">user_type=#{user_type},</if>
+            <if test="account_status != null and account_status != ''">account_status=#{account_status},</if>
+            <if test="user_status != null and user_status != ''">user_status=#{user_status},</if>
+            <if test="last_login_time != null">last_login_time=#{last_login_time},</if>
+            <if test="creator_id != null and creator_id != ''">creator_id=#{creator_id},</if>
+            <if test="create_time != null">create_time=#{create_time},</if>
+            <if test="alter_time != null">alter_time=NOW(),</if>
+            <if test="head_img != null ">head_img=#{head_img},</if>
+            <if test="user_sex != null and user_sex !=''">user_sex=#{user_sex},</if>
+        </set>
+        WHERE user_id=#{user_id}
+    </update>
+
+    <!-- 删除用户 -->
+    <delete id="deleteUser">
+        DELETE FROM sys_user WHERE user_id=#{user_id}
+    </delete>
+
+    <!-- 登录验证 -->
+    <select id="queryLoginPassword" resultType="com.manhui.gsl.jbqgsl.model.User">
+        SELECT * FROM sys_user WHERE login_name=#{login_name} AND password=#{password}
+    </select>
+
+    <!-- 根据用户ID查询用户菜单 -->
+    <select id="queryUserMunu" resultType="com.manhui.gsl.jbqgsl.model.Menu">
+        SELECT sm.menu_id,sm.menu_name,sm.menu_url,sm.p_menu_id,sm.order_no,sm.menu_pic_css,su.user_id FROM sys_menu AS sm
+        JOIN sys_func AS sf ON sf.menu_id like CONCAT(sm.menu_id , '%')
+        JOIN sys_position_func AS pf ON sf.func_id = pf.func_id
+        JOIN sys_position AS sp ON pf.position_id = sp.position_id
+        JOIN sys_user_position AS up ON up.position_id = sp.position_id
+        JOIN sys_user AS su ON su.user_id = up.user_id
+        WHERE su.user_id = #{user_id}
+        GROUP BY sm.menu_id
+        ORDER BY sm.menu_id,sm.order_no ASC
+    </select>
+
+    <!-- 图标样式插入 -->
+    <insert id="insertIcon" keyProperty="ic_id" useGeneratedKeys="true">
+        INSERT INTO sys_icon
+        (
+          ic_class
+        )
+        VALUES
+        (
+          #{ic_class}
+        )
+    </insert>
+
+    <!-- 查询图标 -->
+    <select id="queryIcon" resultType="com.manhui.gsl.jbqgsl.model.Icon">
+        SELECT * FROM sys_icon
+    </select>
+
+    <!-- 用户部门 -->
+    <select id="queryUserDept" resultType="com.manhui.gsl.jbqgsl.model.Dept">
+        SELECT sd.* FROM sys_user AS su
+        LEFT JOIN sys_user_position AS up ON su.user_id = up.user_id
+        LEFT JOIN sys_position AS p ON p.position_id = up.position_id
+        LEFT JOIN sys_dept AS sd ON p.dept_id = sd.dept_id
+        WHERE
+        su.user_id=#{user_id}
+    </select>
+
+    <!-- 根据部门编码查询人员 -->
+    <select id="queryDeptUser" resultType="com.manhui.gsl.jbqgsl.model.User">
+        SELECT su.* FROM sys_user AS su
+        LEFT JOIN sys_user_position AS up ON su.user_id = up.user_id
+        LEFT JOIN sys_position AS p ON p.position_id = up.position_id
+        LEFT JOIN sys_dept AS sd ON p.dept_id = sd.dept_id
+        WHERE
+        sd.dept_id=#{dept_id}
+    </select>
+    
+    <!-- 忘记密码 用户信息验证 -->
+    <select id="checkSysUser" parameterType="com.manhui.gsl.jbqgsl.model.User" resultType="int">
+        SELECT count(*) FROM sys_user 
+        WHERE
+        login_name=#{login_name} and mobile_no =#{mobile_no}
+    </select>
+    
+    <!-- 忘记密码 修改密码 -->
+    <update id="updatePwd">
+        update sys_user set password = #{password}
+        WHERE
+        login_name=#{login_name} and mobile_no =#{mobile_no}
+    </update>
+    
+    <!-- 获取内外部门标识，根据用户ID -->
+    <select id="getInnerOuterDeptFlagByUserId" resultType="string">
+        SELECT
+			d.inner_outer_dept
+		FROM
+			sys_dept d
+		LEFT JOIN sys_position p ON p.dept_id = d.dept_id
+		LEFT JOIN sys_user_position u ON u.position_id = p.position_id
+		WHERE
+			1 = 1
+		AND u.is_primary = '1'
+		AND u.user_id = #{user_id}
+    </select>
+</mapper>

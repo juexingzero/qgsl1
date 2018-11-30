@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+	<title>会员管理-介绍详情</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+    <script type="text/javascript" src="http://kindeditor.net/ke4/kindeditor-all-min.js?t=20160331.js"></script>
+	<style type="text/css">
+		.td1{
+			text-align: right;
+	    	vertical-align: middle;
+		}
+		.cus_table {border-spacing: 0;}
+		.cus_table td,.cus_table th {border-bottom: solid 1px #ccc;border-right: solid 1px #ccc;}
+		.cus_table td {padding: 5px 0;}
+	</style>
+</head>
+
+<body>
+	<div id="form_ryxq" class="from">
+		<div style="display:none;">
+			<input class="mini-hidden" name="id" th:value="${id}">
+			<input class="mini-hidden" name="fieldName" th:value="${fieldName}">
+			<input class="mini-hidden" name="fieldContent" th:value="${fieldContent}">
+			<input class="mini-hidden" name="operator_type" th:value="${operator_type}">
+		</div>
+		
+		<!-- 介绍详情 -->
+		<div id="div_editor" style="height:400px; overflow:auto;">
+		    <div id="editor"></div>
+		</div>
+	    
+	    <div class="mini-toolbar bot_btn">
+			<a class="mini-button cancel" onclick="onClose()">关闭</a>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/memberManager/memberIntroduceDetail.js"></script>
+</body>
+</html>

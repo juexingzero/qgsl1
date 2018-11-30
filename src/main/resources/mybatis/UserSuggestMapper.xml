@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.UserSuggestMapper">
+    <!-- 获取意见反馈列表 -->
+    <select id="getUserSuggestList" resultType="com.manhui.gsl.jbqgsl.model.UserSuggest">
+    	SELECT
+			*
+		FROM
+			user_suggest
+		<where>
+			<if test="is_answer !=null ">
+				is_answer = #{is_answer}
+			</if>
+		</where>
+		<if test="is_answer !=null ">
+			order by answer_time desc
+		</if>
+		<if test="is_answer ==null ">
+			order by create_time desc
+		</if>
+    </select>
+    
+    <!-- 获取意见反馈详情列表， -->
+    <select id="getUserSuggestMapperDetail" resultType="com.manhui.gsl.jbqgsl.model.UserSuggest">
+    	SELECT
+			*
+		FROM
+			user_suggest
+		WHERE
+			1 = 1
+        <if test="id != null and id != ''">
+            AND id = #{id}
+        </if>
+    </select>
+
+    
+    
+    
+    <!-- 更新反馈信息 -->
+    <update id="updateUserSuggest" parameterType="com.manhui.gsl.jbqgsl.model.UserSuggest">
+        UPDATE user_suggest
+        <set>
+            is_answer=#{is_answer},
+            answer_man_id=#{answer_man_id},
+            answer_man_name=#{answer_man_name},
+            answer_time=#{answer_time},
+            answer_content=#{answer_content}
+        </set>
+        WHERE 1=1
+        and id=#{id}
+    </update>
+    
+    <!-- 删除反馈信息 -->
+    <delete id="deleteUserSuggest">
+        DELETE FROM user_suggest WHERE id=#{id}
+    </delete>
+</mapper>

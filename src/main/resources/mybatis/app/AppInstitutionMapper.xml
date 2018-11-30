@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppInstitutionMapper">
+	<select id="queryInstitutionsByIds" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+		select * 
+		from 
+			institution_info 
+		<where>
+			and del_flag = '0'
+			<if test="passiveIdsList !=null and passiveIdsList.size()!=0">
+				and institution_id in
+				<foreach collection="passiveIdsList" item="obj" open=" (" separator="," close=")">
+					#{obj}
+				</foreach>
+			</if>
+		</where>
+		limit #{pageNo},#{pageSize}
+	</select>
+	
+	<select id="getTotal" resultType="long">
+		select count(*) from institution_info 
+		<where>
+		<if test="passiveIdsList !=null and passiveIdsList.size()!=0">
+				and institution_id in
+				<foreach collection="passiveIdsList" item="obj" open=" (" separator="," close=")">
+					#{obj}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<!--即时评价机构总数  -->
+	<select id="countTotal" resultType="long">
+		select
+		 	count(*)
+		 from 
+		   institution_info 
+		<where>
+		 	and del_flag ='0'
+			<if test="passiveIdsList !=null and passiveIdsList.size()>0">
+				and institution_id not in
+				<foreach collection="passiveIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<!--即时评价机构总数  -->
+	<select id="countTotal2" resultType="long">
+		select
+		 	count(*)
+		 from 
+		   institution_info 
+		where del_flag ='0'
+		
+	</select>
+	
+	
+	<select id="queryInstitutions" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select
+		 	institution_id,institution_name,create_time,institution_describe
+		 from 
+		   institution_info 
+		 where
+		 	del_flag ='0' and institution_type !='3'
+		 	 limit #{pageNo},#{pageSize}
+	</select>
+	
+	<select id="queryInstitutions2" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select
+		 	institution_id,institution_name,create_time,institution_describe
+		 from 
+		   institution_info 
+		 <where>
+		 	and del_flag ='0' and institution_type !='3'
+		 <if test="passiveIdsList !=null and passiveIdsList.size()>0">
+		 	and institution_id  not in
+		 	<foreach collection="passiveIdsList" open="(" separator="," close=")" item="obj">
+		 		#{obj}
+		 	</foreach>
+		 </if>
+		 </where>
+		 	 limit #{pageNo},#{pageSize}
+	</select>
+	<select id="queryInstitutionType" resultType="String" >
+		select
+		 	institution_type
+		 from 
+		   institution_info
+		 where
+		 	del_flag ='0' and institution_id=#{institution_id}
+		
+	</select>
+	<!-- 模糊查询 已评价 -->
+	<select id="queryInstitutionYesByLike" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select
+		 	institution_id,institution_name,institution_type,industry_id,institution_main_id
+		 from 
+		   institution_info
+		<where>
+		 	 del_flag ='0' 
+			 <if test="passiveIds !=null and passiveIds.size()>0">
+				 and institution_id in
+			 	<foreach collection="passiveIds" open="(" separator="," close=")"  item="obj">
+			 		#{obj}
+			 	</foreach>
+			 </if>
+			<if test="passive_name !=null and passive_name !=''">
+				and institution_name like '%${passive_name}%'
+			</if>
+		</where>
+	</select>
+	<!-- 模糊查询 未评价 -->
+	<select id="queryInstitutionNoByLike" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select
+		 	institution_id,institution_name,institution_type,industry_id,institution_main_id
+		 from 
+		   institution_info
+		<where>
+		 	 del_flag ='0' 
+			 <if test="passiveInfoIds !=null and passiveInfoIds.size()>0">
+				 and institution_id  in
+			 	<foreach collection="passiveInfoIds" open="(" separator="," close=")"  item="obj">
+			 		#{obj}
+			 	</foreach>
+			 </if>
+			<if test="passive_name !=null and passive_name !=''">
+				and institution_name like '%${passive_name}%'
+			</if>
+		</where>
+	</select>
+	<!-- 即时模糊查询 未评价 -->
+	<select id="queryInstitutionByLike" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select
+		 	institution_id,institution_name
+		 from 
+		   institution_info
+		<where>
+		 	 del_flag ='0' 
+			 <if test="passiveIds !=null and passiveIds.size()>0">
+				 and institution_id not in
+			 	<foreach collection="passiveIds" open="(" separator="," close=")"  item="obj">
+			 		#{obj}
+			 	</foreach>
+			 </if>
+			<if test="passive_name !=null and passive_name !=''">
+				and institution_name like '%${passive_name}%'
+			</if>
+		</where>
+	</select>
+	<!-- 即时模糊查询 未评价 -->
+	<select id="queryInstitutionByLike3" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select
+		 	institution_id,institution_name,institution_type
+		 from 
+		   institution_info
+		<where>
+		 	 del_flag ='0' 
+			<if test="passive_name !=null and passive_name !=''">
+				and institution_name like '%${passive_name}%'
+			</if>
+		</where>
+	</select>
+	<!--获取到政府部门总数  -->
+	<select id="getTotal2" resultType="long" >
+		select
+		 	count(*)
+		 from 
+		   institution_info
+		<where>
+			del_flag ='0' and institution_type !='3'
+	      	<if test="institution_type !=null and institution_type !=''">
+	      		and institution_type =#{institution_type}
+	      	</if>
+		</where>
+			
+	</select>
+	<!--获取到所有的政府 机构  -->
+	<select id="queryInstitutionsByIds2" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select
+		 	*
+		 from 
+		   institution_info
+		<where>
+		 	and del_flag ='0' and institution_type !='3'
+	        <if test="institution_type != null and institution_type !='' ">
+				and institution_type =#{institution_type}
+	        </if>
+		</where>
+		<if test="pageNo !=null and pageSize !=null">
+			limit #{pageNo},#{pageSize}
+		</if>
+	</select>
+	<!--获取到所有的政府 机构  -->
+	<select id="queryInstitutionInfo" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select
+		 	*
+		 from 
+		   institution_info
+		<where>
+		 	del_flag ='0'
+        <if test="passive_id != null and passive_id != ''">
+			and institution_id = #{passive_id}
+        </if>
+		
+		</where>
+	</select>
+	<!-- 分类类统计机构数量 -->
+	<select id="getTotal3" resultType="long" >
+		select count(*)
+		 from 
+		   institution_info
+		<where>
+		 	and del_flag ='0'
+	        <if test="passiveIdsList != null and passiveIdsList.size()>0">
+				and institution_id  in
+				<foreach collection="passiveIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+	        </if>
+	        <if test="institution_type != null and institution_type != ''">
+				and institution_type  =#{institution_type}
+	        </if>
+		</where>
+	</select>
+	<!-- 分类类统计主管企业 -->
+	<select id="getTotal4" resultType="long" >
+		select count(*)
+		 from 
+		   institution_info
+		<where>
+		 	and del_flag ='0'
+	        <if test="passiveIdsList != null and passiveIdsList.size()>0">
+				and institution_id  in
+				<foreach collection="passiveIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+	        </if>
+		</where>
+	</select>
+	<!-- 分类类统计主管企业进行分类统计 -->
+	<select id="getTotal5" resultType="long" >
+		select count(*)
+		 from 
+		   institution_info
+		<where>
+		 	and del_flag ='0'
+	        <if test="passiveIdsList != null and passiveIdsList.size()>0">
+				and institution_id  in
+				<foreach collection="passiveIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+	        </if>
+	        <if test="institution_type != null and institution_type !=''">
+				and institution_type =#{institution_type}
+	        </if>
+	        <if test="industry_id != null and industry_id !=''">
+				and industry_id =#{industry_id}
+	        </if>
+	        <if test="flag != null and flag !='' and flag =='1'.toString() "><!--主管企业  -->
+				and institution_main_id =#{institution_id}
+	        </if>
+	        <if test="flag != null and flag !='' and flag =='0'.toString() "><!--主管企业  -->
+				and institution_main_id !=#{institution_id}
+	        </if>
+		</where>
+	</select>
+	<!--分类获取机构信息  -->
+	<select id="queryInstitutionsTypeGroupByIds" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select *
+		 from 
+		   institution_info
+		<where>
+		 	del_flag ='0'
+	        <if test="passiveIdsList != null and passiveIdsList.size()>0">
+				and institution_id  in
+				<foreach collection="passiveIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+	        </if>
+	        <if test="institution_type != null and institution_type != ''">
+				and institution_type  =#{institution_type}
+	        </if>
+		</where>
+	        <if test="pageNo != null  and pageSize != null ">
+				limit #{pageNo},#{pageSize}
+	        </if>
+	</select>
+	<!--评价方为政府 查询企业  -->
+	<select id="queryInstitutionsCompanyTypeByIds" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select *
+		 from 
+		   institution_info
+		<where>
+		 	del_flag ='0'
+	        <if test="passiveIdsList != null and passiveIdsList.size()>0">
+				and institution_id  in
+				<foreach collection="passiveIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+	        </if>
+		</where>
+	        <if test="pageNo !=null  and pageSize !=null " >
+				limit #{pageNo},#{pageSize}
+	        </if>
+	</select>
+	<!--评价方为政府 查询企业  -->
+	<select id="queryInstitutionsCompanyTypeByIds2" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select *
+		 from 
+		   institution_info
+		<where>
+		 	del_flag ='0'
+	        <if test="passiveIdsList != null and passiveIdsList.size()>0">
+				and institution_id  in
+				<foreach collection="passiveIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+	        </if>
+	        <if test="institution_type != null and institution_type !=''">
+				and institution_type =#{institution_type}
+	        </if>
+	        <if test="industry_id != null and industry_id !=''">
+				and industry_id =#{industry_id}
+	        </if>
+		</where>
+	        <if test="pageNo !=null  and pageSize !=null " >
+				limit #{pageNo},#{pageSize}
+	        </if>
+	</select>
+	<select id="getInstitution" resultType="com.manhui.gsl.jbqgsl.model.Institution" >
+		select * from institution_info where institution_id = #{institution_id}
+	</select>
+</mapper>

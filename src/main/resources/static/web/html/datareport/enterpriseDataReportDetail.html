@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>数据上报详细内容</title>
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+	<script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<div id="tabs" style="height:100%;overflow-y:auto;">
+		<div style="padding: 10px; border-top: 0; border-left: 0; border-right: 0;">
+			<input class="mini-hidden" id="data_report_id" name="data_report_id" th:value="${data_report_id}"/>
+			<table class="form-table" border="0" cellpadding="1" cellspacing="2">
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						企业名称：
+					</td>
+					<td style="width: 200px">
+						<input id="QYMC" name="QYMC" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						组织机构代码：
+					</td>
+					<td>
+						<input id="TYSHXYDM" name="TYSHXYDM" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						企业所属行业：
+					</td>
+					<td colspan="3">
+						<input id="HYFL" name="HYFL" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						主营业务领域1：
+					</td>
+					<td style="width: 200px">
+						<input id="zyywly1" name="zyywly1" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						占营收总额比例1：
+					</td>
+					<td>
+						<input id="zyszebl1" name="zyszebl1" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						主营业务领域2：
+					</td>
+					<td style="width: 200px">
+						<input id="zyywly2" name="zyywly2" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						占营收总额比例2：
+					</td>
+					<td>
+						<input id="zyszebl2" name="zyszebl2" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						主营业务领域3：
+					</td>
+					<td style="width: 200px">
+						<input id="zyywly3" name="zyywly3" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						占营收总额比例3：
+					</td>
+					<td>
+						<input id="zyszebl3" name="zyszebl3" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						主要产品或服务名称：
+					</td>
+					<td  colspan="3">
+						<input id="zycp" name="zycp" class="mini-textbox" readonly="readonly" style="width: 199px"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度营收总额（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndysze" name="bndysze" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度营收总额（万元）：
+					</td>
+					<td>
+						<input id="sndysze" name="sndysze" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度利润总额（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndlrze" name="bndlrze" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度利润总额（万元）：
+					</td>
+					<td>
+						<input id="sndlrze" name="sndlrze" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度税后净利润（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndshjlr" name="bndshjlr" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度税后净利润（万元）：
+					</td>
+					<td>
+						<input id="sndshjlr" name="sndshjlr" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度资产总额（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndzcze" name="bndzcze" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度资产总额（万元）：
+					</td>
+					<td>
+						<input id="sndzcze" name="sndzcze" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度固定资产净值（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndgdzcjz" name="bndgdzcjz" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度固定资产净值（万元）：
+					</td>
+					<td>
+						<input id="sndgdzcjz" name="sndgdzcjz" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度净资产总额（所有者权益）（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndjzcze" name="bndjzcze" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度净资产总额（所有者权益）（万元）：
+					</td>
+					<td>
+						<input id="sndjzcze" name="sndjzcze" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度缴税总额（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndjsze" name="bndjsze" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度缴税总额（万元）：
+					</td>
+					<td>
+						<input id="sndjsze" name="sndjsze" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度研发费用（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndyffy" name="bndyffy" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度研发费用（万元）：
+					</td>
+					<td>
+						<input id="sndyffy" name="sndyffy" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度出口总额（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndckze" name="bndckze" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度出口总额（万元）：
+					</td>
+					<td>
+						<input id="sndckze" name="sndckze" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度海外收入（不含出口）（万元）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndhwsr" name="bndhwsr" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度海外收入（不含出口）（万元）：
+					</td>
+					<td>
+						<input id="sndhwsr" name="sndhwsr" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度年末员工人数（人）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndnmygrs" name="bndnmygrs" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度年末员工人数（人）：
+					</td>
+					<td>
+						<input id="sndnmygrs" name="sndnmygrs" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						本年度年末海外雇员人数（人）：
+					</td>
+					<td style="width: 200px">
+						<input id="bndnmhwgy" name="bndnmhwgy" class="mini-textbox" readonly="readonly"/>
+					</td>
+					<td class="title noEmpty" style="width: 180px;" align="right">
+						上年度年末海外雇员人数（人）：
+					</td>
+					<td>
+						<input id="sndnmhwgy" name="sndnmhwgy" class="mini-textbox" readonly="readonly" style="width: 199px;"/>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!-- bot btns -->
+		<div class="mini-toolbar bot_btn">
+			<a class="mini-button" onclick="returns('ok')">关闭</a>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/datareport/enterpriseDataReportDetail.js"></script>
+</body>
+</html>

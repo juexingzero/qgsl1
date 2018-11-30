@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 字典设置 -->
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.DictionaryMapper">
+
+    <!-- 查询字典 -->
+    <select id="queryDictionary" resultType="com.manhui.gsl.jbqgsl.model.Dictionary">
+      SELECT sd1.*,sd2.dict_name as dict_pidName FROM sys_dictionary AS sd1
+      LEFT JOIN sys_dictionary AS sd2 ON sd1.dict_pid = sd2.dict_id WHERE 1=1
+      <if test="where != null and where != ''">
+        AND (sd1.dict_name like CONCAT('%',#{where},'%') OR sd1.dict_type LIKE CONCAT('%',#{where},'%'))
+      </if>
+      ORDER BY dict_id asc
+      <if test="pageNo != null and pageSize != null">
+        LIMIT #{pageNo},#{pageSize}
+      </if>
+    </select>
+
+    <!-- 查询字典 -->
+    <select id="queryDictionaryCount" resultType="int">
+      SELECT COUNT(1) FROM sys_dictionary AS sd1
+      LEFT JOIN sys_dictionary AS sd2 ON sd1.dict_pid = sd2.dict_id WHERE 1=1
+      <if test="where != null and where != ''">
+          AND (sd1.dict_name like CONCAT('%',#{where},'%') OR sd1.dict_type LIKE CONCAT('%',#{where},'%'))
+      </if>
+    </select>
+
+    <!-- 添加数据字典 -->
+    <insert id="insertDictionary" keyProperty="dict_id" useGeneratedKeys="true">
+        INSERT INTO sys_dictionary
+        (
+          dict_type,
+          dict_name,
+          dict_value,
+          dict_pid,
+          isSystem
+        )
+        VALUES
+        (
+          #{dict_type},
+          #{dict_name},
+          #{dict_value},
+          #{dict_pid},
+          #{isSystem}
+        )
+    </insert>
+
+    <!-- 修改数据字典 -->
+    <update id="updateDictionary">
+        UPDATE sys_dictionary
+        <set>
+            <if test="dict_type != null and dict_type != ''">dict_type=#{dict_type},</if>
+            <if test="dict_name != null and dict_name != ''">dict_name=#{dict_name},</if>
+            <if test="dict_value != null">dict_value=#{dict_value},</if>
+            <if test="dict_pid != null">dict_pid=#{dict_pid},</if>
+            <if test="isSystem != null">isSystem=#{isSystem},</if>
+        </set>
+        WHERE dict_id = #{dict_id}
+    </update>
+
+    <!-- 删除字典 -->
+    <delete id="deleteDictionary">
+        DELETE FROM sys_dictionary WHERE dict_id = #{dict_id}
+    </delete>
+
+    <!-- 根据条件查询字典树 -->
+    <select id="queryDictionaryTree" resultType="com.manhui.gsl.jbqgsl.model.Dictionary">
+        SELECT * FROM sys_dictionary WHERE find_in_set(dict_id,treeDictionary(#{dict_id}));
+    </select>
+
+    <!-- 根据条件查询字典值 -->
+    <select id="queryDictionaryWhere" resultType="com.manhui.gsl.jbqgsl.model.Dictionary">
+        SELECT * FROM sys_dictionary WHERE 1=1
+        <if test="dict_id != null">
+          AND dict_id = #{dict_id}
+        </if>
+        LIMIT 1
+    </select>
+
+</mapper>

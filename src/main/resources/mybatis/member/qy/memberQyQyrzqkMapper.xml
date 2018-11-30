@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyQyrzqkMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyrzqk">
+        <id column="RZQKZJ" jdbcType="VARCHAR" property="rzqkzj" />
+        <result column="HJBZRZCPZLMC" jdbcType="VARCHAR" property="hjbzrzcpzlmc" />
+        <result column="HJBZRZCP" jdbcType="VARCHAR" property="hjbzrzcp" />
+        <result column="RYJB" jdbcType="VARCHAR" property="ryjb" />
+        <result column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="SRRZDJ" jdbcType="VARCHAR" property="srrzdj" />
+        <result column="GXJSQYRZJG" jdbcType="VARCHAR" property="gxjsqyrzjg" />
+        <result column="GXJSQYSZQY" jdbcType="VARCHAR" property="gxjsqyszqy" />
+        <result column="HDSJ" jdbcType="VARCHAR" property="hdsj" />
+        <result column="SRRZRQ" jdbcType="VARCHAR" property="srrzrq" />
+        <result column="WMZYRZBM" jdbcType="VARCHAR" property="wmzyrzbm" />
+        <result column="WMZYRZPC" jdbcType="VARCHAR" property="wmzyrzpc" />
+        <result column="GXJSQYRZPC" jdbcType="VARCHAR" property="gxjsqyrzpc" />
+        <result column="SFHDWMZYJCKQ" jdbcType="VARCHAR" property="sfhdwmzyjckq" />
+        <result column="SFBRZWGXJSQY" jdbcType="VARCHAR" property="sfbrzwgxjsqy" />
+        <result column="HJBZZSBH" jdbcType="VARCHAR" property="hjbzzsbh" />
+        <result column="HJBZPZSJ" jdbcType="VARCHAR" property="hjbzpzsj" />
+        <result column="GXJSQYSZDQ" jdbcType="VARCHAR" property="gxjsqyszdq" />
+        <result column="SHMYMC" jdbcType="VARCHAR" property="shmymc" />
+        <result column="BFJG" jdbcType="VARCHAR" property="bfjg" />
+        <result column="SFTGZLGLRZ" jdbcType="VARCHAR" property="sftgzlglrz" />
+        <result column="ZLGLRZMB" jdbcType="VARCHAR" property="zlglrzmb" />
+        <result column="QYID" jdbcType="VARCHAR" property="qyid" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyrzqk">
+       insert into member_qy_qyrzqk(RZQKZJ,HJBZRZCPZLMC,HJBZRZCP,RYJB,JBXXZJ,SRRZDJ,GXJSQYRZJG,GXJSQYSZQY,
+        HDSJ,SRRZRQ,WMZYRZBM,WMZYRZPC,GXJSQYRZPC,SFHDWMZYJCKQ,SFBRZWGXJSQY,HJBZZSBH,HJBZPZSJ,GXJSQYSZDQ,SHMYMC,BFJG,SFTGZLGLRZ,ZLGLRZMB,QYID)
+       values (#{rzqkzj},#{hjbzrzcpzlmc},#{hjbzrzcp},#{ryjb},#{jbxxzj},#{srrzdj},#{gxjsqyrzjg},#{gxjsqyszqy},
+        #{hdsj},#{srrzrq},#{wmzyrzbm},#{wmzyrzpc},#{gxjsqyrzpc},#{sfhdwmzyjckq},#{sfbrzwgxjsqy},#{hjbzzsbh},#{hjbzpzsj},
+        #{gxjsqyszdq},#{shmymc},#{bfjg},#{sftgzlglrz},#{zlglrzmb},#{qyid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyrzqk">
+        update member_qy_qyrzqk
+        <set>
+            <if test="rzqkzj!=null and rzqkzj != ''">RZQKZJ=#{rzqkzj},</if>
+            <if test="hjbzrzcpzlmc!=null ">HJBZRZCPZLMC=#{hjbzrzcpzlmc},</if>
+            <if test="hjbzrzcp!=null">HJBZRZCP=#{hjbzrzcp},</if>
+            <if test="ryjb!=null">RYJB=#{ryjb},</if>
+            <if test="jbxxzj!=null">JBXXZJ=#{jbxxzj},</if>
+            <if test="srrzdj!=null">SRRZDJ=#{srrzdj},</if>
+            <if test="gxjsqyrzjg!=null">GXJSQYRZJG=#{gxjsqyrzjg},</if>
+            <if test="gxjsqyszqy!=null">GXJSQYSZQY=#{gxjsqyszqy},</if>
+            <if test="hdsj!=null">HDSJ=#{hdsj},</if>
+            <if test="srrzrq!=null">SRRZRQ=#{srrzrq},</if>
+            <if test="wmzyrzbm!=null">WMZYRZBM=#{wmzyrzbm},</if>
+            <if test="wmzyrzpc!=null">WMZYRZPC=#{wmzyrzpc},</if>
+            <if test="gxjsqyrzpc!=null">GXJSQYRZPC=#{gxjsqyrzpc},</if>
+            <if test="sfhdwmzyjckq!=null">SFHDWMZYJCKQ=#{sfhdwmzyjckq},</if>
+            <if test="sfbrzwgxjsqy!=null">SFBRZWGXJSQY=#{sfbrzwgxjsqy},</if>
+            <if test="hjbzzsbh!=null">HJBZZSBH=#{hjbzzsbh},</if>
+            <if test="hjbzpzsj!=null">HJBZPZSJ=#{hjbzpzsj},</if>
+            <if test="gxjsqyszdq!=null">GXJSQYSZDQ=#{gxjsqyszdq},</if>
+            <if test="shmymc!=null">SHMYMC=#{shmymc},</if>
+            <if test="bfjg!=null">BFJG=#{bfjg},</if>
+            <if test="sftgzlglrz!=null">SFTGZLGLRZ=#{sftgzlglrz},</if>
+            <if test="zlglrzmb!=null">ZLGLRZMB=#{zlglrzmb},</if>
+            <if test="qyid!=null">QYID=#{qyid},</if>
+        </set>
+        where RZQKZJ = #{rzqkzj}
+    </update>
+
+    <!--根企业基本信息表id 查询数据-->
+    <select id="queryByQyid" parameterType="String" resultType="HashMap">
+        select rzqkzj,sfbrzwgxjsqy,gxjsqyrzjg,sfhdwmzyjckq,wmzyrzbm,sftgzlglrz,zlglrzmb from member_qy_qyrzqk where QYID = #{qyid}
+    </select>
+
+</mapper>

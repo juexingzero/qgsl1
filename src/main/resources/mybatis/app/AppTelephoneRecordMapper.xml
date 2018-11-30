@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppTelephoneRecordMapper">
+	<insert id="save">
+		INSERT INTO telephone_record (
+			id,
+			caller_id,
+			caller_name,
+			caller_post,
+			caller_dept_name,
+			caller_dept_id,
+			caller_phone,
+			called_id,
+			called_name,
+			called_post,
+			called_dept_name,
+			called_phone,
+			called_dept_id,
+			num,
+			link_time
+		)
+		VALUES
+			(
+		#{ id }, 
+		#{caller_id},
+		#{caller_name},
+		#{caller_post},
+		#{caller_dept_name},
+		#{caller_dept_id},
+		#{caller_phone},
+		#{called_id},
+		#{called_name},
+		#{called_post},
+		#{called_dept_name},
+		#{called_phone},
+		#{called_dept_id},
+		#{num},
+		#{link_time}
+		)
+	</insert>
+	<select id="query"  resultType="com.manhui.gsl.jbqgsl.model.topicevaluate.TelephoneRecord">
+		select * from telephone_record 
+		<where>
+			<if test="caller_id !=null and caller_id !=''">
+				and caller_id =#{caller_id}
+			</if>
+			<if test="called_id !=null and called_id !=''">
+				and called_id =#{called_id}
+			</if>
+		</where>
+	</select>
+	<update id="update">
+		update telephone_record 
+		<set>
+			<if test="caller_id!=null and caller_id !='' ">caller_id=#{caller_id},</if>
+			<if test="caller_name!=null and caller_name !='' ">caller_name=#{caller_name},</if>
+			<if test="caller_post!=null and caller_post !='' ">caller_post=#{caller_post},</if>
+			<if test="caller_dept_name!=null and caller_dept_name !='' ">caller_dept_name=#{caller_dept_name},</if>
+			<if test="caller_dept_id!=null and caller_dept_id !='' ">caller_dept_id=#{caller_dept_id},</if>
+			<if test="caller_phone!=null and caller_phone !='' ">caller_phone=#{caller_phone},</if>
+			<if test="called_id!=null and called_id !='' ">called_id=#{called_id},</if>
+			<if test="called_name!=null and called_name!='' ">called_name=#{called_name},</if>
+			<if test="called_post!=null and called_post !='' ">called_post=#{called_post},</if>
+			<if test="called_dept_name!=null and called_dept_name !='' ">called_dept_name=#{called_dept_name},</if>
+			<if test="called_dept_id !=null and called_dept_id !='' ">called_dept_id=#{called_dept_id},</if>
+			<if test="called_phone!=null and called_phone !='' ">called_phone=#{called_phone},</if>
+			<if test="num!=null ">num=#{num},</if>
+			<if test="link_time!=null and link_time !='' ">link_time=#{link_time},</if>
+		</set>
+		<where>
+			<if test="id !=null and id !=''">
+				 and id = #{id} 
+			</if>
+		</where>
+	</update>
+	
+	<select id="queryLastTimeLinkManList" resultType="com.manhui.gsl.jbqgsl.controller.app.linkman.TelephoneRecordResult">
+		SELECT
+			id,
+			tr.caller_id,
+			tr.called_id,
+			tr.called_name,
+			tr.called_post,
+			tr.called_dept_name,
+			tr.called_dept_id,
+			tr.called_phone,
+			su.user_sex as user_sex,
+			su.head_img as head_img
+		FROM
+			telephone_record tr
+		left join sys_user su 
+		on  tr.called_id = su.user_id
+		WHERE
+			caller_id = #{caller_id}
+		ORDER BY link_time desc
+		LIMIT 0,20
+	</select>
+</mapper> 

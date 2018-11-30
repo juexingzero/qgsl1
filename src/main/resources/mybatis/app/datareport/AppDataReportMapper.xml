@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.datareport.AppDataReportMapper">
+	<select id="queryToEvaluateDataReport" parameterType="String" resultType="com.manhui.gsl.jbqgsl.controller.app.datareport.result.DataReportList">
+		SELECT
+			mdr.id,
+			mdr.qy_id,
+			mdr.data_report_id,
+			mdt.template_id,
+			mdt.start_time,
+			mdt.end_time,
+			mdt.template_title,
+			mqyjbxx.QYMC,
+			mqyjbxx.TYSHXYDM,
+			mqyjbxx.HYFL,
+			mdr.report_state
+		FROM
+			member_data_relation mdr
+		INNER JOIN member_data_template mdt ON mdr.template_id = mdt.template_id
+		INNER JOIN member_qy_qyjbxx mqyjbxx ON mqyjbxx.JBXXZJ = mdr.qy_id
+		<where>
+			AND mdt.state='1' 
+			AND mdr.report_state='0'
+			<if test="member_id !=null and member_id !=''">
+				AND mdr.qy_id = #{member_id} 
+			</if>
+		</where>
+	</select>
+	<select id="queryToAlreadyEvaluateDataReport" parameterType="String" resultType="com.manhui.gsl.jbqgsl.controller.app.datareport.result.DataReportList">
+		SELECT
+			mdl.id,
+			mdl.qy_id,
+			mdl.data_report_id,
+			mdt.template_id,
+			mdt.start_time,
+			mdt.end_time,
+			mdt.template_title,
+			mqyjbxx.QYMC,
+			mqyjbxx.TYSHXYDM,
+			mqyjbxx.HYFL,
+			mdl.report_state
+		FROM
+			member_data_relation mdl
+		INNER JOIN member_data_template mdt ON mdl.template_id = mdt.template_id
+		INNER JOIN member_qy_qyjbxx mqyjbxx ON mqyjbxx.JBXXZJ = mdl.qy_id
+		<where><!--结束 或者未结束但是已经上报  -->
+			<if test="member_id !=null and member_id !=''">
+				AND mdl.qy_id = #{member_id} AND (mdt.state='2' OR (mdt.state='1' AND mdl.report_state='1') )
+			</if>
+		</where>
+	</select>
+	<update id="updateMemberDataRelation" parameterType="Map">
+		update member_data_relation set report_state=#{report_state},report_time = #{report_time} where data_report_id = #{id}
+	</update>
+	<insert id="saveDataReportList" parameterType="com.manhui.gsl.jbqgsl.model.datareport.DataEnterprise">
+		INSERT INTO member_data_enterprise
+			VALUES
+			(
+				#{id},          
+				#{qy_id},       
+				#{template_id}, 
+				#{zyywly1},     
+				#{zyywly2},     
+				#{zyywly3},     
+				#{zyszebl1},    
+				#{zyszebl2},    
+				#{zyszebl3},    
+				#{zycp},        
+				#{bndysze},     
+				#{bndlrze},     
+				#{bndshjlr},    
+				#{bndzcze},     
+				#{bndgdzcjz},   
+				#{bndjzcze},    
+				#{bndjsze},     
+				#{bndyffy},     
+				#{bndckze},     
+				#{bndhwsr},     
+				#{bndnmygrs},   
+				#{bndnmhwgy},   
+				#{sndysze},     
+				#{sndlrze},     
+				#{sndshjlr},    
+				#{sndzcze},     
+				#{sndgdzcjz},   
+				#{sndjzcze},    
+				#{sndjsze},     
+				#{sndyffy},     
+				#{sndckze},     
+				#{sndhwsr},     
+				#{sndnmygrs},   
+				#{sndnmhwgy}
+			)
+	</insert>
+	<select id="queryMemberDataEnterprise" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.datareport.DataEnterprise">
+		SELECT
+			*
+		FROM
+			member_data_enterprise
+		WHERE
+			id = #{id}
+	</select>
+	<select id="queryTemplateIntroduce" parameterType="String" resultType="Map">
+		SELECT
+			template_id,introduce
+		FROM
+			member_data_template
+		WHERE
+			template_id = #{template_id}
+	</select>
+	<select id="queryDataRelationState" parameterType="String" resultType="String">
+		SELECT
+			report_state
+		FROM
+			member_data_relation
+		WHERE
+			data_report_id = #{id}
+	</select>
+</mapper>

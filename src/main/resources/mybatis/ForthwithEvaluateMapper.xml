@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.ForthwithEvaluateMapper">
+	<select id="queryUnevaluateList" parameterType="java.util.Map" resultType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+		select eva.* from forthwith_evaluate eva left join evaluate_flowing_suggest su
+		on eva.forthwith_id = su.forthwith_id
+		where 
+		su.suggest_is_answer = 0
+		<if test="evaluate_active_name != null and evaluate_active_name != ''">
+            AND 
+            (
+            	eva.evaluate_active_name LIKE CONCAT('%','${evaluate_active_name}','%')
+            	OR eva.evaluate_passive_name LIKE CONCAT('%','${evaluate_active_name}','%')
+            )
+        </if>
+        AND eva.del_flag = 0
+		ORDER BY
+			eva.create_time DESC
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	</select>
+	
+	<select id="queryUnevaluateTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+	select count(eva.forthwith_id) from forthwith_evaluate eva left join evaluate_flowing_suggest su
+	 on eva.forthwith_id = su.forthwith_id
+		where su.suggest_is_answer = 0
+		<if test="evaluate_active_name != null and evaluate_active_name != ''">
+            AND 
+            (
+	            eva.evaluate_active_name LIKE CONCAT('%','${evaluate_active_name}','%')
+	            OR eva.evaluate_passive_name LIKE CONCAT('%','${evaluate_active_name}','%')
+            )
+        </if>
+        AND eva.del_flag = 0
+		ORDER BY
+			eva.create_time DESC
+	</select>
+	
+	<select id="queryEvaluateList" parameterType="java.util.Map" resultType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+		select eva.* from forthwith_evaluate eva left join evaluate_flowing_suggest su
+		 on eva.forthwith_id = su.forthwith_id
+		where su.suggest_is_answer = 1
+		<if test="evaluate_active_name != null and evaluate_active_name != ''">
+            AND 
+            (
+            	eva.evaluate_active_name LIKE CONCAT('%','${evaluate_active_name}','%')
+            	OR eva.evaluate_passive_name LIKE CONCAT('%','${evaluate_active_name}','%')
+            )
+        </if>
+        AND eva.del_flag = 0
+		ORDER BY
+			eva.create_time DESC
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	</select>
+	
+	<select id="queryEvaluateTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+	select count(eva.forthwith_id) from forthwith_evaluate eva left join evaluate_flowing_suggest su
+	 on eva.forthwith_id = su.forthwith_id
+		where su.suggest_is_answer = 1 
+		<if test="evaluate_active_name != null and evaluate_active_name != ''">
+            AND 
+            (
+            	eva.evaluate_active_name LIKE CONCAT('%','${evaluate_active_name}','%')
+            	OR eva.evaluate_passive_name LIKE CONCAT('%','${evaluate_active_name}','%')
+            )
+        </if>
+        AND eva.del_flag = 0
+		ORDER BY
+			eva.create_time DESC
+	</select>
+	<select id="queryEvaluate" parameterType="java.lang.String" resultType="map">
+		select eva.evaluate_active_name,eva.evaluate_passive_name,eva.real_score_sum,
+		su.suggest_id,su.work_content,su.suggest_initiate,su.suggest_answer
+		 from forthwith_evaluate eva,evaluate_flowing_suggest su where 
+		 eva.forthwith_id = su.forthwith_id
+		 AND eva.forthwith_id = #{forthwith_id} AND su.passive_id = #{passive_id}
+		 AND su.actice_id = #{active_id}
+	</select>
+	<select id="queryForthwithEvaluate" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+		select * from forthwith_evaluate where forthwith_id = #{forthwith_id}
+	</select>
+	<select id="queryEvaluateFlowingScores" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore">
+		select * from evaluate_flowing_score where forthwith_id= #{forthwith_id}
+		AND passive_id = #{passive_id} AND actice_id = #{active_id}
+	</select>
+	
+	<update id="updateSuggestAnswer" parameterType="java.lang.String">
+		update evaluate_flowing_suggest 
+		<set>
+			suggest_is_answer = '1',
+			suggest_answer = #{suggest_answer}
+		</set>
+		where suggest_id = #{suggest_id}
+	</update>
+</mapper>

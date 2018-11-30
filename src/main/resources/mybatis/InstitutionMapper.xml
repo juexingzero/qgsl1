@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.InstitutionMapper">
+    <!-- 获取机构列表 -->
+    <select id="queryInstitutionList" parameterType="java.util.Map" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+    	SELECT
+			info.*,industry.industry_id,industry.industry_name
+		FROM
+			institution_info info left join industry_info industry
+			on info.industry_id = industry.industry_id
+		WHERE 1 = 1
+		AND info.institution_type = #{institution_type}
+        <if test="institution_name != null and institution_name != ''">
+            AND info.institution_name LIKE CONCAT('%',#{institution_name},'%')
+        </if>
+		<if test="street_main_id != null and street_main_id != ''">
+			AND info.street_main_id  = #{street_main_id}
+		</if>
+			AND info.del_flag = '0'
+		ORDER BY
+			info.create_time DESC
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 获取机构总数 -->
+    <select id="queryInstitutionTotal" resultType="int">
+			SELECT
+				COUNT(*)
+			FROM
+				institution_info info left join industry_info industry
+				on info.industry_id = industry.industry_id
+			WHERE 1 = 1
+			AND info.institution_type = #{institution_type}
+	        <if test="institution_name != null and institution_name != ''">
+	            AND info.institution_name LIKE CONCAT('%',#{institution_name},'%')
+	        </if>
+			<if test="street_main_id != null and street_main_id != ''">
+				AND info.street_main_id  = #{street_main_id}
+			</if>
+				AND info.del_flag = '0'
+    </select>
+    
+    <update id="deleteInstitution" parameterType="java.lang.String">
+    	update institution_info set del_flag = '1' where institution_id = #{institution_id}
+    </update>
+    
+    <select id="queryInstitution" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+    	select * from institution_info where institution_id = #{institution_id}
+    </select>
+    <update id="editInstitution" parameterType="com.manhui.gsl.jbqgsl.model.Institution">
+    	update institution_info
+    	<set>
+    		institution_name=#{institution_name},
+    		institution_type = #{institution_type},
+    		<if test="institution_describe != null">
+		        institution_describe = #{institution_describe},
+		    </if>
+    		<if test="industry_id != null">
+        		industry_id = #{industry_id},
+      		</if>
+      		 institution_linkman_name = #{institution_linkman_name},
+      		 institution_linkman_phone = #{institution_linkman_phone},
+      		 <if test="institution_linkman_email != null">
+        		institution_linkman_email = #{institution_linkman_email},
+      		</if>
+		      <if test="update_time != null">
+		        update_time = #{update_time}, 
+		      </if>
+    	</set>
+    	where institution_id = #{institution_id}
+    </update>
+    <insert id="saveInstitution" parameterType="com.manhui.gsl.jbqgsl.model.Institution">
+    	insert into institution_info
+    	<trim prefix="(" suffix=")" suffixOverrides="," >
+ 		institution_id,
+ 		institution_name,
+ 		institution_type,
+ 		<if test="institution_describe != null">institution_describe,</if>
+ 		<if test="industry_id != null">industry_id,</if>
+ 		institution_linkman_name,
+ 		institution_linkman_phone,
+ 		<if test="institution_linkman_email != null">institution_linkman_email,</if>
+		<if test="institution_main_id != null" >institution_main_id,</if>
+		<if test="street_main_id != null" >street_main_id,</if>
+ 		create_time,
+ 		update_time,
+ 	</trim>
+ 	<trim prefix="values (" suffix=")" suffixOverrides="," >
+ 		#{institution_id},
+ 		#{institution_name},
+ 		#{institution_type},
+ 		<if test="institution_describe != null">#{institution_describe},</if>
+ 		<if test="industry_id != null">#{industry_id},</if>
+ 		#{institution_linkman_name},
+ 		#{institution_linkman_phone},
+ 		<if test="institution_linkman_email != null">#{institution_linkman_email},</if>
+		<if test="institution_main_id != null" >#{institution_main_id},</if>
+		<if test="street_main_id != null" >#{street_main_id},</if>
+ 		#{create_time},
+ 		#{update_time}
+ 	</trim>
+    </insert>
+    <select id="queryInstitutionByNameAndPhone" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+    	select * from institution_info
+    	where del_flag = '0' AND institution_name = #{institution_name}
+    </select>
+    
+    <select id="queryInstitutionByInstitutionMainId" parameterType="java.util.Map" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+    	select info.*,industry.industry_id,industry.industry_name
+		FROM
+			institution_info info left join industry_info industry
+			on info.industry_id = industry.industry_id
+    	where institution_type = 3
+    	<choose>
+    		<when test="institution_main_id != null and institution_main_id != ''">
+    			AND	info.institution_main_id = #{institution_main_id}
+    		</when>
+    		<otherwise>
+    			AND	info.institution_main_id is null
+    		</otherwise>
+    	</choose>
+    	
+    	<if test="institution_name != null and institution_name != ''">
+    		AND info.institution_name LIKE CONCAT('%',#{institution_name},'%')
+    	</if>
+    	<if test="industry_id != null and industry_id != 0">
+    		AND info.industry_id = #{industry_id}
+    	</if>
+    		AND info.del_flag = '0'
+		ORDER BY
+			info.create_time DESC
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+    
+    
+    <select id="queryInstitutionCountByInstitutionMainId" parameterType="java.lang.String" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			institution_info info left join industry_info industry
+			on info.industry_id = industry.industry_id
+		WHERE institution_type = 3
+    	<choose>
+    		<when test="institution_main_id != null and institution_main_id != ''">
+    			AND	info.institution_main_id = #{institution_main_id}
+    		</when>
+    		<otherwise>
+    			AND	info.institution_main_id is null
+    		</otherwise>
+    	</choose>
+    	<if test="institution_name != null and institution_name != ''">
+    		AND info.institution_name LIKE CONCAT('%',#{institution_name},'%')
+    	</if>
+    	<if test="industry_id != null and industry_id != 0">
+    		AND info.industry_id = #{industry_id}
+    	</if>
+			AND info.del_flag = '0'
+    </select>
+
+
+	<select id="queryStreetInstitutionByInstitutionMainId" parameterType="java.util.Map" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+		select info.*,industry.industry_id,industry.industry_name
+		FROM
+		institution_info info left join industry_info industry
+		on info.industry_id = industry.industry_id
+		where institution_type = 3
+		<choose>
+			<when test="institution_main_id != null and institution_main_id != ''">
+				AND	info.street_main_id = #{institution_main_id}
+			</when>
+			<otherwise>
+				AND	info.street_main_id is null
+			</otherwise>
+		</choose>
+
+		<if test="institution_name != null and institution_name != ''">
+			AND info.institution_name LIKE CONCAT('%',#{institution_name},'%')
+		</if>
+		<if test="industry_id != null and industry_id != 0">
+			AND info.industry_id = #{industry_id}
+		</if>
+		AND info.del_flag = '0'
+		ORDER BY
+		info.create_time DESC
+		<if test="pageNo != null and pageSize != null">
+			LIMIT #{pageNo},#{pageSize}
+		</if>
+	</select>
+
+
+	<select id="queryStreetInstitutionCountByInstitutionMainId" parameterType="java.lang.String" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		institution_info info left join industry_info industry
+		on info.industry_id = industry.industry_id
+		WHERE institution_type = 3
+		<choose>
+			<when test="institution_main_id != null and institution_main_id != ''">
+				AND	info.institution_main_id = #{institution_main_id}
+			</when>
+			<otherwise>
+				AND	info.street_main_id is null
+			</otherwise>
+		</choose>
+		<if test="institution_name != null and institution_name != ''">
+			AND info.institution_name LIKE CONCAT('%',#{institution_name},'%')
+		</if>
+		<if test="industry_id != null and industry_id != 0">
+			AND info.industry_id = #{industry_id}
+		</if>
+		AND info.del_flag = '0'
+	</select>
+    
+    <update id="cleanInstitutionMainId" parameterType="java.lang.String">
+    	update institution_info
+    	<set>
+    		institution_main_id = null
+    	</set>
+    	where institution_id = #{institution_id} and institution_type = 3
+    </update>
+    
+    <update id="saveInstitutionMainId" parameterType="java.lang.String">
+    	update institution_info
+    	<set>
+    		institution_main_id = #{main_institution}
+    	</set>
+    	where institution_id = #{institution_id} and institution_type = 3
+    </update>
+
+	<update id="cleanStreetMainId" parameterType="java.lang.String">
+		update institution_info
+		<set>
+			street_main_id = null
+		</set>
+		where institution_id = #{institution_id} and institution_type = 3
+	</update>
+
+	<update id="saveStreetMainId" parameterType="java.lang.String">
+		update institution_info
+		<set>
+			street_main_id = #{main_institution}
+		</set>
+		where institution_id = #{institution_id} and institution_type = 3
+	</update>
+
+	<select id="queryEnterpriseMemberInfo" parameterType="map" resultType="map">
+			select qy.qymc,qy.qyjc,lxr.lxrxm,lxr.LXRLXFS as sjhm,lxr.qyyx from member_join_manager mjm
+			INNER JOIN member_qy_qyjbxx qy
+			INNER JOIN member_qy_qylxrxx lxr
+			where mjm.memberType = 'HYLX-03'
+			and mjm.memberId = qy.jbxxzj
+			and qy.jbxxzj = lxr.qyid
+			and mjm.state = 'HYSP-02'
+			<if test="XM != null and XM != ''">
+				and lxr.lxrxm = #{XM}
+			</if>
+			<if test="YDDH != null and YDDH != ''">
+				and lxr.sjhm = #{YDDH}
+			</if>
+	</select>
+
+	<select id="queryInstitutionByMoblie" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+		select * from institution_info where institution_linkman_phone = #{mobile}
+	</select>
+</mapper>

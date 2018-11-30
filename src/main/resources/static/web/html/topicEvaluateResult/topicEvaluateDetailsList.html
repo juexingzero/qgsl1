@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>被评价方得分详情列表</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.cookie.js"></script>
+</head>
+
+<body>
+    <div id="form_detail">
+	    <div class="table_edit" style="padding:5px;border-bottom:none;">
+	        <table style="width:100%; table-layout:fixed;background-color:#ffffff;">
+	            <tr>
+	                <td>
+	                	<label style="font-family:Verdana;">被评价方</label>
+	                    <input class="mini-textbox" style="width:250px;" required="true" allowInput="false" enabled="false" th:value="${passiveInfo.institution_name}"/>
+	                </td>
+					<td id="tr_real_score_avg">
+						<label style="font-family:Verdana;">平均得分</label>
+						<input class="mini-textbox" style="width:250px" required="true" maxLength="50" enabled="false" th:value="${passiveInfo.real_score_avg}"/>
+					</td>
+	            </tr>
+	            <!--<tr id="tr_real_score_avg">
+	                <td>
+	                	<label style="font-family:Verdana;">平均得分</label>
+	                	<input class="mini-textbox" style="width:250px" required="true" maxLength="50" enabled="false" th:value="${passiveInfo.real_score_avg}"/>
+	                </td>
+	            </tr>-->
+	        </table>
+	    </div>
+
+		<div>
+	        <div id="datagrid_flowingScoreList" class="mini-datagrid" style="width:100%;height:500px;" sizeList="[10,20,50,100]" pageSize="20"
+	             url="/web/v1/topicEvaluateResult/getEvaluateFlowingScoreList" idField="id">
+	            <div property="columns">
+			        <div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div>
+	                <div field="institution_name" headerAlign="center" align="center">评价方</div>
+	                <div field="real_score" headerAlign="center" align="center" renderer="onConvertRealScore">打分</div>
+	                <div field="score_id" headerAlign="center" align="center" renderer="onConvertOperation">操作</div>
+	            </div>
+	        </div>
+		</div>
+		
+	    <div class="mini-toolbar bot_btn">
+		    <a class="mini-button closeBut" style="width:60px;" onclick="onClose()">关闭</a>
+	    </div>
+    </div>
+    
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var topic_id = [[${passiveInfo.topic_id}]];
+        var passive_id = [[${passiveInfo.institution_id}]];
+        var page_type = [[${page_type}]];
+        /*]]>*/
+    </script>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("datagrid_flowingScoreList");
+        
+        $(function(){
+        	//从评价发起详情中进入时隐藏平均分数
+        	if(page_type == "evaluate_initiate"){
+        		$("#tr_real_score_avg").hide();
+        	}
+
+            grid.load ({"topic_id":topic_id, "passive_id":passive_id});
+        });
+
+        //加载打分列内容
+        function onConvertRealScore(e){
+        	var record = e.record;
+        	var real_score = record.real_score;
+        	var is_evaluate = record.is_evaluate;
+        	if(record.index != "*"){
+        		if(is_evaluate == "0"){
+            		return '<span style="color:red;">未评价</span>';
+        		}
+        	}
+        	return real_score;
+        }
+
+        //加载操作列内容
+        function onConvertOperation(e){
+         	var record = e.record;
+         	var is_evaluate = record.is_evaluate;
+         	var topic_id = record.topic_id;
+         	var topic_standard_id = record.topic_standard_id;
+         	var passive_id = record.passive_id;
+         	var actice_id = record.actice_id;
+         	var actice_name = record.institution_name;
+         	var real_score_sum = record.real_score;
+         	if(record.index != "*"){
+         		if(is_evaluate == "1"){
+             		return '<a href="javascript:onToStandardScoreDetail(\''+ topic_id +'\',\'' + topic_standard_id +'\',\'' + passive_id 
+             		+'\',\'' + actice_id +'\',\'' + actice_name +'\',\'' + real_score_sum + '\')" style="text-decoration:none;">详情</a>';
+         		}
+         	}
+         	return "";
+        }
+
+	    //展示标准打分详情
+	    function onToStandardScoreDetail(topic_id, topic_standard_id, passive_id, actice_id, actice_name, real_score_sum){
+	      	mini.open({
+	      		url: "/web/v1/topicEvaluateResult/toStandardScoreDetail?topic_id="+topic_id+"&topic_standard_id="+topic_standard_id
+	      				+"&passive_id="+passive_id+"&actice_id="+actice_id+"&actice_name="+actice_name+"&real_score_sum="+real_score_sum,
+	      		title: "标准打分详情", 
+	      		width: 800,
+	      		height: 700,
+	      		ondestroy: function (action) {}
+	      	});
+	    }
+		
+      	//关闭
+      	function onClose() {
+        	CloseWindow("cancel");
+      	}
+    </script>
+</body>
+</html>

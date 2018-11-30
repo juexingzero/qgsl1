@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyGslqybqMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyGslqybq">
+        <id column="QYBBQZJ" jdbcType="VARCHAR" property="qybbqzj" />
+        <result column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="QYBQ" jdbcType="VARCHAR" property="qybq" />
+        <result column="QYGM" jdbcType="VARCHAR" property="qygm" />
+        <result column="QYID" jdbcType="VARCHAR" property="qyid" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyGslqybq">
+       insert into member_qy_gslqybq(QYBBQZJ,JBXXZJ,QYBQ,QYGM,QYID) values (#{qybbqzj},#{jbxxzj},#{qybq},#{qygm},#{qyid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyGslqybq">
+        update member_qy_gslqybq
+        <set>
+            <if test="qybbqzj!=null and qybbqzj">QYBBQZJ=#{qybbqzj},</if>
+            <if test="jbxxzj!=null">JBXXZJ=#{jbxxzj},</if>
+            <if test="qybq!=null">QYBQ=#{qybq},</if>
+            <if test="qygm!=null">QYGM=#{qygm},</if>
+            <if test="qyid!=null">QYID=#{qyid},</if>
+        </set>
+        where QYBBQZJ = #{qybbqzj}
+    </update>
+
+</mapper>

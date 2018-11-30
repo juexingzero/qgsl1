@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppTopicEvaluateStandardDetailMapper">
+	<select id="showEvaluateDeatil" resultType="com.manhui.gsl.jbqgsl.model.TopicEvaluateStandardDetail">
+		SELECT
+			tesd.*
+		FROM
+			topic_evaluate_standard_detail tesd
+		
+		WHERE 1=1
+	    <if test="topic_id != null and topic_id != ''">
+	        AND tesd.topic_id = #{topic_id}
+	    </if>
+	    <if test="standard_id != null and standard_id != ''">
+	        AND tesd.standard_id = #{standard_id}
+	    </if>
+	    <if test="detail_id != null and detail_id != ''">
+	        AND tesd.p_detail_id = #{detail_id}
+	    </if>
+	    <if test="detail_level != null">
+	        AND tesd.detail_level = #{detail_level}
+	    </if>
+	    order by create_time asc
+	</select>
+<!-- 	<select id="showEvaluateDeatil" resultType="map">
+		SELECT
+			tesd.*,efc.*
+		FROM
+			topic_evaluate_standard_detail tesd
+		left join evaluate_flowing_score efc
+		on tesd.topic_id = efc.topic_id and tesd.standard_id =efc.topic_standard_id and tesd.detail_id=efc.topic_standard_detail_id
+		WHERE 1=1
+	    <if test="topic_id != null and topic_id != ''">
+	        AND tesd.topic_id = #{topic_id}
+	    </if>
+	    <if test="standard_id != null and standard_id != ''">
+	        AND tesd.standard_id = #{standard_id}
+	    </if>
+	    <if test="detail_id != null and detail_id != ''">
+	        AND tesd.p_detail_id = #{detail_id}
+	    </if>
+	    <if test="detail_level != null">
+	        AND tesd.detail_level = #{detail_level}
+	    </if>
+	</select> -->
+</mapper>

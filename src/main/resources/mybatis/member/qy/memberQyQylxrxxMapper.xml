@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyQylxrxxMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQylxrxx">
+        <id column="LXRXXZJ" jdbcType="VARCHAR" property="lxrxxzj" />
+        <result column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="TBRXM" jdbcType="VARCHAR" property="tbrxm" />
+        <result column="TBRLXFS" jdbcType="VARCHAR" property="tbrlxfs" />
+        <result column="MSXM" jdbcType="VARCHAR" property="msxm" />
+        <result column="MSLXFS" jdbcType="VARCHAR" property="mslxfs" />
+        <result column="LXRXM" jdbcType="VARCHAR" property="lxrxm" />
+        <result column="LXRLXFS" jdbcType="VARCHAR" property="lxrlxfs" />
+        <result column="HWFZRXM" jdbcType="VARCHAR" property="hwfzrxm" />
+        <result column="HWFZRZW" jdbcType="VARCHAR" property="hwfzrzw" />
+        <result column="QYTXDZ" jdbcType="VARCHAR" property="qytxdz" />
+        <result column="FRDBLXFS" jdbcType="VARCHAR" property="frdblxfs" />
+        <result column="HWFZRLXFS" jdbcType="VARCHAR" property="hwfzrlxfs" />
+        <result column="QYYB" jdbcType="VARCHAR" property="qyyb" />
+        <result column="DSZXM" jdbcType="VARCHAR" property="dszxm" />
+        <result column="DSZLXFS" jdbcType="VARCHAR" property="dszlxfs" />
+        <result column="QYYX" jdbcType="VARCHAR" property="qyyx" />
+        <result column="BGDH" jdbcType="VARCHAR" property="bgdh" />
+        <result column="SJHM" jdbcType="VARCHAR" property="sjhm" />
+        <result column="QYID" jdbcType="VARCHAR" property="qyid" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQylxrxx">
+       insert into member_qy_qylxrxx(LXRXXZJ,JBXXZJ,TBRXM,TBRLXFS,MSXM,MSLXFS,LXRXM,LXRLXFS,HWFZRXM,HWFZRZW,QYTXDZ,
+          FRDBLXFS,HWFZRLXFS,QYYB,DSZXM,DSZLXFS,QYYX,BGDH,SJHM,QYID)
+        values (#{lxrxxzj},#{jbxxzj},#{tbrxm},#{tbrlxfs},#{msxm},#{mslxfs},#{lxrxm},#{lxrlxfs},#{hwfzrxm},
+        #{hwfzrzw},#{qytxdz},#{frdblxfs},#{hwfzrlxfs},#{qyyb},#{dszxm},#{dszlxfs},#{qyyx},#{bgdh},#{sjhm},#{qyid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQylxrxx">
+        update member_qy_qylxrxx
+        <set>
+            <if test="lxrxxzj!=null and lxrxxzj != ''">LXRXXZJ=#{lxrxxzj},</if>
+            <if test="jbxxzj!=null">JBXXZJ=#{jbxxzj},</if>
+            <if test="tbrxm!=null">TBRXM=#{tbrxm},</if>
+            <if test="tbrlxfs!=null">TBRLXFS=#{tbrlxfs},</if>
+            <if test="msxm!=null">MSXM=#{msxm},</if>
+            <if test="mslxfs!=null">MSLXFS=#{mslxfs},</if>
+            <if test="lxrxm!=null">LXRXM=#{lxrxm},</if>
+            <if test="lxrlxfs!=null">LXRLXFS=#{lxrlxfs},</if>
+            <if test="hwfzrxm!=null">HWFZRXM=#{hwfzrxm},</if>
+            <if test="hwfzrzw!=null">HWFZRZW=#{hwfzrzw},</if>
+            <if test="qytxdz!=null">QYTXDZ=#{qytxdz},</if>
+            <if test="frdblxfs!=null">FRDBLXFS=#{frdblxfs},</if>
+            <if test="hwfzrlxfs!=null">HWFZRLXFS=#{hwfzrlxfs},</if>
+            <if test="qyyb!=null">QYYB=#{qyyb},</if>
+            <if test="dszxm!=null">DSZXM=#{dszxm},</if>
+            <if test="dszlxfs!=null">DSZLXFS=#{dszlxfs},</if>
+            <if test="qyyx!=null">QYYX=#{qyyx},</if>
+            <if test="bgdh!=null">BGDH=#{bgdh},</if>
+            <if test="sjhm!=null">SJHM=#{sjhm},</if>
+            <if test="qyid!=null">QYID=#{qyid},</if>
+        </set>
+        where LXRXXZJ = #{lxrxxzj}
+    </update>
+
+    <!--根企业基本信息表id 查询数据-->
+    <select id="queryByQyid" parameterType="String" resultType="HashMap">
+      select lxrxxzj,lxrxm,lxrlxfs from member_qy_qylxrxx where QYID = #{qyid}
+    </select>
+</mapper>

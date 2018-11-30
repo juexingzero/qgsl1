@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppUserSuggestMapper">
+	<select id="list" resultType="com.manhui.gsl.jbqgsl.model.UserSuggest" parameterType="com.manhui.gsl.jbqgsl.model.UserSuggest">
+    SELECT  *  FROM user_suggest where user_id = #{user_id} 
+    ORDER BY createTime DESC
+  </select>
+
+  <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.UserSuggest">
+    INSERT INTO user_suggest(id,user_id,user_name,content,user_phone,is_answer,create_time)
+      VALUES (#{id},#{user_id},#{user_name},#{content},#{user_phone},#{is_answer},#{create_time})
+  </insert>
+  <select id="getUserSuggestDetail" resultType="com.manhui.gsl.jbqgsl.model.UserSuggest">
+    SELECT
+		user_name,content,create_time,answer_man_name,answer_content,answer_time
+	FROM
+		user_suggest
+	WHERE
+		id = #{userSuggest_id}
+  </select>
+</mapper>

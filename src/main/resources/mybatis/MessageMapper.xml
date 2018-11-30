@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.MessageMapper">
+    <!-- 获取消息信息列表 -->
+    <select id="getMessageInfoList" resultType="com.manhui.gsl.jbqgsl.model.MessageInfo">
+    	SELECT
+			mi.*
+		FROM
+			message_info mi
+		WHERE
+			1 = 1
+        <if test="message_type != null and message_type != ''">
+            AND mi.message_type = #{message_type}
+        </if>
+        <if test="message_mode != null and message_mode != ''">
+            AND mi.message_mode = #{message_mode}
+        </if>
+        <if test="message_content != null and message_content != ''">
+            AND mi.message_content LIKE CONCAT('%',#{message_content},'%')
+        </if>
+		ORDER BY
+			mi.create_time DESC
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 获取消息信息总数 -->
+    <select id="getMessageInfoTotal" resultType="int">
+        SELECT
+			COUNT(*)
+		FROM
+			(
+				SELECT
+					mi.*
+				FROM
+					message_info mi
+				WHERE
+					1 = 1
+		        <if test="message_type != null and message_type != ''">
+		            AND mi.message_type = #{message_type}
+		        </if>
+		        <if test="message_mode != null and message_mode != ''">
+		            AND mi.message_mode = #{message_mode}
+		        </if>
+		        <if test="message_content != null and message_content != ''">
+		            AND mi.message_content LIKE CONCAT('%',#{message_content},'%')
+		        </if>
+			) t
+    </select>
+    
+    <!-- 获取消息信息-->
+    <select id="getMessageInfo" resultType="com.manhui.gsl.jbqgsl.model.MessageInfo">
+    	SELECT
+			mi.*
+		FROM
+			message_info mi
+		WHERE
+			1 = 1
+            AND mi.message_id = #{message_id}
+    </select>
+    
+    <!-- 插入消息信息 -->
+    <insert id="insertMessageInfo">
+        INSERT INTO message_info (
+			message_id,
+			message_type,
+			message_mode,
+			message_content,
+			creator_id,
+			creator_name,
+			create_time
+		)
+		VALUES
+        (
+          #{message_id},
+          #{message_type},
+          #{message_mode},
+          #{message_content},
+          #{creator_id},
+          #{creator_name},
+          #{create_time}
+        )
+    </insert>
+    
+    <!-- 更新消息信息 -->
+    <update id="updateMessageInfo">
+        UPDATE message_info
+        <set>
+            <if test="message_type != null and message_type != ''">message_type=#{message_type},</if>
+            <if test="message_mode != null and message_mode != ''">message_mode=#{message_mode},</if>
+            <if test="message_content != null and message_content != ''">message_content=#{message_content},</if>
+            update_time=#{update_time}
+        </set>
+        WHERE message_id=#{message_id}
+    </update>
+    
+    <!-- 删除消息信息 -->
+    <delete id="deleteMessageInfo" parameterType="java.util.Map">
+        DELETE FROM message_info WHERE 1=1 AND message_id IN 
+       <foreach collection="message_ids" index="index" item="item" open="(" separator="," close=")">
+               #{item}       
+       </foreach>    
+   	</delete>
+    
+    <!-- 获取消息流水列表 -->
+    <select id="getMessageFlowingList" resultType="com.manhui.gsl.jbqgsl.model.MessageFlowing">
+    	SELECT
+			mf.*
+		FROM
+			message_flowing mf
+		WHERE
+			1 = 1
+        <if test="message_id != null and message_id != ''">
+            AND mf.message_id = #{message_id}
+        </if>
+        <if test="send_id != null and send_id != ''">
+            AND mf.send_id = #{send_id}
+        </if>
+        <if test="send_name != null and send_name != ''">
+            AND mf.send_name LIKE CONCAT('%',#{send_name},'%')
+        </if>
+        <if test="receive_id != null and receive_id != ''">
+            AND mf.receive_id = #{receive_id}
+        </if>
+        <if test="receive_name != null and receive_name != ''">
+            AND mf.receive_name LIKE CONCAT('%',#{receive_name},'%')
+        </if>
+		ORDER BY
+			mf.send_time DESC
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 获取消息流水列表 -->
+    <select id="getMessageFlowingListForDelCheck" resultType="com.manhui.gsl.jbqgsl.model.MessageFlowing">
+    	SELECT
+			mf.*
+		FROM
+			message_flowing mf
+		WHERE
+			1 = 1
+        <if test="message_ids != null and message_ids != ''">
+            AND mf.message_id IN 
+	       <foreach collection="message_ids" index="index" item="item" open="(" separator="," close=")">
+	       		#{item}       
+	       </foreach>
+        </if>
+    </select>
+
+    <!-- 获取消息流水总数 -->
+    <select id="getMessageFlowingTotal" resultType="int">
+        SELECT
+			COUNT(*)
+		FROM
+			(
+				SELECT
+					mf.*
+				FROM
+					message_flowing mf
+				WHERE
+					1 = 1
+		        <if test="message_id != null and message_id != ''">
+		            AND mf.message_id = #{message_id}
+		        </if>
+		        <if test="send_name != null and send_name != ''">
+		            AND mf.send_name LIKE CONCAT('%',#{send_name},'%')
+		        </if>
+		        <if test="receive_name != null and receive_name != ''">
+		            AND mf.receive_name LIKE CONCAT('%',#{receive_name},'%')
+		        </if>
+			) t
+    </select>
+    
+    <!-- 获取消息流水列表，用于APP -->
+    <select id="getMessageFlowingListForApp" resultType="Map">
+    	SELECT
+			mf.*, mi.message_type,
+			mi.message_content
+		FROM
+			message_flowing mf
+		LEFT JOIN message_info mi ON mf.message_id = mi.message_id
+		WHERE
+			1 = 1
+		AND mf.receive_id = #{receive_id}
+		ORDER BY
+			mf.send_time DESC
+    </select>
+    
+    <!-- 插入消息信息 -->
+    <insert id="insertMessageFlowing">
+        INSERT INTO message_flowing (
+			message_id,
+			flowing_id,
+			send_id,
+			send_name,
+			receive_id,
+			receive_name,
+			send_time,
+			userSuggest_id,
+			is_read
+		)
+		VALUES
+        (
+          #{message_id},
+          #{flowing_id},
+          #{send_id},
+          #{send_name},
+          #{receive_id},
+          #{receive_name},
+          #{send_time},
+          #{userSuggest_id},
+          #{is_read}
+        )
+    </insert>
+    
+    <!-- 获取消息接收方的用户列表 -->
+    <select id="getAppUserList" resultType="com.manhui.gsl.jbqgsl.model.AppUser">
+    	SELECT
+			aui.*
+		FROM
+			app_user_info aui
+		WHERE
+			1 = 1
+        <if test="user_name != null and user_name != ''">
+		    AND aui.user_name LIKE CONCAT('%',#{user_name},'%')
+        </if>
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 获取消息流水总数 -->
+    <select id="getAppUserTotal" resultType="int">
+        SELECT
+			COUNT(*)
+		FROM
+			(
+				SELECT
+					aui.*
+				FROM
+					app_user_info aui
+				WHERE
+					1 = 1
+		        <if test="user_name != null and user_name != ''">
+		            AND aui.user_name = #{user_name}
+		        </if>
+			) t
+    </select>
+    
+    <!-- 更新消息流水 -->
+    <update id="updateMessageFlowing">
+        UPDATE message_flowing
+        <set>
+            <if test="is_read != null and is_read != ''">is_read=#{is_read},</if>
+            <if test="read_time != null and read_time != ''">read_time=#{read_time},</if>
+        </set>
+        WHERE flowing_id=#{flowing_id}
+    </update>
+</mapper>

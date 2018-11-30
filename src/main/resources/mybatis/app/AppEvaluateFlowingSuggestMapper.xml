@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppEvaluateFlowingSuggestMapper">
+	<insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingSuggest">
+		insert into evaluate_flowing_suggest
+	
+			(
+				suggest_id,topic_id,topic_standard_id,
+				forthwith_id,forthwith_standard_id,
+				passive_id,passive_name,actice_id,
+				active_name,work_content,suggest_initiate,
+				suggest_is_answer,suggest_answer,create_time
+			)
+		values 
+			(
+				#{suggest_id},#{topic_id},#{topic_standard_id},
+				#{forthwith_id},#{forthwith_standard_id},
+				#{passive_id},#{passive_name},#{actice_id},
+				#{active_name},#{work_content},#{suggest_initiate},
+				#{suggest_is_answer},#{suggest_answer},#{create_time}
+			)
+	
+	
+	</insert>
+	<!--双向评价详情展示  -->
+	<select id="queryContentAndSuggestByIds" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingSuggest" parameterType="java.util.Map">
+		select * 
+		from 
+			evaluate_flowing_suggest
+		<where>
+			<if test="active_id != null and active_id !=''">
+				and actice_id = #{active_id}
+			</if>
+			<if test="passive_id != null and passive_id !=''">
+				and passive_id = #{passive_id}
+			</if>
+			<if test="topic_id != null and topic_id !=''">
+				and topic_id = #{topic_id}
+			</if>
+		</where>
+	</select>
+	<!--即时评价详情展示  -->
+	<select id="queryContentAndSuggestByIds2" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingSuggest" parameterType="java.util.Map">
+		select * 
+		from 
+			evaluate_flowing_suggest
+		<where>
+			<if test="active_id != null and active_id !=''">
+				and actice_id = #{active_id}
+			</if>
+			<if test="passive_id != null and passive_id !=''">
+				and passive_id = #{passive_id}
+			</if>
+			<if test="topic_id != null and topic_id !=''">
+				and topic_id = #{topic_id}
+			</if>
+			<if test="forthwith_id != null and forthwith_id !=''">
+				and forthwith_id = #{forthwith_id}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryPassiveNum" resultType="int" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingSuggest">
+		select count(topic_id) from evaluate_flowing_suggest
+		<where>
+			<if test="active_id != null and active_id !=''">
+				and actice_id = #{active_id}
+			</if>
+			<if test="passive_id != null and passive_id !=''">
+				and passive_id = #{passive_id}
+			</if>
+			<if test="topic_id != null and topic_id !=''">
+				and topic_id = #{topic_id}
+			</if>
+		</where>
+	</select>
+	<select id="querySuggest" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingSuggest" >
+		select * from evaluate_flowing_suggest
+		<where>
+			and forthwith_id is not null
+			<if test="institution_id != null and institution_id !=''">
+				and actice_id = #{institution_id} 
+			</if>
+		</where>
+	</select>
+	<select id="queryPassiveInstitutions" resultType="String" >
+		select DISTINCT passive_id 
+		from 
+			evaluate_flowing_suggest
+		<where>
+			<if test="topic_id != null and topic_id !=''">
+				and topic_id = #{topic_id}
+			</if>
+			<if test="active_id != null and active_id !=''">
+				and actice_id = #{active_id}
+			</if>
+		</where>
+	</select>
+
+	<select id="querySuggestByIds" resultType="int" parameterType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+		select count(*) 
+		from 
+			evaluate_flowing_suggest
+		<where>
+			<if test="topic_id != null and topic_id !=''">
+				and topic_id = #{topic_id}
+			</if>
+			<if test="actice_id != null and actice_id !=''">
+				and actice_id = #{actice_id}
+			</if>
+		</where>
+	</select>
+	<!--保证流水建议表 不流水分数表数据唯一 保证一条  -->
+	<select id="countRecoredsByIds" resultType="int" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore">
+		select count(*) 
+		from 
+			evaluate_flowing_suggest
+		<where>
+			<if test="topic_id != null and topic_id !=''">
+				and topic_id = #{topic_id}
+			</if>
+			<if test="actice_id != null and actice_id !=''">
+				and actice_id = #{actice_id}
+			</if>
+			<if test="passive_id != null and passive_id !=''">
+				and passive_id = #{passive_id}
+			</if>
+			<if test="topic_standard_id != null and topic_standard_id !=''">
+				and topic_standard_id = #{topic_standard_id}
+			</if>
+		</where>
+	</select>
+	<select id="query" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingSuggest" parameterType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+		select * 
+		from 
+			evaluate_flowing_suggest
+		<where>
+			<if test="forthwith_id != null and forthwith_id !='' ">
+				and forthwith_id =#{forthwith_id}
+			</if>
+			<if test="passive_id != null and passive_id !='' ">
+			and passive_id  = #{passive_id}
+			</if>
+			<if test="active_id != null and active_id!='' ">
+			and actice_id =#{active_id}
+			</if>
+		</where>
+	</select>
+	<select id="queryTopicEvaluateSuggestByIds" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingSuggest" parameterType="String">
+		select * 
+		from 
+			evaluate_flowing_suggest
+		<where>
+			<if test="topic_id != null and topic_id !='' ">
+				and topic_id =#{topic_id}
+			</if>
+			<if test="passive_id != null and passive_id !='' ">
+			and passive_id  = #{passive_id}
+			</if>
+			<if test="active_id != null and active_id!='' ">
+			and actice_id =#{active_id}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteEvaluateFlowingSuggest" parameterType="java.lang.String">
+		delete  from evaluate_flowing_suggest
+		<where>
+			<if test="topic_id != null and topic_id !='' ">
+				and topic_id =#{topic_id}
+			</if>
+			<if test="passive_id != null and passive_id !='' ">
+			and passive_id  = #{passive_id}
+			</if>
+			<if test="active_id != null and active_id!='' ">
+			and actice_id =#{active_id}
+			</if>
+		</where>
+	</delete>
+</mapper>

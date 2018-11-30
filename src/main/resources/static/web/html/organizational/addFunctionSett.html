@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加功能配置</title>
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		.td1 {
+		text-align: right;
+	}
+	</style>
+</head>
+
+<body>
+	<div id="form1" class="from">
+	    <table>
+	        <input style="display: none;" name="update_bools" id="update_bools" value="false" class="mini-textbox">
+	        <tr>
+	            <td class="td1">菜单ID：</td>
+	            <td>
+	                <input name="menu_id" id="menu_id" class="mini-textbox" style="width: 180px;" required="true" allowInput="false" />
+	            </td>
+	            <td style="width: 30px;"></td>
+	            <td class="td1">菜单名称：</td>
+	            <td>
+	                <input name="menu_name" id="menu_name" class="mini-textbox" style="width: 180px;" required="true" allowInput="false" />
+	            </td>
+	        </tr>
+	        <tr>
+	        	<td class="td1">
+	        		<span style="color: red; margin-right:2px;">*</span>功能ID：
+	        	</td>
+	            <td>
+	                <input name="func_id_text" id="func_id_text" class="mini-textbox" style="width: 110px;" required="true" allowInput="false" />
+	                <input name="func_id" id="func_id" class="mini-textbox" style="width: 65px;" required="true" />
+	            </td>
+	            <td style="width: 30px;"></td>
+	        	<td class="td1">
+	        		<span style="color: red; margin-right:2px;">*</span>功能名称：
+	        	</td>
+	            <td>
+	                <input name="func_name" id="func_name" class="mini-textbox" style="width: 180px;" required="true" />
+	            </td>
+	        </tr>
+	        <tr>
+	            <td class="td1">功能说明：</td>
+	            <td colspan="5">
+	                <input name="func_desc" id="func_desc" class="mini-textbox" style="width: 493px;" />
+	            </td>
+	        </tr>
+	        <tr>
+	       		 <td class="td1">
+	        		<span style="color: red; margin-right:2px;">*</span>功能序号：
+	        	</td>
+	            <td>
+	                <input name="order_no" id="order_no" class="mini-textbox" style="width: 180px;" required="true" />
+	            </td>
+	            <td style="width: 30px;"></td>
+	            <td class="td1">
+	        		<span style="color: red; margin-right:2px;">*</span>授权标志：
+	        	</td>
+	            <td>
+	                <input name="auth_flag" id="auth_flag" class="mini-combobox" style="width:180px;" required="true" value="Y" data="[{id:'Y',text:'授权访问'},{id:'N',text:'登录访问'},{id:'A',text:'匿名访问'}]" />
+	            </td>
+	        </tr>
+	        <!-- 
+	        <tr>
+	        	 <td class="td1">
+	        		<span style="color: red; margin-right:2px;">*</span>功能等级：
+	        	</td>
+	            <td>
+	                <input name="func_level" id="func_level" class="mini-combobox" style="width:180px;" required="true" data="[{id:'1',text:'父级'},{id:'2',text:'子级'}]" />
+	            </td>
+	        </tr>
+	         -->
+	    </table>
+	    
+	    <div class="mini-toolbar bot_btn">
+	        <a class="mini-button" style="" onclick="save()">保存</a>
+	        <a class="mini-button" style="width:60px;" onclick="CloseWindow('cancel')">取消</a>
+	    </div>
+	</div>
+	
+	<script src="/resources/organizational/js/addFunctionSett.js" type="text/javascript"></script>
+</body>
+</html>

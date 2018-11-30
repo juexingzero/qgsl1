@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppEvaluateFlowingScoreMapper">
+	<select id="queryEvaluateFlowingScoreList" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore">
+		select 
+			*
+		from
+			evaluate_flowing_score
+		<where>
+			<if test="institution_id !=null and institution_id !=''">
+				and actice_id = #{institution_id}
+			</if>
+			and passive_id in
+			<if test="institutionList !=null and institutionList.size()>0">
+				<foreach collection="institutionList" item="obj" open="(" separator="," close=")">
+					#{obj.institution_id}
+				</foreach>
+			</if>
+			
+			<if test="topic_id !=null and topic_id !=''">
+				and topic_id =#{topic_id}
+			</if>
+		</where>
+		group by passive_id
+	</select>
+	<select id="queryEvaluateFlowingScoreByIds" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore">
+		select * from evaluate_flowing_score
+			<where>
+				<if test="active_institution_id !=null and active_institution_id !=''">
+						and actice_id = #{active_institution_id}
+				</if>
+				<if test="passive_institution_id !=null and passive_institution_id !=''">
+						and passive_id = #{passive_institution_id}
+				</if>
+				<if test="topic_id !=null and topic_id !=''">
+						and topic_id = #{topic_id}
+				</if>
+			</where>
+	</select>
+	<insert id="save">
+		insert into evaluate_flowing_score 
+		(
+			score_id,topic_id,topic_standard_id,topic_standard_detail_id,
+			topic_standard_detail_name,forthwith_id,forthwith_standard_id,
+			forthwith_standard_detail_id,forthwith_standard_detail_name,passive_id,passive_name,
+			actice_id,active_name,plan_score,real_score,create_time,standard_p_detail_id,standard_detail_level
+		)
+		values
+		(
+			#{score_id},#{topic_id},#{topic_standard_id},#{topic_standard_detail_id},
+			#{topic_standard_detail_name},#{forthwith_id},#{forthwith_standard_id},
+			#{forthwith_standard_detail_id},#{forthwith_standard_detail_name},#{passive_id},#{passive_name},
+			#{actice_id},#{active_name},#{plan_score},#{real_score},#{create_time},#{standard_p_detail_id},#{standard_detail_level}
+		)
+	</insert>
+	
+	<select id="queryEvaluateFlowingScore" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore">
+		select * 
+		from  
+			evaluate_flowing_score 
+		<where>
+			<if test="topic_id !=null and topic_id !=''">
+				and topic_id = #{topic_id}
+			</if>
+			<if test="standard_id !=null and standard_id !=''">
+				and topic_standard_id = #{standard_id}
+			</if>
+			<if test="detail_id !=null and detail_id !=''">
+				and topic_standard_detail_id = #{detail_id}
+			</if>
+			<if test="active_id !=null and active_id !=''">
+				and actice_id = #{active_id}
+			</if>
+			<if test="passive_id !=null and passive_id !=''">
+				and passive_id = #{passive_id}
+			</if>
+		</where>  
+		order by create_time desc
+	</select>
+	
+	<select id="queryEvaluateFlowingScore2" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore">
+		select * 
+		from  
+			evaluate_flowing_score 
+		<where>
+			<if test="forthwith_id !=null and forthwith_id !=''">
+				and forthwith_id = #{forthwith_id}
+			</if>
+			<if test="standard_id !=null and standard_id !=''">
+				and forthwith_standard_id = #{standard_id}
+			</if>
+			<if test="detail_id !=null and detail_id !=''">
+				and forthwith_standard_detail_id = #{detail_id}
+			</if>
+			<if test="active_id !=null and active_id !=''">
+				and actice_id = #{active_id}
+			</if>
+			<if test="passive_id !=null and passive_id !=''">
+				and passive_id = #{passive_id}
+			</if>
+		</where>
+	</select>
+	<select id="queryForthwithIdByPassiveId" resultType="com.manhui.gsl.jbqgsl.model.EvaluateFlowingScore" parameterType="String">
+		select DISTINCT forthwith_id,actice_id
+		from  
+			evaluate_flowing_score 
+		<where>
+			<if test="passive_id !=null and passive_id !=''">
+				and passive_id = #{passive_id}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteEvaluateFlowingScore" parameterType="java.lang.String">
+		delete  from evaluate_flowing_score
+		<where>
+			<if test="active_id !=null and active_id !=''">
+				and actice_id = #{active_id}
+			</if>
+			<if test="passive_id !=null and passive_id !=''">
+				and passive_id = #{passive_id}
+			</if>
+			<if test="topic_id !=null and topic_id !=''">
+				and topic_id = #{topic_id}
+			</if>
+		</where>
+	</delete>
+</mapper>

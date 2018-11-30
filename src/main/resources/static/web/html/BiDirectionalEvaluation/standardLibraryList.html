@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>评价标准</title>
+	<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<div style="padding: 5px 0;">
+ 		<a class="mini-button" onclick="add()"><i class="fa fa-plus"></i>新增</a>
+	</div>
+	<div id="mini-fit" class="mini-fit" >
+	    <div id="datagrid1_standardLibararyList" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[5,10,20,50]" pageSize="20"
+	         url="/web/v1/standradLibarary/listStandard" idField="standardLibraryList_id" multiSelect="true">
+	        <div property="columns">
+	            <div type="checkcolumn" width="50px" headerAlign="center"></div>
+	            <div field="standard_name" headerAlign="center">评价标准名称</div>
+	            <div field="standard_describe" width="30%" headerAlign="center">主要内容</div>
+	            <div field="standard_type" headerAlign="center" align="center" renderer="covert">标准分类</div>
+	            <div field="standard_plan_score" headerAlign="center" align="center">总分数</div>
+	            <div type="comboboxcolumn" width="10%" field="standard_belonged" headerAlign="center" align="center">是否同时为即时评价
+	            	<input name="standard_belonged" property="editor" class="mini-combobox" style="width:100%;" data="[{id:'1', text:'否'},{id:'2', text:'是'}]" />
+	            </div> 
+	            <div field="create_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm:ss">创建时间</div>
+	            <div field="standard_type" width="10%" headerAlign="center" renderer="onActionRenderer"  align="center">操作</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/standardLibrary/standardList.js"></script>
+</body>
+</html>

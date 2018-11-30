@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.meetingmanager.AppMeetingVoteMapper">
+	<select id="getMeetingVoteList" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.MeetingVoteOptionListResult" parameterType="map">
+		SELECT
+			mvp.options_id,
+			mvp.options,
+		    mp.meeting_id,
+		    mp.vote_options,
+			mv.allow_item,
+			mv.meetings
+		FROM
+			meeting_vote mv
+		LEFT JOIN meeting_person mp ON mv.meeting_id = mp.meeting_id
+		LEFT JOIN meeting_vote_options mvp ON mv.vote_id = mvp.vote_id
+		WHERE
+			mp.member_id = #{member_id} 
+			AND 
+			mp.meeting_id = #{meeting_id}
+		ORDER BY mvp.sorting 
+	</select>
+	<select id="queryMeetingVote" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.MeetingVoteObjectResult" parameterType="map">
+		SELECT
+			mv.*
+		FROM
+			meeting_vote mv
+		WHERE
+			mv.meeting_id = #{meeting_id} 
+	</select>
+</mapper>

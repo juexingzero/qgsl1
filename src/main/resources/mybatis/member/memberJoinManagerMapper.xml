@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.MemberJoinManagerMapper">
+
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberJoinManager">
+        insert into member_join_manager(joinId,createTime,updateTime,createUserId,createUserName,memberType,memberId,
+        state,joinObjId,joinObjName,position)
+        values
+        (#{joinId},#{createTime},#{updateTime},#{createUserId},#{createUserName},#{memberType},#{memberId},
+        #{state},#{joinObjId},#{joinObjName},#{position})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberJoinManager">
+        update member_join_manager
+        <set>
+            <if test="createTime!=null and createTime !='' ">createTime=#{createTime},</if>
+            <if test="updateTime!=null and updateTime !='' ">updateTime=#{updateTime},</if>
+            <if test="createUserId!=null and createUserId !='' ">createUserId=#{createUserId},</if>
+            <if test="createUserName!=null and createUserName !='' ">createUserName=#{createUserName},</if>
+            <if test="memberType!=null and memberType !='' ">memberType=#{memberType},</if>
+            <if test="memberId!=null and memberId !='' ">memberId=#{memberId},</if>
+            <if test="state!=null and state !='' ">state=#{state},</if>
+            <if test="joinObjId!=null and joinObjId !='' ">joinObjId=#{joinObjId},</if>
+            <if test="joinObjName!=null and joinObjName !='' ">joinObjName=#{joinObjName},</if>
+            <if test="position!=null and position !='' ">position=#{position},</if>
+        </set>
+        where joinId = #{joinId}
+    </update>
+
+    <!---->
+    <select id="queryAllList" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberJoinManager"
+            resultType="com.manhui.gsl.jbqgsl.model.member.MemberJoinManager">
+        select * from (
+        select a.*,b.approve_fail_reason,approve_fail_info from member_join_manager a
+        left join member_approve b on b.member_id = a.joinId
+        <where>
+            a.state != 'HYSP-04'
+            <if test="createUserId != null and createUserId != ''">
+                and a.createUserId = #{createUserId}
+            </if>
+            <if test="memberType != null and memberType != ''">
+                and a.memberType = #{memberType}
+            </if>
+            <if test="state != null and state != ''">
+                and a.state = #{state}
+            </if>
+            <if test="stateList != null and stateList.size >0">
+                and a.state in
+                <foreach collection="stateList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="joinObjId != null and joinObjId != ''">
+                and a.joinObjId = #{joinObjId}
+            </if>
+            <if test="joinId != null and joinId != ''">
+                and a.joinId = #{joinId}
+            </if>
+        </where>
+        order by a.createTime,b.approve_time desc
+        ) z group by z.joinId
+    </select>
+
+    <!--根据 joinObjIdList查询数据-->
+    <select id="queryByjoinObjIdList" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberJoinManager"
+            resultType="com.manhui.gsl.jbqgsl.model.member.MemberJoinManager">
+        select  * from member_join_manager where
+        <choose>
+            <when test="joinObjIdList != null and joinObjIdList.size >0">
+                joinObjId in
+                <foreach collection="joinObjIdList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                joinObjId in ('')
+            </otherwise>
+        </choose>
+        <if test="state != null and state != ''" >
+            and state = #{state}
+        </if>
+    </select>
+    <!-- 个人会员的基本信息 企业  还没有写 -->
+    <select id="queryMemberBaseInfo" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberJoinManager"
+            resultType="com.manhui.gsl.jbqgsl.controller.app.memberapproval.MemberBaseInfo">
+			SELECT
+				result.*
+			FROM
+			 (
+				 SELECT
+					mjm.joinId AS joinId,
+					mjm.memberId AS member_id,
+					mrr.XM AS member_name,
+					mjm.memberType AS member_type,
+					mjm.createTime AS apply_time,
+					mrr.XM AS contact_name,
+					mrytx.YDDH AS contact_phone
+				FROM
+					member_join_manager mjm
+				INNER JOIN member_ry_ryjbxx mrr ON mjm.memberId = mrr.ID
+				INNER JOIN member_ry_txfs mrytx ON mjm.memberId = mrytx.RYID
+				<where>
+					<if test="stateList !=null and  stateList.size()>0 ">
+						  and mjm.state in
+		                <foreach collection="stateList" index="index" item="item" open="(" separator="," close=")">
+		                    #{item}
+		                </foreach>
+					</if>
+					<if test="joinObjId !=null and joinObjId !=''">
+						  and mjm.joinObjId = #{joinObjId}
+					</if>
+				</where>
+				UNION ALL<!--企业会员  -->
+				 SELECT
+				    mjm.joinId AS joinId,
+					mjm.memberId AS member_id,
+					mqyjb.QYMC AS member_name,
+					mjm.memberType AS member_type,
+					mjm.createTime AS apply_time,
+					mqylx.LXRXM AS contact_name,
+					mqylx.LXRLXFS AS member_phone
+				FROM
+					member_join_manager mjm
+				INNER JOIN member_qy_qyjbxx mqyjb ON mjm.memberId = mqyjb.JBXXZJ
+				INNER JOIN member_qy_qylxrxx mqylx ON mjm.memberId = mqylx.QYID
+				<where>
+					<if test="stateList !=null and  stateList.size()>0 ">
+						  and mjm.state in
+		                <foreach collection="stateList" index="index" item="item" open="(" separator="," close=")">
+		                    #{item}
+		                </foreach>
+					</if>
+					<if test="joinObjId !=null and joinObjId !=''">
+						  and mjm.joinObjId = #{joinObjId}
+					</if>
+				</where>
+				UNION ALL<!--团体待定有错误  -->
+				 SELECT
+				    mjm.joinId AS joinId,
+					mjm.memberId AS member_id,
+					mjgstjb.STMC AS member_name,
+					mjm.memberType AS member_type,
+					mjm.createTime AS apply_time,
+					mqyfr.xm AS contact_name,
+					mqyfr.lxdh AS member_phone
+				FROM
+					member_join_manager mjm
+				INNER JOIN member_jg_stjbxx mjgstjb ON mjm.memberId = mjgstjb.ID
+				INNER JOIN member_qy_qyfrxx mqyfr ON mjm.memberId = mqyfr.QYID
+				<where>
+					<if test="stateList !=null and  stateList.size()>0 ">
+						  and mjm.state in
+		                <foreach collection="stateList" index="index" item="item" open="(" separator="," close=")">
+		                    #{item}
+		                </foreach>
+					</if>
+					<if test="joinObjId !=null and joinObjId !=''">
+						  and mjm.joinObjId = #{joinObjId}
+					</if>
+				</where>
+		)AS result ORDER BY result.apply_time DESC
+    </select>
+
+    <!--删除 审批不通过数据-->
+    <update id="delByCreateUserIdAndState" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberJoinManager">
+        update member_join_manager set state=#{state} where createUserId = #{createUserId} and state = 'HYSP-03'
+    </update>
+    <select id="getMemberInfoByMemberId" resultType="com.manhui.gsl.jbqgsl.model.member.MemberJoinManager" parameterType="String">
+        select * from member_join_manager where memberId=#{member_id}
+    </select>
+
+    
+    <select id="queryMemberStaffListPage" parameterType="com.manhui.gsl.jbqgsl.service.app.membermanager.ParamModel" resultType="HashMap">
+        select * from (
+        <!--个人入会-->
+        select a.memberType,a.joinObjId,a.joinObjName,a.position,a.createTime,
+        b.user_name,b.user_id,c.xm contact,d.yddh user_phone
+        from member_join_manager a
+        INNER JOIN app_user_info b on a.createUserId = b.user_id
+        inner join member_ry_ryjbxx c on c.ID = a.memberId
+        inner join member_ry_txfs d on c.ID = d.RYID
+        <where>
+            a.memberType = 'HYLX-01'
+            <if test="joinObjId != null and joinObjId != ''">
+                and a.joinObjId = #{joinObjId}
+            </if>
+            <if test="position != null and position !=''">
+                and a.position = #{position}
+            </if>
+            <if test="contact != null and contact !=''">
+                and (b.user_name like '%${contact}%'  or c.xm like '%${contact}%')
+            </if>
+            <if test="user_phone != null and user_phone !=''">
+            	and d.yddh like '%${user_phone}%'
+            </if>
+        </where>
+        union all
+        <!--社团入会-->
+        select a.memberType,a.joinObjId,a.joinObjName,a.position,a.createTime,
+        b.user_name,b.user_id,c.mscgzryxm contact,c.mscgzrydh user_phone
+        from member_join_manager a
+        INNER JOIN app_user_info b on a.createUserId = b.user_id
+        inner join member_jg_stjbxx c on c.ID = a.memberId
+        <where>
+            a.memberType = 'HYLX-02'
+            <if test="joinObjId != null and joinObjId != ''">
+                and a.joinObjId = #{joinObjId}
+            </if>
+            <if test="position != null and position !=''">
+                and a.position = #{position}
+            </if>
+            <if test="contact != null and contact !=''">
+                and (b.user_name like '%${contact}%' or c.mscgzryxm like '%${contact}%')
+            </if>
+            <if test="user_phone != null and user_phone !=''">
+            	and c.mscgzrydh like '%${user_phone}%'
+            </if>
+        </where>
+        union all
+        <!--企业入会-->
+        select a.memberType,a.joinObjId,a.joinObjName,a.position,a.createTime,
+        b.user_name,b.user_id,d.lxrxm contact,d.lxrlxfs user_phone
+        from member_join_manager a
+        INNER JOIN app_user_info b on a.createUserId = b.user_id
+        inner join member_qy_qyjbxx c on c.JBXXZJ = a.memberId
+        inner join member_qy_qylxrxx d on d.QYID = c.JBXXZJ
+        <where>
+            a.memberType = 'HYLX-03'
+            <if test="joinObjId != null and joinObjId != ''">
+                and a.joinObjId = #{joinObjId}
+            </if>
+            <if test="position != null and position !=''">
+                and a.position = #{position}
+            </if>
+            <if test="contact != null and contact !=''">
+                and (b.user_name like '%${contact}%' or d.lxrxm like '%${contact}%')
+            </if>
+            <if test="user_phone != null and user_phone !=''">
+            	and d.lxrlxfs like '%${user_phone}%'
+            </if>
+        </where>
+        ) ss order by ss.createTime  desc
+    </select>
+    
+     <select id="queryMemberId" resultType="Map" parameterType="String">
+        select * from member_join_manager where createUserId=#{user_id} and state="HYSP-02" and memberType="HYLX-03" limit 0,1
+    </select>
+</mapper>

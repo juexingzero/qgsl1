@@ -1,0 +1,83 @@
+server:
+  port: 9191
+  tomcat:
+    uri-encoding: UTF-8
+
+logging:
+  path: D:\jbqgsl\log
+  file: jbqgsl_dev.log
+  # 分页配置
+  pagehelper:
+    helper-dialect: mysql
+    reasonable: true
+    support-methods-arguments: true
+    params: count=countSql
+  #level:
+    #com.manhui.gsl.jbqgsl.dao: DEBUG
+
+spring:
+  # 数据库配置
+  datasource:
+    type: com.alibaba.druid.pool.xa.DruidXADataSource
+    druid:
+      developmentDB:
+        name: developmentDB
+        url: jdbc:mysql://192.168.0.13:3306/jbqgsl_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=true
+        username: root
+        password: Abc@123456
+        initialSize: 5 # 初始化大小
+        minIdle: 5  # 初始化最小 
+        maxActive: 20  # 初始化最大
+        maxWait: 60000 # 配置获取连接等待超时的时间
+        timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        minEvictableIdleTimeMillis: 30 # 配置一个连接在池中最小生存的时间，单位是毫秒
+        validationQuery: SELECT 1
+        validationQueryTimeout: 10000
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat,wall
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记install录
+        useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+  # html页面访问
+  thymeleaf:
+      cache: false
+      prefix: classpath:/static
+      check-template-location: true
+      suffix: .html
+      encoding: UTF-8
+      mode: LEGACYHTML5
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  # 静态资源文件
+  mvc:
+      static-path-pattern: /resources/**
+  # redis
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password: 123456
+    maxTotal: 100
+    maxIdle: 10
+    maxWaitMillis: 100000
+  #上传文件大小
+  servlet:
+    multipart:
+      max-file-size: 50Mb
+      max-request-size: 50Mb
+# mybatis配置
+mybatis:
+  mapper-locations: classpath:mybatis/**/*.xml
+  type-aliases-package: com.manhui.gsl.jbqgsl.model # 配置映射类所在包名
+  configuration:
+    call-setters-on-nulls: true
+# jta相关参数配置
+jta:
+  log-dir: classpath:tx-logs
+  transaction-manager-id: txManager

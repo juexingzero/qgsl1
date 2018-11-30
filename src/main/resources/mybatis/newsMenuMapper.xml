@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.NewsMenuMapper">
+<insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.NewsMenu">
+   insert into tb_news_menu(menuId,menuName,superiorId,createUserId,createTime,state,sequence,
+      menuUrl,updateUserid,updateTime,fileImg,menuModel,type,remark,fileImgName)
+    values (#{menuId},#{menuName},#{superiorId},#{createUserId},#{createTime},#{state},#{sequence},
+      #{menuUrl},#{updateUserid},#{updateTime},#{fileImg},#{menuModel},#{type},#{remark},#{fileImgName})
+</insert>
+
+    <!--查询list-->
+    <select id="queryList" parameterType="com.manhui.gsl.jbqgsl.model.NewsMenu"
+           resultType="com.manhui.gsl.jbqgsl.model.NewsMenu">
+        select * from tb_news_menu
+        <where>
+            <if test="stateList != null and stateList.size>0">
+                 state in
+                <foreach collection="stateList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="menuName != null and menuName != ''">
+                and menuName like '%#{menuName}%'
+            </if>
+            <if test="menuIdList != null and menuIdList.size() >0" >
+                and menuId in
+                <foreach collection="menuIdList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by sequence desc
+    </select>
+
+    <!--根据id 查询数据-->
+    <select id="queryById" parameterType="Integer" resultType="com.manhui.gsl.jbqgsl.model.NewsMenu">
+        select * from tb_news_menu where menuId = #{menuId}
+    </select>
+
+    <!--根据上级id 查询数据-->
+    <select id="queryListBySuperiorId" parameterType="com.manhui.gsl.jbqgsl.model.NewsMenu"
+            resultType="com.manhui.gsl.jbqgsl.model.NewsMenu">
+         select * from tb_news_menu where superiorId = #{superiorId}
+             <if test="stateList != null and stateList.size>0">
+                 and state in
+                 <foreach collection="stateList" index="index" item="item" open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+             </if>
+    </select>
+
+    <!--根据id 修改数据-->
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.NewsMenu">
+        update tb_news_menu
+        <set>
+            <if test="menuName!=null ">menuName=#{menuName},</if>
+            <if test="superiorId!=null">superiorId=#{superiorId},</if>
+            <if test="createUserId!=null and createUserId !='' ">createUserId=#{createUserId},</if>
+            <if test="createTime!=null and createTime !='' ">createTime=#{createTime},</if>
+            <if test="state!=null">state=#{state},</if>
+            <if test="sequence!=null">sequence=#{sequence},</if>
+            <if test="menuUrl!=null ">menuUrl=#{menuUrl},</if>
+            <if test="updateUserid!=null and updateUserid !='' ">updateUserid=#{updateUserid},</if>
+            <if test="updateTime!=null and updateTime !='' ">updateTime=#{updateTime},</if>
+            <if test="fileImg!=null">fileImg=#{fileImg},</if>
+            <if test="menuModel!=null and menuModel !='' ">menuModel=#{menuModel},</if>
+            <if test="type!=null">type=#{type},</if>
+            <if test="remark!=null">remark=#{remark},</if>
+            <if test="fileImgName!=null ">remark=#{fileImgName},</if>
+        </set>
+        where menuId = #{menuId}
+    </update>
+</mapper>

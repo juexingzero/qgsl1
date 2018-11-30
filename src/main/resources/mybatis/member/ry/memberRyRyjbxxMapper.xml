@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.ry.MemberRyRyjbxxMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyRyjbxx">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="RYBM" jdbcType="VARCHAR" property="rybm" />
+        <result column="XM" jdbcType="VARCHAR" property="xm" />
+        <result column="XB" jdbcType="VARCHAR" property="xb" />
+        <result column="ZT" jdbcType="VARCHAR" property="zt" />
+        <result column="CSRQ" jdbcType="VARCHAR" property="csrq" />
+        <result column="CSD" jdbcType="VARCHAR" property="csd" />
+        <result column="JG" jdbcType="VARCHAR" property="jg" />
+        <result column="MZ" jdbcType="VARCHAR" property="mz" />
+        <result column="HYZK" jdbcType="VARCHAR" property="hyzk" />
+        <result column="SG" jdbcType="VARCHAR" property="sg" />
+        <result column="XX" jdbcType="VARCHAR" property="xx" />
+        <result column="ZY" jdbcType="VARCHAR" property="zy" />
+        <result column="ZC" jdbcType="VARCHAR" property="zc" />
+        <result column="RYFL" jdbcType="VARCHAR" property="ryfl" />
+        <result column="BZ" jdbcType="VARCHAR" property="bz" />
+        <result column="RYZJLX" jdbcType="VARCHAR" property="ryzjlx" />
+        <result column="RYZJBM" jdbcType="VARCHAR" property="ryzjbm" />
+        <result column="STATE" jdbcType="VARCHAR" property="state" />
+        <result column="peopleType" jdbcType="VARCHAR" property="peopleType" />
+    </resultMap>
+
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyRyjbxx">
+        insert into member_ry_ryjbxx(ID,RYBM,XM,XB,ZT,CSRQ,CSD,JG,MZ,HYZK,SG,XX,ZY,ZC,RYFL,BZ,RYZJLX,RYZJBM,STATE,peopleType)
+        values
+        (#{id},#{rybm},#{xm},#{xb},#{zt},#{csrq},#{csd},#{jg},#{mz},#{hyzk},#{sg},#{xx},#{zy},#{zc},#{ryfl},#{bz},#{ryzjlx},#{ryzjbm},#{state},#{peopleType})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyRyjbxx">
+        update member_ry_ryjbxx
+        <set>
+            <if test="rybm!=null">RYBM=#{rybm},</if>
+            <if test="xm!=null">XM=#{xm},</if>
+            <if test="xb!=null">XB=#{xb},</if>
+            <if test="zt!=null">ZT=#{zt},</if>
+            <if test="csrq!=null">CSRQ=#{csrq},</if>
+            <if test="csd!=null">CSD=#{csd},</if>
+            <if test="jg!=null">JG=#{jg},</if>
+            <if test="mz!=null">MZ=#{mz},</if>
+            <if test="hyzk!=null">HYZK=#{hyzk},</if>
+            <if test="sg!=null">SG=#{sg},</if>
+            <if test="xx!=null">XX=#{xx},</if>
+            <if test="zy!=null">ZY=#{zy},</if>
+            <if test="zc!=null">ZC=#{zc},</if>
+            <if test="ryfl!=null">RYFL=#{ryfl},</if>
+            <if test="bz!=null">BZ=#{bz},</if>
+            <if test="ryzjlx!=null">RYZJLX=#{ryzjlx},</if>
+            <if test="ryzjbm!=null">RYZJBM=#{ryzjbm},</if>
+            <if test="state!=null">STATE=#{state},</if>
+            <if test="peopleType!=null">peopleType=#{peopleType},</if>
+        </set>
+        where id = #{id}
+    </update>
+    
+    <!--查询个人入会信息-->
+    <!--获得 app 个人入会 申请信息-->
+    <select id="getAppIndividualApplyDataById" parameterType="String" resultType="HashMap">
+        SELECT a.joinId,a.createTime,a.memberType,a.memberId ryid,a.state,a.joinObjId,a.position,a.joinObjName,
+          b.rybm,b.xm,b.xb,b.zt,b.csrq,b.csd,b.jg,b.mz,b.hyzk,b.STATE memberState,
+          b.sg,b.xx,b.zy,b.zc,b.ryfl,b.bz,ryzjlx,ryzjbm,b.peopleType,
+          c.dpsf,
+          d.xlmc,d.xxmc,
+          e.yddh,e.gddh,e.dzyx,e.gsmc,e.gszw,
+          f.rdzw,f.zxzw,f.ttxhmc,f.ttxhzw,
+          g.approve_fail_info
+         from member_join_manager a
+         inner join member_ry_ryjbxx b on a.memberId = b.id
+         left join member_ry_dpsf c on c.ryid = b.id
+         left join member_ry_xlyxw d on d.ryid = b.id
+         left join member_ry_txfs e on e.ryid = b.id
+         left join member_ry_fgrszyzw f on f.paramid = b.id
+         left join (select * from member_approve where member_id = #{joinId} order by approve_time desc limit 0,1) g on g.member_id = b.id
+        where a.joinId = #{joinId}
+    </select>
+
+    <!--根据id 查询数据-->
+    <select id="queryById" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyRyjbxx">
+        select  * from member_ry_ryjbxx where ID = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.meetingmanager.MeetingManagerMapper">
+	  <select id="getMeetingManagerList" resultType="com.manhui.gsl.jbqgsl.model.MeetingManager">
+    	SELECT
+			*
+		FROM
+			meeting_manager
+		WHERE
+			is_delete=0
+        <if test="meeting_theme != null and meeting_theme != ''">
+            AND meeting_theme like #{meeting_theme}
+        </if>
+        <if test="meeting_state != null and meeting_state.size > 0">
+            AND meeting_state in
+             <foreach collection="meeting_state" index="index" item="item" open="(" separator="," close=")">
+               #{item}
+          </foreach>
+        </if>
+        ORDER BY create_time desc
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+	    
+	    
+	    <select id="queryMeetingManagerTotal" resultType="int">
+    	SELECT
+			count(*)
+		FROM
+			meeting_manager
+		WHERE
+			is_delete=0
+        <if test="meeting_theme != null and meeting_theme != ''">
+            AND meeting_theme = #{meeting_theme}
+        </if>
+        <if test="meeting_state != null and meeting_state.size > 0">
+            AND meeting_state in
+             <foreach collection="meeting_state" index="index" item="item" open="(" separator="," close=")">
+               #{item}
+          </foreach>
+        </if>
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+	    
+	    <update id="updateMeetingManager" parameterType="com.manhui.gsl.jbqgsl.model.MeetingManager">
+        UPDATE meeting_manager
+        <set>
+	        <if test="meeting_theme != null and meeting_theme != ''">
+            	meeting_theme=#{meeting_theme},
+	        </if>
+	        <if test="meeting_address != null and meeting_address != ''">
+            	meeting_address=#{meeting_address},
+	        </if>
+	        <if test="meeting_navigation != null and meeting_navigation != ''">
+            	meeting_navigation=#{meeting_navigation},
+	        </if>
+	        <if test="meeting_ll != null and meeting_ll != ''">
+            	meeting_ll=#{meeting_ll},
+	        </if>
+	        <if test="meeting_data != null and meeting_data != ''">
+            	meeting_data=#{meeting_data},
+	        </if>
+	        <if test="meeting_starttime != null and meeting_starttime != ''">
+            	meeting_starttime=#{meeting_starttime},
+	        </if>
+	        <if test="meeting_endtime != null and meeting_endtime != ''">
+            	meeting_endtime=#{meeting_endtime},
+	        </if>
+	        <if test="meeting_state != null and meeting_state != ''">
+            	meeting_state=#{meeting_state},
+	        </if>
+	        <if test="meeting_content != null and meeting_content != ''">
+            	meeting_content=#{meeting_content},
+	        </if>
+	        <if test="or_code != null and or_code != ''">
+            	or_code=#{or_code},
+	        </if>
+	        <if test="is_receipt != null and is_receipt != ''">
+            	is_receipt=#{is_receipt},
+	        </if>
+	        <if test="is_vote != null and is_vote != ''">
+            	is_vote=#{is_vote},
+	        </if>
+	        <if test="is_delete != null and is_delete != ''">
+            	is_delete=#{is_delete},
+	        </if>
+	        <if test="is_delete != null and is_delete != ''">
+            	is_delete=#{is_delete},
+	        </if>
+            	meeting_minutes=#{meeting_minutes},
+	        <if test="allow_select != null and allow_select != ''">
+            	allow_select=#{allow_select},
+	        </if>
+	        <if test="receipt_time != null and receipt_time != ''">
+            	receipt_time=#{receipt_time},
+	        </if>
+        </set>
+        WHERE meeting_id=#{meeting_id}
+    </update>
+    
+    <insert id="insertMeetingManager" parameterType="com.manhui.gsl.jbqgsl.model.MeetingManager">
+		insert into meeting_manager 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			meeting_id,
+			meeting_theme,
+			meeting_address,
+			meeting_navigation,
+			meeting_ll,
+			meeting_data,
+			meeting_starttime,
+			meeting_endtime,
+			meeting_content,
+			or_code,
+			is_vote,
+			allow_select,
+			receipt_time,
+			create_time
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			#{meeting_id},
+			#{meeting_theme},
+			#{meeting_address},
+			#{meeting_navigation},
+			#{meeting_ll},
+			#{meeting_data},
+			#{meeting_starttime},
+			#{meeting_endtime},
+			#{meeting_content},
+			#{or_code},
+			#{is_vote},
+			#{allow_select},
+			#{receipt_time},
+			now(),
+		</trim>
+	</insert>
+	
+	<select id="queryMeetingManager" resultType="com.manhui.gsl.jbqgsl.model.MeetingManager">
+    	SELECT
+			*
+		FROM
+			meeting_manager
+		WHERE
+			is_delete=0
+			<if test="meeting_id != null and meeting_id != ''">
+			and meeting_id=#{meeting_id}	
+			</if>
+			<if test="meeting_theme != null and meeting_theme != ''">
+			and meeting_theme=#{meeting_theme}
+			</if>
+        
+	    </select>
+	    
+	    <select id="querymeetingManagerList" resultType="com.manhui.gsl.jbqgsl.model.MeetingManager">
+    	SELECT
+			*
+		FROM
+			meeting_manager
+		WHERE
+			is_delete=0 and meeting_state=1 or meeting_state=2
+	    </select>
+	    
+	    <select id="querymmTotal" resultType="int">
+    	SELECT
+			count(*)
+		FROM
+			meeting_manager
+		WHERE
+		 	meeting_state!=4 and meeting_state!=0 and is_delete=0
+		 <if test="meeting_starttime != null and meeting_starttime != ''">
+		 	and meeting_starttime >= #{meeting_starttime}
+		 </if>
+		 <if test="meeting_endtime != null and meeting_endtime != ''">
+		 	and meeting_endtime &lt;= #{meeting_endtime}
+		 </if>
+	    </select>
+</mapper> 

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppForthwithEvaluateMapper">
+	<select id="getForthwithEvaluateIds" resultType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+		select * from forthwith_evaluate
+		<where>
+			<if test="institution_id !=null and institution_id !=''">
+				and active_id =#{institution_id}
+			</if>
+		</where>
+	</select>
+		
+	<select id="queryInstitutionType" resultType="string">
+		select * from institution_info
+		<where>
+			<if test="institution_id !=null and institution_id !=''">
+				and institution_id =#{institution_id}
+			</if>
+		</where>
+	</select>	
+	<select id="queryInstitution" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+		select * from institution_info
+		<where>
+		
+			<if test="passiveInstitutionIdList !=null and passiveInstitutionIdList.size()>0 ">
+				and institution_id in
+				<foreach collection="passiveInstitutionIdList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+			</if>
+			and del_flag='0'
+		</where>
+	</select>	
+		<!-- 在标准表中查 -->
+		
+		<select id="queryStandardId" resultType="string">
+			select standard_id from evaluate_standard
+		<where>
+			and is_effect ='1' and del_flag='0'
+			<if test="standard_belonged !=null and standard_belonged !='' ">
+				and standard_belonged = #{standard_belonged}
+			</if>
+		</where>
+	</select>	
+	
+ 	<!-- 在主题评价标准中查即时评价 -->
+<!--	<select id="queryStandardId" resultType="string">
+			select standard_id from topic_evaluate_standard
+			<where>
+				<if test="standard_belonged !=null and standard_belonged !='' ">
+					and standard_belonged = #{standard_belonged}
+				</if>
+			</where>
+	</select>	 -->
+		<insert id="save">
+			insert into 
+				forthwith_evaluate
+			( 	forthwith_id,forthwith_number,passive_id,
+				evaluate_passive_name,active_id,evaluate_active_name,
+				evaluate_time,real_score_sum,del_flag,create_time,update_time
+			)
+			values
+			(
+				#{forthwith_id},#{forthwith_number},#{passive_id},
+				#{evaluate_passive_name},#{active_id},#{evaluate_active_name},
+				#{evaluate_time},#{real_score_sum},#{del_flag},#{create_time},#{update_time}
+			)
+		
+		</insert>	
+	<select id="queryForthwithObj" resultType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+		select real_score_sum, forthwith_id,passive_id,evaluate_passive_name,active_id,evaluate_active_name,evaluate_time 
+		from
+		 	forthwith_evaluate 
+		where 
+		 	passive_id=#{institution_id} and del_flag ='0' order by evaluate_passive_name desc
+		 limit #{pageNo},#{pageSize}
+	</select>
+	<select id="queryTotal" resultType="Long">
+		select count(*)
+		from
+		 	forthwith_evaluate 
+		where 
+		 	active_id=#{institution_id} and del_flag ='0'
+	</select>
+	
+	<select id="queryTotal2" resultType="Long">
+		select count(*) from institution_info
+		<where>
+			institution_id in
+				(select passive_id
+					from
+					 	forthwith_evaluate 
+					<where>
+						<if test="institution_id !=null and institution_id !=''">
+						 	and active_id=#{institution_id} and del_flag ='0'
+						</if>
+					
+					</where>
+				 )
+				<if test="institution_type !=null and institution_type !=''">
+					and institution_type = #{institution_type}
+				</if>
+		</where>
+		 
+	</select>
+	
+	   <!-- 获取当前最大的主题编号 -->
+    <select id="getMaxTopicNumber" resultType="string">
+        SELECT
+			MAX(forthwith_number)
+		FROM
+			forthwith_evaluate
+    </select>
+    <select id="queryForthwithId" resultType="string">
+        SELECT
+			forthwith_id
+		FROM
+			forthwith_evaluate
+		where 
+		 	active_id=#{active_id} and passive_id =#{passive_id} and del_flag='0'
+    </select>
+    <select id="queryCountForthwith" resultType="int">
+        SELECT
+			count(*)
+		FROM
+			forthwith_evaluate
+		where 
+		 	active_id=#{active_id} and passive_id =#{passive_id} and del_flag='0'
+    </select>
+    <select id="queryPassiveIds" resultType="String">
+        SELECT
+			distinct passive_id
+		FROM
+			forthwith_evaluate
+		<where>
+			and del_flag='0'
+			<if test="active_id != null and active_id != ''">
+				and active_id=#{active_id} 
+			</if>
+		</where>
+    </select>
+    <select id="queryForthwithList" resultType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+        SELECT
+			*
+		FROM
+			forthwith_evaluate
+		<where>
+			and del_flag='0'
+			<if test="institution_id != null and institution_id != ''">
+				and active_id=#{institution_id} 
+			</if>
+		</where>
+			<if test="pageNo != null  and pageSize !=null  ">
+				limit #{pageNo},#{pageSize}
+			</if>
+    </select>
+    
+    <select id="queryForthwithList2" resultType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+ 		select * from forthwith_evaluate 	
+ 		
+ 		<where>
+			and del_flag='0'
+			<if test="institution_id != null and institution_id != ''">
+				and passive_id in 
+			</if>
+		
+ 		(
+ 			select institution_id from institution_info 
+ 				<where>
+ 					and institution_id in
+			       (
+				       SELECT
+						passive_id
+					FROM
+						forthwith_evaluate
+					<where>
+						and del_flag='0'
+						<if test="institution_id != null and institution_id != ''">
+							and active_id=#{institution_id} 
+						</if>
+					</where>
+					)	
+			<if test="institution_type !=null and institution_type !=''">
+				and institution_type =#{institution_type}
+			</if>
+		</where>
+	)
+		<if test="institution_id !=null and institution_id !=''">
+				and active_id =#{institution_id}
+		</if>
+	</where>
+		<if test="pageNo != null  and pageSize !=null  ">
+				limit #{pageNo},#{pageSize}
+		</if>
+    </select>
+    
+    
+
+</mapper>

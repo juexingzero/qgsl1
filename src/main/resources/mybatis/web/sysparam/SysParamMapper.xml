@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.sysparam.SysParamMapper">
+    <!-- 获取参数列表 -->
+    <select id="getSysParamList" resultType="com.manhui.gsl.jbqgsl.model.sysparam.SysParam">
+    	SELECT
+			sp.*
+		FROM
+			sys_param sp
+		WHERE
+			1 = 1
+        <if test="param_type != null and param_type != ''">
+            AND sp.param_type = #{param_type}
+        </if>
+       order by param_order 
+    </select>
+
+    <select id="getSysParamMenu" resultType="com.manhui.gsl.jbqgsl.model.sysparam.SysParam">
+        select * from sys_param where p_param_id is not null
+        and p_param_id != "" and LENGTH(p_param_id) <![CDATA[<]]> 5
+        order by param_order
+    </select>
+
+    <select id="getSysParamOneList" resultType="com.manhui.gsl.jbqgsl.model.sysparam.SysParam">
+        select * from sys_param where p_param_id = '0'
+        order by param_order
+    </select>
+
+    <select id="getSysParamTwoList" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.sysparam.SysParam">
+      select * from sys_param where p_param_id = #{p_param_id}
+      order by param_order
+    </select>
+
+    <select id="getSysParamListPage" parameterType="java.util.Map" resultType="com.manhui.gsl.jbqgsl.model.sysparam.SysParam">
+      select * from sys_param where p_param_id = #{p_param_id}
+      order by param_order
+    <if test="pageNo != null and pageSize != null">
+        LIMIT #{pageNo},#{pageSize}
+    </if>
+    </select>
+
+    <select id="getSysParamListCount" parameterType="String" resultType="java.lang.Integer">
+      select count(*) from sys_param where p_param_id = #{p_param_id}
+      order by param_order
+    </select>
+
+    <select id="getSysParamDetail" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.sysparam.SysParam">
+        select * from sys_param where param_id = #{param_id}
+    </select>
+
+    <delete id="deleteSysParamData" parameterType="String" >
+      delete from sys_param where param_id = #{param_id}
+    </delete>
+
+    <insert id="insertSysParamData" parameterType="com.manhui.gsl.jbqgsl.model.sysparam.SysParam">
+        insert into sys_param
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            param_id,
+            p_param_id,
+            param_key,
+            param_value,
+            <if test="param_describe != null">param_describe,</if>
+            param_order,
+            create_time,
+            <if test="update_time != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{param_id},
+            #{p_param_id},
+            #{param_key},
+            #{param_value},
+            <if test="param_describe != null">#{param_describe},</if>
+            #{param_order},
+            #{create_time},
+            <if test="update_time != null">#{update_time},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysParamData" parameterType="com.manhui.gsl.jbqgsl.model.sysparam.SysParam">
+        update sys_param
+        <set>
+            <if test="p_param_id">p_param_id = #{p_param_id},</if>
+            <if test="param_key">param_key = #{param_key},</if>
+            <if test="param_value">param_value = #{param_value},</if>
+            <if test="param_describe">param_describe = #{param_describe},</if>
+            <if test="param_order">param_order = #{param_order},</if>
+            <if test="create_time">create_time = #{create_time},</if>
+            <if test="update_time">update_time = #{update_time}</if>
+        </set>
+        where param_id = #{param_id}
+    </update>
+
+    <select id="getSysParamByKey" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.sysparam.SysParam">
+        select * from sys_param where param_key = #{param_key} order by create_time desc limit 0,1
+    </select>
+    <select id="getSysParamKeyList" parameterType="list" resultType="String">
+        select param_key from sys_param 
+       	<where>
+       		<if test="paramIdList !=null and paramIdList.size()>0">
+       			and param_id in
+       			<foreach collection="paramIdList" item="item" open="(" separator="," close=")">
+       				#{item}
+       			</foreach>
+       		</if>
+       	</where>
+    </select>
+</mapper>

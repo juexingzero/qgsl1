@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyQyxypjMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyxypj">
+        <id column="XYPJZJ" jdbcType="VARCHAR" property="xypjzj" />
+        <result column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="QYHDXYPJNF" jdbcType="VARCHAR" property="qyhdxypjnf" />
+        <result column="GSQYXY" jdbcType="VARCHAR" property="gsqyxy" />
+        <result column="NSXYDJ" jdbcType="VARCHAR" property="nsxydj" />
+        <result column="JGPJDJ" jdbcType="VARCHAR" property="jgpjdj" />
+        <result column="YHZXDJ" jdbcType="VARCHAR" property="yhzxdj" />
+        <result column="QYXYJB" jdbcType="VARCHAR" property="qyxyjb" />
+        <result column="LDBZSM" jdbcType="VARCHAR" property="ldbzsm" />
+        <result column="SCXYDJ" jdbcType="VARCHAR" property="scxydj" />
+        <result column="QYID" jdbcType="VARCHAR" property="qyid" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyxypj">
+       insert into member_qy_qyxypj(XYPJZJ,JBXXZJ,QYHDXYPJNF,GSQYXY,NSXYDJ,JGPJDJ,YHZXDJ,QYXYJB,LDBZSM,SCXYDJ,QYID)
+       values
+       (#{xypjzj},#{jbxxzj},#{qyhdxypjnf},#{gsqyxy},#{nsxydj},#{jgpjdj},#{yhzxdj},#{qyxyjb},#{ldbzsm},#{scxydj},#{qyid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyxypj">
+        update member_qy_qyxypj
+        <set>
+            <if test="xypjzj!=null and xypjzj != ''">XYPJZJ=#{xypjzj},</if>
+            <if test="jbxxzj!=null">JBXXZJ=#{jbxxzj},</if>
+            <if test="qyhdxypjnf!=null">QYHDXYPJNF=#{qyhdxypjnf},</if>
+            <if test="gsqyxy!=null">GSQYXY=#{gsqyxy},</if>
+            <if test="nsxydj!=null">NSXYDJ=#{nsxydj},</if>
+            <if test="jgpjdj!=null">JGPJDJ=#{jgpjdj},</if>
+            <if test="yhzxdj!=null">YHZXDJ=#{yhzxdj},</if>
+            <if test="qyxyjb!=null">QYXYJB=#{qyxyjb},</if>
+            <if test="ldbzsm!=null">LDBZSM=#{ldbzsm},</if>
+            <if test="scxydj!=null">SCXYDJ=#{scxydj},</if>
+            <if test="qyid!=null">QYID=#{qyid},</if>
+        </set>
+        where XYPJZJ = #{xypjzj}
+    </update>
+
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.NewsOperatingMapper">
+
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.NewsOperating" useGeneratedKeys="true" keyProperty="operatingId">
+        insert into tb_news_operating(operatingId,userId,userName,newsId,newsName,type,createTime,updateTime,state,content,commentState,phoneId)
+        values
+        (#{operatingId},#{userId},#{userName},#{newsId},#{newsName},#{type},#{createTime},#{updateTime},#{state},#{content},#{commentState},#{phoneId})
+    </insert>
+
+
+    <!--根据id 修改数据-->
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.NewsOperating">
+        update tb_news_operating
+        <set>
+            <if test="userId!=null and userId !='' ">userId=#{userId},</if>
+            <if test="userName!=null and userName !='' ">userName=#{userName},</if>
+            <if test="newsId!=null">newsId=#{newsId},</if>
+            <if test="newsName!=null and newsName !='' ">newsName=#{newsName},</if>
+            <if test="type!=null">type=#{type},</if>
+            <if test="createTime!=null and createTime !='' ">createTime=#{createTime},</if>
+            <if test="updateTime!=null and updateTime !='' ">updateTime=#{updateTime},</if>
+            <if test="state!=null">state=#{state},</if>
+            <if test="content!=null and content !='' ">content=#{content},</if>
+            <if test="commentState != null">commentState = #{commentState},</if>
+            <if test="noReason != null and noReason != ''">noReason = #{noReason}</if>
+        </set>
+        where operatingId = #{operatingId}
+    </update>
+
+    <!--查询人员收藏，点赞等新闻 新闻-->
+    <select id="getUserCollectionNews" parameterType="com.manhui.gsl.jbqgsl.model.NewsOperating"
+            resultType="com.manhui.gsl.jbqgsl.model.NewsOperating">
+        select o.operatingId,o.userId,o.type,o.createTime,o.updateTime,o.content,o.newsId,
+          n.commentNums,n.collectionNums,n.viewNums,n.likeNums,n.releaseTime,n.newsImg,n.imgType,n.infoSource,n.newsName
+        from tb_news_operating o inner join tb_news n on o.newsId = n.newsId and n.state = 2
+        where o.userId = #{userId} and o.state = 1 and o.type = #{type}
+        <if test="newsId != null">
+            and o.newsId = #{newsId}
+        </if>
+    </select>
+
+    <!--询人员 对 新闻的操作数据-->
+    <select id="getUserNewsOperatingList" parameterType="com.manhui.gsl.jbqgsl.model.NewsOperating"
+            resultType="com.manhui.gsl.jbqgsl.model.NewsOperating">
+        select * from tb_news_operating where state = 1 and userId = #{userId} and newsId = #{newsId}
+    </select>
+
+    <!--查询新闻评论数据列表，关联人员表，获得人员信息-->
+    <select id="queryCommentList" parameterType="com.manhui.gsl.jbqgsl.model.NewsOperating"
+            resultType="com.manhui.gsl.jbqgsl.model.NewsOperating">
+        select o.operatingId,o.newsId,o.newsName,o.createTime,o.updateTime,o.type,o.content,o.commentState,
+          u.user_id userId,u.user_name userName,u.head_img,
+          m.menuId,m.menuName
+         from tb_news_operating o
+          inner join app_user_info u on o.userId = u.user_id
+          inner join tb_news n on n.newsId = o.newsId
+          inner join tb_news_belong_menu nm on nm.newsId = n.newsId
+          inner join tb_news_menu m on m.menuId = nm.menuId
+        where o.state = #{state} and o.type = #{type}
+        <if test="newsId != null">
+            and o.newsId = #{newsId}
+        </if>
+        <if test="menuId != null and menuId != ''">
+            and m.menuId = #{menuId}
+        </if>
+        <if test="newsName != null and newsName != ''">
+            and n.newsName like '%${newsName}%'
+        </if>
+        <if test="commentState != null">
+            and o.commentState = #{commentState}
+        </if>
+
+        order by o.createTime desc
+    </select>
+
+    <!--根据id 查询数据 -->
+    <select id="getNewsOperatingById" parameterType="Integer" resultType="com.manhui.gsl.jbqgsl.model.NewsOperating">
+        select * from tb_news_operating where operatingId = #{operatingId} and state = 1
+    </select>
+
+    <!--查询回执数据-->
+    <select id="queryReceiptDataList" parameterType="Integer" resultType="com.manhui.gsl.jbqgsl.model.NewsOperating">
+        select o.operatingId,o.newsId,o.userId,o.userName,o.createTime,c.receiptType type,c.content,c.assignPeople
+        from tb_news_operating o inner join tb_news_receipt_content c
+            on o.newsId = c.newsId and o.operatingId = c.operatingId
+        where o.newsId = #{newsId} and o.state = 1 and o.type = #{type}
+    </select>
+
+    <!--查询评论数据-->
+    <select id="queryCommentInfo" parameterType="List" resultType="com.manhui.gsl.jbqgsl.model.NewsOperating">
+        select o.operatingId,o.newsId,o.newsName,o.createTime,o.updateTime,o.type,o.content,o.commentState,
+         u.user_id userId,u.user_name userName,u.head_img,
+          m.menuId,m.menuName
+         from tb_news_operating o
+        inner join app_user_info u on o.userId = u.user_id
+          inner join tb_news n on n.newsId = o.newsId
+          inner join tb_news_belong_menu nm on nm.newsId = n.newsId
+          inner join tb_news_menu m on m.menuId = nm.menuId
+         where o.state = 1
+        <if test="operatingIds != null and operatingIds.size>0">
+            and o.operatingId in
+            <foreach collection="operatingIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.ry.MemberRyTxfsMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyTxfs">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="RYBM" jdbcType="VARCHAR" property="rybm" />
+        <result column="GZDWTXDZ" jdbcType="VARCHAR" property="gzdwtxdz" />
+        <result column="GZDWYZBM" jdbcType="VARCHAR" property="gzdwyzbm" />
+        <result column="GZDH" jdbcType="VARCHAR" property="gzdh" />
+        <result column="JTZZ" jdbcType="VARCHAR" property="jtzz" />
+        <result column="JTZZYZBM" jdbcType="VARCHAR" property="jtzzyzbm" />
+        <result column="SE" jdbcType="VARCHAR" property="se" />
+        <result column="SI" jdbcType="VARCHAR" property="si" />
+        <result column="XA" jdbcType="VARCHAR" property="xa" />
+        <result column="YDDH" jdbcType="VARCHAR" property="yddh" />
+        <result column="ZZDH" jdbcType="VARCHAR" property="zzdh" />
+        <result column="DZYX" jdbcType="VARCHAR" property="dzyx" />
+        <result column="CZHM" jdbcType="VARCHAR" property="czhm" />
+        <result column="GDDH" jdbcType="VARCHAR" property="gddh" />
+        <result column="QQ" jdbcType="VARCHAR" property="qq" />
+        <result column="WXH" jdbcType="VARCHAR" property="wxh" />
+        <result column="RYID" jdbcType="VARCHAR" property="ryid" />
+        <result column="GSMC" jdbcType="VARCHAR" property="gsmc" />
+        <result column="GSZW" jdbcType="VARCHAR" property="gszw" />
+
+    </resultMap>
+
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyTxfs">
+      insert into member_ry_txfs(ID,RYBM,GZDWTXDZ,GZDWYZBM,GZDH,JTZZ,JTZZYZBM,SE,SI,XA,YDDH,ZZDH,DZYX,CZHM,GDDH,QQ,WXH,RYID,GSMC,GSZW)
+      values
+      (#{id},#{rybm},#{gzdwtxdz},#{gzdwyzbm},#{gzdh},#{jtzz},#{jtzzyzbm},#{se},#{si},#{xa},#{yddh},#{zzdh},
+        #{dzyx},#{czhm},#{gddh},#{qq},#{wxh},#{ryid},#{gsmc},#{gszw})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyTxfs">
+        update member_ry_txfs
+        <set>
+            <if test="rybm!=null">RYBM = #{rybm},</if>
+            <if test="gzdwtxdz!=null">GZDWTXDZ = #{gzdwtxdz},</if>
+            <if test="gzdwyzbm!=null">GZDWYZBM = #{gzdwyzbm},</if>
+            <if test="gzdh!=null">GZDH = #{gzdh},</if>
+            <if test="jtzz!=null">JTZZ = #{jtzz},</if>
+            <if test="jtzzyzbm!=null">JTZZYZBM = #{jtzzyzbm},</if>
+            <if test="se!=null">SE = #{se},</if>
+            <if test="si!=null">SI = #{si},</if>
+            <if test="xa!=null">XA = #{xa},</if>
+            <if test="yddh!=null">YDDH = #{yddh},</if>
+            <if test="zzdh!=null">ZZDH = #{zzdh},</if>
+            <if test="dzyx!=null">DZYX = #{dzyx},</if>
+            <if test="czhm!=null">CZHM = #{czhm},</if>
+            <if test="gddh!=null">GDDH = #{gddh},</if>
+            <if test="qq!=null">QQ = #{qq},</if>
+            <if test="wxh!=null">WXH = #{wxh},</if>
+            <if test="ryid!=null">RYID = #{ryid},</if>
+            <if test="gsmc!=null">GSMC = #{gsmc},</if>
+            <if test="gszw!=null">GSZW = #{gszw},</if>
+        </set>
+        where ID = #{id}
+    </update>
+    
+    <!--根据人员基本信息表id 查询数据-->
+    <select id="appQueryMapByRyid" parameterType="String" resultType="HashMap">
+        select id,gzdwtxdz,gzdwyzbm,gzdh,jtzz,jtzzyzbm,se,si,xa,yddh,zzdh,dzyx,czhm,gddh,qq,wxh,gsmc,gszw
+         from member_ry_txfs where RYID = #{ryid}
+    </select>
+
+
+    <!--根据人员基本信息表id 修改数据-->
+    <update id="updateByRyid" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyTxfs">
+        update member_ry_txfs
+        <set>
+            <if test="rybm!=null">RYBM = #{rybm},</if>
+            <if test="gzdwtxdz!=null">GZDWTXDZ = #{gzdwtxdz},</if>
+            <if test="gzdwyzbm!=null">GZDWYZBM = #{gzdwyzbm},</if>
+            <if test="gzdh!=null">GZDH = #{gzdh},</if>
+            <if test="jtzz!=null">JTZZ = #{jtzz},</if>
+            <if test="jtzzyzbm!=null">JTZZYZBM = #{jtzzyzbm},</if>
+            <if test="se!=null">SE = #{se},</if>
+            <if test="si!=null">SI = #{si},</if>
+            <if test="xa!=null">XA = #{xa},</if>
+            <if test="yddh!=null">YDDH = #{yddh},</if>
+            <if test="zzdh!=null">ZZDH = #{zzdh},</if>
+            <if test="dzyx!=null">DZYX = #{dzyx},</if>
+            <if test="czhm!=null">CZHM = #{czhm},</if>
+            <if test="gddh!=null">GDDH = #{gddh},</if>
+            <if test="qq!=null">QQ = #{qq},</if>
+            <if test="wxh!=null">WXH = #{wxh},</if>
+            <if test="gsmc!=null ">GSMC = #{gsmc},</if>
+            <if test="gszw!=null">GSZW = #{gszw},</if>
+            <if test="ryid!=null and ryid != ''">RYID = #{ryid},</if>
+        </set>
+        where RYID = #{ryid}
+    </update>
+</mapper>

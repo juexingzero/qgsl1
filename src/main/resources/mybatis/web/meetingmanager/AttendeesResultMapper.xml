@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.meetingmanager.AttendeesResultMapper">
+	  <select id="getAttendeesResultList" resultType="com.manhui.gsl.jbqgsl.controller.web.meetingmanager.AttendeesResult">
+    	select  a.member_id,a.company_name,a.concats_title,a.concats_name,a.concats_telephone from member_company a 
+    	where 1=1 
+    	<if test="company_name != null and company_name != ''">
+            AND a.company_name like #{company_name} or a.concats_name like #{company_name}
+        </if>
+        <if test="approve_organization_name != null and approve_organization_name != ''">
+            AND a.approve_organization_name = #{approve_organization_name}
+        </if>
+        <if test="concats_title != null and concats_title != ''">
+            AND a.organization_title = #{concats_title}
+        </if>    	
+		union
+		select  b.member_id,b.company_name,b.organization_title as concats_title,b.concats_name,b.concats_telephone  from member_personal b 
+		where 1=1
+		<if test="company_name != null and company_name != ''">
+            AND b.company_name like #{company_name} or b.concats_name like #{company_name}
+        </if>
+        <if test="approve_organization_name != null and approve_organization_name != ''">
+            AND b.approve_organization_name = #{approve_organization_name}
+        </if>
+        <if test="concats_title != null and concats_title != ''">
+            AND b.organization_title = #{concats_title}
+        </if>
+         <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+	    
+	    <select id="queryAttendeesResultTotal" resultType="int">
+    	select sum(num) from
+    	(
+    	select count(*) as num from member_company a
+    	where 1=1 
+    	<if test="company_name != null and company_name != ''">
+            AND a.company_name like #{company_name} or a.concats_name like #{company_name}
+        </if>
+        <if test="approve_organization_name != null and approve_organization_name != ''">
+            AND a.approve_organization_name = #{approve_organization_name}
+        </if>
+        <if test="concats_title != null and concats_title != ''">
+            AND a.organization_title = #{concats_title}
+        </if>    	
+		union
+		select count(*) as num from member_personal b
+		where 1=1
+		<if test="company_name != null and company_name != ''">
+            AND b.company_name like #{company_name} or b.concats_name like #{company_name}
+        </if>
+        <if test="approve_organization_name != null and approve_organization_name != ''">
+            AND b.approve_organization_name = #{approve_organization_name}
+        </if>
+        <if test="concats_title != null and concats_title != ''">
+            AND b.organization_title = #{concats_title}
+        </if>
+        ) as c
+        
+         <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+</mapper> 

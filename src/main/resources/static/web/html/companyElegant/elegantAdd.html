@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>风采新增</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<!--富文本编辑器-->
+	<script type="text/javascript" charset="utf-8" src="/resources/ueditor/utf8-jsp/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/resources/ueditor/utf8-jsp/ueditor.all.min.js"> </script>
+	<!--文本编译器语言-->
+	<script type="text/javascript" charset="utf-8" src="/resources/ueditor/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
+	<!--文本编译器tolbars-->
+	<script type="text/javascript" charset="utf-8" src="/resources/ueditor/utf8-jsp/toolbars.js"></script>
+	<script type="text/javascript" src="/resources/miniui/res/third-party/swfupload/swfupload.js"></script>
+	<!-- 图片上传 -->
+	<script type="text/javascript" src="/resources/fileUpload/fileUpload.js"></script>
+	<link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        /**修改文件上传框的大小**/
+		body .upload { padding: 0 0 5px 0; }
+        body .upload .image { width:160px; height:200px; }
+        body .upload .image .image_font { height: 165px; line-height: 165px; }
+        body .upload .image .image_content { width: auto; height: auto; }
+    </style>
+</head>
+
+<body>
+	<div id="form_elegant_add" style="height: 100%;">
+	    <div class="table_edit" style="height: 100%; overflow-y: auto; padding-bottom: 55px; padding-top: 5px">
+		    <table style="width:100%; background-color:#ffffff;">
+		    	<colgroup>
+		    		<col style="width: 100px;">
+		    	</colgroup>
+	            <tr>
+	               <td class="td1" ><span style="color: red; margin-right:2px;">*</span>企业名称：</td>
+	                <td>
+	                    <input name="company_name" emptyText="请输入企业名称" class="mini-textbox" style="width:240px;" required="true" maxLength="30"/>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td><label style="line-height:30px;padding-left:5px;">企业分类：</label></td>
+	                <td>
+	                    <select name="company_type" class="mini-combobox" style="width:120px;" valueField="param_key" textField="param_value" value="1">
+	                        <option value="1">普通会员</option>
+	                        <option value="2">优秀会员</option>
+	                    </select>
+	                </td>
+	            </tr>
+		        <tr>
+	                <td><label style="line-height:30px;padding-left:5px;">排序编号：</label></td>
+	                <td>
+	               		<input name="order_no" class="mini-spinner" style="width:120px" value="1" maxValue="1000" minValue="1"/>
+	                </td>
+		        </tr>
+		        <tr>
+		            <td><label style="line-height:30px;padding-left:5px;">企业logo：</label></td>
+		            <td>
+	                    <input id="file" class="mini-fileupload" name="file" limitType="*.png" style="width:330px;height: 26px;"
+	                           flashUrl="/resources/miniui/res/third-party/swfupload/swfupload.swf"
+	                           uploadUrl="/upload/uploadFile"
+	                           onuploadsuccess="onUploadSuccess" onuploaderror="onUploadError" onfileselect="onFileSelect"/>
+	                    <a checkOnClick="true" groupName="search" class="mini-button" id="fileupload" onclick="startUpload()">上传</a>
+	                    <a checkOnClick="true" groupName="search" class="mini-button" id="filedel" onclick="delUpload()">删除</a>
+		            </td>
+		        </tr>
+		        <tr>
+		            <td><label style="line-height:30px;padding-left:5px;">企业图片：</label></td>
+		            <td>
+		                <input name="company_image" class="mini-textbox" required="true" visible="false"/>
+		                <div id="uploadImage" class="upload image"></div>
+		            </td>
+		        </tr>
+		        <tr>
+		            <td class="td1" ><span style="color:red; margin-right:2px;">*</span>企业描述：</td>
+					<td>
+						<script id="editor" type="text/plain" style="width:100%;height:300px;"></script>
+					</td>
+		        </tr>
+		    </table>
+			<div class="mini-toolbar bot_btn">
+				<a class="mini-button saveBut" checkOnClick="true" groupName="search" id="submit" onclick="save()">保存</a>
+				<a class="mini-button cancelBut" checkOnClick="true" groupName="search" onclick="onCancel()">取消</a>
+				<a class="mini-button closeBut" style="width:60px;display:none;" onclick="onCancel()">关闭</a>
+			</div>
+		</div>
+	</div>
+	
+    <script th:inline="javascript">
+		var operation_flag = [[${operation_flag}]];
+		var elegant_id = [[${elegant_id}]];
+	</script>
+	
+	<script type="text/javascript">
+	    mini.parse();
+	    
+	    var ue;
+	    var cpi_pathText = mini.getByName("company_image");//首页图片
+        var imgObj = "";
+	    var company_describe = "";
+	    $(function(){
+			if(operation_flag == "add"){
+				$(".saveBut").show();
+				$(".cancelBut").show();
+				$(".closeBut").hide();
+			}else if(operation_flag == "edit"){
+				loadData();
+				$(".saveBut").show();
+				$(".cancelBut").show();
+				$(".closeBut").hide();
+			}else if(operation_flag == "detail"){
+				loadData();
+    			mini.getByName("company_name").setEnabled(false);
+			  	mini.getByName("company_type").setEnabled(false);
+			  	mini.getByName("order_no").setEnabled(false);
+				mini.get("file").setEnabled(false);
+            	mini.get("fileupload").setEnabled(false);
+            	mini.get("filedel").setEnabled(false);
+				$(".saveBut").hide();
+				$(".cancelBut").hide();
+				$(".closeBut").show();
+			}
+	        //图片
+	        $("#uploadImage").uploadFile({
+	            size : 1,
+	            type: "gif|jpg|jpeg|png|svg|GIF|JPG|PNG|SVG",       // 文件类型 |隔开 比如图片类型：
+	            fileSize:'2MB',
+                imagePath:imgObj,
+	            success: function (data) {
+	                var fileObj;
+	                var fileName = '';
+	                var filePath = '';
+	                for (var i = 0; i < data.length; i++) {
+	                    fileObj = data[i];
+	                    fileName += fileObj.fileName+",";
+	                    filePath += fileObj.path+",";
+	                }
+	                if(fileName != ""){
+	                    fileName = fileName.substring(0, fileName.length-1);
+	                    filePath = filePath.substring(0, filePath.length-1);
+	                }
+	                cpi_pathText.setValue(filePath);
+	                cpi_pathText.setText(fileName);
+	            }
+	        });
+			
+	        //实例化编辑器
+	        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+	        ue = UE.getEditor('editor',{"toolbars":toolbars});
+	        UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+	        //设置图片上传地址
+	        UE.Editor.prototype.getActionUrl = function(action) {
+	            if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
+	                return '/web/v1/news/uploadFile'; //在这里返回我们实际的上传图片地址
+	            } else {
+	                return this._bkGetActionUrl.call(this, action);
+	            }
+	        }
+            //设置初始化内容
+            ue.ready(function() {//编辑器初始化完成再赋值
+                ue.setContent(company_describe);  //赋值给UEditor
+            });
+            
+            if(operation_flag == "detail"){
+    			$(".image_success").css("display","none");
+    			$(".image_down").hide();
+    			$(".image_delete").hide();
+    			$(".uploadBtn").hide();
+			}
+	    });
+
+	    /****************************logo-start****************************/
+		var fileLogo = mini.get("file");//文件路径
+		var url="";
+	  	//文件 *.png、*.jpg
+	  	function onFileSelect(e) {
+	  		var standardSize = 150 * 1024 * 1024;
+	  		var fileSize = e.file.size;
+	  		if (fileSize > standardSize) {
+	  			mini.alert("文件最大不能超过150MB", "系统提示");
+	  			fileLogo.clear();
+	  		}
+	 	}
+
+	 	function onUploadSuccess(e) {
+	  		mini.alert("上传成功", "系统提示");
+	  		var obj = JSON.parse(e.serverData);
+	  		this.setText(obj.path[0]);
+	  		url = obj.path[0];
+	  	}
+
+	  	function onUploadError(e) {
+	  		mini.alert("上传失败", "系统提示");
+	  	}
+
+	  	//上传文件
+	  	function startUpload() {
+	      	fileLogo.startUpload();
+	  	}
+
+	  	//删除上传文件
+	  	function delUpload(){
+	      	if (confirm("是否确定删除文件！")) {
+	          	fileLogo.setText("");
+	          	url = "";
+	      	}
+	  	}
+	    /****************************logo-end****************************/
+	    
+	    //加载企业信息
+		function loadData(){
+	        $.ajax({
+	            url: "/web/v1/companyElegant/getCompanyElegantDetail",
+	            type: "POST",
+	            data: { 
+	            	elegant_id	: elegant_id 
+	            },
+	            dataType: "json",
+	    		cache: false,
+	    		async: false,
+	            success: function (result) {
+	                if(result.state == "1"){
+	              	  	var companyElegant = result.data;
+	         		  	mini.getByName("company_name").setValue(companyElegant.company_name);
+	        		  	mini.getByName("company_type").setValue(companyElegant.company_type);
+	        		  	mini.getByName("order_no").setValue(companyElegant.order_no);
+	        		  	mini.getByName("company_image").setValue(companyElegant.company_image);
+	        		  	url = companyElegant.company_logo;
+	        		  	mini.getByName("file").setText(companyElegant.company_logo);
+	                    imgObj = companyElegant.imgObj;
+	        		  	company_describe = companyElegant.company_describe;
+	                }else{
+	                    alert(result.message);
+	                }
+	            }
+	        });
+		}
+		
+	    //提交表单数据
+	    function save(){
+	        var form = new mini.Form("#form_elegant_add");
+	        form.validate();//验证
+	        if (form.isValid() == false) return;
+	
+	        var newsImgVal = cpi_pathText.getValue();
+	        if(newsImgVal.indexOf("t")>=0){
+	            //图片新闻，必填图片
+	            if(!newsImgVal){
+	                mini.alert("企业图片不能为空!","系统提示");
+	                return;
+	            }
+	        }
+	        
+	        var company_describe = ue.getContent();
+	        if(!company_describe){
+	            mini.alert("企业描述不能为空","系统提示");
+	            return;
+	        }
+	        
+	        var data = form.getData();
+	        data.elegant_id = elegant_id;
+	        data.company_name = mini.getByName("company_name").getValue();
+	        data.company_type = mini.getByName("company_type").getValue();
+	        data.order_no = mini.getByName("order_no").getValue();
+	    	data.company_logo = url;
+	        data.company_image = cpi_pathText.getValue();//图片原名称
+	        data.company_describe = company_describe;
+	        var json = mini.encode(data);   //序列化成JSON
+	        $("#submit").off("click");
+	        $.ajax({
+	            url: "/web/v1/companyElegant/saveCompanyElegant",
+	            type: "POST",
+	            data: { json: json },
+	            dataType: "json",
+	            success: function (result) {
+	                if(result.state == "1"){
+	              	  	CloseWindow("cancel");
+	                }else{
+	                    $("#submit").on("click", save);
+	                    alert(result.message);
+	                }
+	            }
+	        });
+	        $("#submit").on("click", save);
+	    }
+		
+    	//取消
+    	function onCancel() {
+    	  	CloseWindow("cancel");
+    	}
+	</script>
+</body>
+</html>

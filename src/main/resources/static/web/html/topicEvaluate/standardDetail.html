@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>标准详情</title>
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+	<script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<div id="detailForm" class="addForm" style="height:100%;overflow-y:auto;">
+		<input class="mini-hidden" name="standard_id" id="id_standard_id" th:value="${standard_id}">
+		<div class="mini-toolbar" style="padding: 10px; border-top: 0; border-left: 0; border-right: 0;">
+			<table class="form-table" border="0" cellpadding="1" cellspacing="2">
+				<tr>
+					<td style="padding-left:50px;padding-bottom:10px;">标准名称：<span id="id_standard_name"></span></td>
+					<td style="padding-left:50px;padding-bottom:10px;">标准分类：<span id="id_standard_type"></span></td>
+				</tr>
+				<tr>
+					<td style="padding-left:50px;padding-bottom:10px;">当前总分：<span id="id_standard_plan_score"></span></td>
+					<td style="padding-left:50px;padding-bottom:10px;display:none;" id="belongeds_td">是否同时设置为即时评价的评价标准：<span id="id_standard_belongeds"></span></td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="mini-fit" id="mini-fit">
+			<div id="datagrid_standardAdd" class="mini-treegrid" style="width:100%;height:88%;" url="/web/v1/standradLibarary/loadDetail"
+			    showTreeIcon="true" treeColumn="detail_name" idField="detail_id" parentField="p_detail_id" resultAsTree="false" expandOnLoad="true">
+			    <div property="columns">
+<!-- 			        <div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div> -->
+			        <div name="detail_name" width="80%" field="detail_name" headerAlign="center"><span align="center">评价标准内容</span></div>
+			        <div name="detail_plan_score" width="10%" field="detail_plan_score" headerAlign="center" align="center">计划分数</div>
+			    </div>
+			</div>
+			<div class="mini-toolbar bot_btn">
+				<a class="mini-button" style="width:60px;" onclick="returns('ok')">关闭</a>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/topicEvaluate/standardDetail.js"></script>
+</body>
+</html>

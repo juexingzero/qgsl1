@@ -1,0 +1,230 @@
+﻿*,
+*:before,
+*:after{    
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html, body
+{
+    margin:0;
+    height:100%;
+    overflow:hidden;
+    
+    font-family:微软雅黑;
+    font-size:13px; 
+}
+
+a {
+  text-decoration: none;
+}
+
+/* layout */
+
+/*上方导航*/
+.navbar
+{
+    height:50px;
+    background: #2d8de1;
+    border-bottom:0;
+}
+
+/*左侧菜单*/
+.sidebar
+{
+    position:absolute;
+    width:225px;
+    top:50px;
+    left:0;
+    bottom:0;
+    background: #363636;
+}
+
+body .menu-title {
+	color: #fff;
+}
+
+.main
+{
+    position:absolute;
+    top:50px;
+    left:225px;
+    right:0;
+    bottom:0;
+    background:#ffffff;
+}
+
+
+/* 上方logo */
+.navbar-brand
+{
+    width: auto;
+    cursor: default;
+    line-height: 50px;
+    font-size: 16px;
+    background: #2d8de1;
+    padding-left: 20px;
+    padding: 0 0 0 20px;
+}
+
+.navbar-brand .logo_img {
+	display: inline-block;
+    margin-right: 10px;
+    position: relative;
+    top: 3px;
+}
+
+.navbar-brand, .navbar-brand:hover, .navbar-brand:focus
+{
+    color:#fff;
+}
+
+.navbar,
+.navbar-nav > li > a
+{
+    color:#fff;    
+}
+.navbar-nav > li > a
+{
+    padding-top:16px;
+}
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus,
+.navbar-nav > li.active > a,
+.navbar-nav li.open a.dropdown-toggle
+{
+    background: rgb(17, 103, 164);
+}
+
+.navbar-nav > li > a.userinfo
+{
+    padding-top:10px;
+}
+.userinfo > img {
+    height: 35px;
+    width: 35px;
+    vertical-align: middle;
+    border-radius: 50%;
+    margin-right:4px;
+}
+
+.dropdown-menu
+{    
+    font-size:13px;
+}
+.dropdown-menu i
+{
+    min-width:18px;
+    margin-right:2px;
+}
+
+
+/* compact */
+.compact .sidebar,
+.compact .navbar-brand
+{
+    width:55px;
+}
+.compact .main
+{
+    left:55px;
+}
+
+.navbar-brand-compact,
+.compact .navbar-brand
+{
+    display:none;
+}
+.compact .navbar-brand-compact
+{
+    display:block;
+}
+
+.compact .menu-text,
+.compact .menu-arrow
+{
+    display:none;
+}
+
+.compact .menu-title
+{
+    padding-left:0px !important;
+    text-align:center;
+}
+
+/*.compact .has-children > a > .menu-icon:before
+{
+    font-size:16px;
+    content: "\f0d7";
+}
+.compact .open > a > .menu-icon:before
+{
+    content: "\f0d8";
+}*/
+
+/* icontop */
+
+.navbar-nav > li.icontop > a{
+    padding:0 15px;
+}
+.icontop i
+{
+    padding-top: 4px;
+    text-align: center;
+    display: block;
+    font-size: 25px;
+    line-height: 25px;
+    width: 100%;
+    margin: 0;
+}
+.icontop span {
+    text-align: center;
+    display: block;
+    line-height: 21px;
+    width: 100%;
+    margin: 0;
+}
+
+/* sidebar-toggle */ 
+.sidebar-toggle 
+{
+    height:30px;
+    line-height: 30px;
+    color: #aeb9c2;
+    background-color: #4a5064;
+    font-size: 14px;
+    text-align: center;
+    cursor:pointer;
+}
+.sidebar-toggle .fa {
+    margin-top: 10px;
+}
+.sidebar-toggle:hover .fa {
+    color: #fff;
+}
+
+
+.menutip
+{
+    z-index:100;
+}
+
+/* 右侧导航栏样式 */
+body .menu {
+	background: none;
+	color: #333;
+	padding-left: 10px;
+}
+
+body .menu ul {
+	background: none;
+}
+
+body .menu-title:hover,
+body .menu-title:visited,
+body .menu-title:active,
+body .menu-title:focus {
+	background: none;
+	color: rgb(8, 134, 219);
+}

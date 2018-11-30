@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>添加商会</title>
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+	<script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+	<script src="http://kindeditor.net/ke4/kindeditor-all-min.js?t=20160331.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<div id="addForm" class="addForm" style="height:100%;overflow-y:auto;">
+		<div style="padding: 10px; border-top: 0; border-left: 0; border-right: 0;">
+			<input class="mini-hidden" id="sid" name="sid" th:value="${sid}"/>
+			<input class="mini-hidden" id="lyid" name="lyid" th:value="${lyid}"/>
+			<table class="form-table" border="0" cellpadding="1" cellspacing="2">
+				<tr>
+					<td class="title noEmpty" style="width: 100px;">
+						<span style="color:red;margin-right:2px;">*</span>商会名称：
+					</td>
+					<td style="width: 200px">
+						<input id="shmc" name="shmc" class="mini-textbox" required="true" emptyText="请输入商会名称"/>
+					</td>
+					<td class="title noEmpty" style="width: 100px;">
+						<span style="color:red;margin-right:8px;"></span>排序：
+					</td>
+					<td>
+						<input id="px" name="px" class="mini-textbox" emptyText="请输入排序"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 80px;">
+						<span style="color:red;margin-right:2px;">*</span>联系人：
+					</td>
+					<td style="width: 200px">
+						<input id="lxr" name="lxr" class="mini-textbox" required="true" emptyText="请输入联系人名称"/>
+					</td>
+					<td class="title noEmpty">
+						<span style="color:red;margin-right:2px;">*</span>手机号码：
+					</td>
+					<td>
+						<input id="sj" name="sj" class="mini-textbox"  required="true" emptyText="请输入手机号码" maxlength="11"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 80px;">
+						<span style="color:red;margin-right:8px;"></span>座机：
+					</td>
+					<td style="width: 200px">
+						<input id="dh" name="dh" class="mini-textbox" emptyText="请输入座机电话" maxlength="14"/>
+					</td>
+					<td class="title noEmpty">
+						<span style="color:red;margin-right:8px;"></span>办公地点：
+					</td>
+					<td>
+						<input id="bgdd" name="bgdd" class="mini-textbox" emptyText="请输入办公地点" maxlength="100"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty" style="width: 80px;">
+						<span style="color:red;margin-right:8px;"></span>邮箱：
+					</td>
+					<td style="width: 200px">
+						<input id="yx" name="yx" class="mini-textbox" emptyText="请输入邮箱" maxlength="50" vtype="email"/>
+					</td>
+					<td class="title noEmpty">
+						<span style="color:red;margin-right:8px;"></span>地址：
+					</td>
+					<td>
+						<input id="dz" name="dz" class="mini-textbox" emptyText="请输入地址" maxlength="500"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="form-label" style="width:70px;margin-right:2px;"></td>
+					<td>
+						<input id="sfjldzzs" name="sfjldzzs" class="mini-checkbox" text="是否建立党组织" onvaluechanged="onValueChanged"/>
+						<input id="sfjldzz" name="sfjldzz" class="mini-hidden" value=""/>
+					</td>
+					<td class="form-label" style="width:70px;margin-right:2px;"></td>
+					<td>
+						<input id="sfzmzbmdjs" name="sfzmzbmdjs" class="mini-checkbox" text="是否在民政部门登记" onvaluechanged="onValueChanged1"/>
+						<input id="sfzmzbmdj" name="sfzmzbmdj" class="mini-hidden" value=""/>
+					</td>
+				</tr>
+				<tr id="time" hidden="true">
+					<td class="form-label" style="margin-right:8px;">组织建立时间：</td>
+					<td colspan="3">
+						<input name="zzjlsj1" id="zzjlsj1" class="mini-datepicker" style="width: 180px;" format="yyyy-MM-dd" allowInput="false" onvaluechanged="timeChange"/>
+						<input name="zzjlsj" id="zzjlsj" class="mini-hidden" style="width: 180px;"  />
+					</td>
+				</tr>
+				<tr>
+					<td  valign="top" style="margin-right:8px;">介绍:</td>
+					<td colspan="3">
+						<div id="editor" name="js"  rows="20" cols="80" maxlength="200"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!-- bot btns -->
+		<div class="mini-toolbar bot_btn">
+			<a class="mini-button" onclick="save()" th:if="${flag} == 'add'">保存</a>
+			<a class="mini-button" onclick="edit()" th:if="${flag} == 'edit'">保存</a>
+			<a class="mini-button" onclick="returns('ok')">取消</a>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/commerceList/commerceAdd.js"></script>
+</body>
+</html>

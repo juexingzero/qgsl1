@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>编辑明细</title>
+<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+<script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+	<table id="editTable" style="width:100%;">
+		<tr>
+			<td colspan="4">明细信息<hr/>
+				<input class="mini-hidden" name="p_detail_id" id="p_detail_id" th:value="${p_detail_id}">
+				<input class="mini-hidden" name="standard_id" id="standard_id" th:value="${standard_id}">
+				<input class="mini-hidden" name=detail_level id="detail_level" th:value="${detail_level}">
+				<input class="mini-hidden" name=detail_id id="detail_id" th:value="${detail_id}">
+			</td>
+		</tr>
+		<tr>
+			<td style="white-space: nowrap; vertical-align: top;"><span style="color:red;margin-right:2px;">*</span>细则名称：</td>
+			<td style="width: 60%">
+				<textarea id="detail_name" name="detail_name"  class="mini-textarea" required="true" emptyText="请输入细则名称" th:if="${detail_level} == 1" requiredErrorText="明细不能为空" style="width:100%; height: 150px" maxlength="15"></textarea>
+				<textarea id="detail_name" name="detail_name"  class="mini-textarea" required="true" emptyText="请输入细则名称" th:if="${detail_level} == 2" requiredErrorText="明细不能为空" style="width:100%; height: 150px" maxlength="150"></textarea>
+				<!-- <input id="detail_name" name="detail_name" class="mini-textbox" required="true" th:if="${detail_level} == 1" requiredErrorText="明细不能为空" style="width:100%;"  maxlength="15" />
+				<input id="detail_name" name="detail_name" class="mini-textbox" required="true" th:if="${detail_level} == 2" requiredErrorText="明细不能为空" style="width:100%;"  maxlength="150" /> -->
+			</td>
+			<td style="white-space: nowrap; vertical-align: top; padding-left: 60px"><span style="color:red;margin-right:2px;">*</span>分数：</td>
+			<td style="vertical-align: top;">
+				<input id="detail_plan_score" name="detail_plan_score" class="mini-textbox" value=""  style="width:80%; text-align: center" required="true" vtype="int"/>
+			</td>
+		</tr>
+	</table>
+	<!-- bot btns -->
+	<div class="mini-toolbar bot_btn">
+		<a id="save&close" class="mini-button" iconCls="" onclick="save(true)">保存</a>
+		<a id="close" class="mini-button" iconCls="" onclick="CloseWindow('ok')">关闭</a>
+	</div>
+</body>
+	<script type="text/javascript"
+		src="/resources/js/standardLibrary/standardDetailEdit.js"></script>
+</html>

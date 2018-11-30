@@ -1,0 +1,90 @@
+/* 步骤图样式 */
+.step_diagram {
+	margin: 20px 0;
+	padding-left: 30px;
+}
+
+.step_icons {
+	overflow: hidden;
+	position: relative;
+	height: 30px;
+	margin-bottom: 10px;
+}
+
+.step_icons .step_cycle {
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 16px;
+	text-align: center;
+	color: #666;
+	border-radius: 50%;
+	top: 0;
+	background: #ccc;
+}
+
+.step_icons .step_cycle.not_start {
+	left: 0;
+}
+
+.step_icons .step_cycle.processing {
+	left: 150px;
+}
+
+.step_icons .step_cycle.over {
+	left: 300px;
+}
+
+.step_icons .step_line {
+	width: 120px;
+	height: 6px;
+	background: #ccc;
+	position: absolute;
+	top: 12px;
+}
+
+.step_icons .step_line.l1 {
+	left: 30px;
+}
+
+.step_icons .step_line.l2 {
+	left: 180px;
+}
+
+.step_icons .step_cycle.active,
+.step_icons .step_line.active {
+	background: #d50e0e;
+	color: #fff
+}
+
+.step_texts {
+	overflow: hidden;
+	margin-left: -10px;
+}
+
+.step_texts .text {
+	float: left;
+	line-height: 20px;
+	color: #666;
+	font-size: 16px;
+}
+
+.step_texts .text.active {
+	color: #d50e0e;
+}
+
+.step_texts .text.t2 {
+	margin-left: 102px;
+}
+
+.countdown_wrapper {
+	margin-bottom: 20px;
+	font-size: 20px;
+	/*color: #fff;*/
+}
+
+.countdown_wrapper .show_countdown {
+	color: #d50e0e;
+	font-weight: bold;
+}

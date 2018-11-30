@@ -1,0 +1,350 @@
+/* 自定义表单样式 */
+.mr_10 {
+	margin-right: 10px;
+}
+
+.btn_lh {
+	line-height: 30px;
+}
+
+/*  */
+.form_wrapper {
+	margin-bottom: 15px;
+	overflow: hidden;
+}
+
+/* 底部按钮样式1 */
+.bot_btns {
+	text-align: center;
+	padding-top: 10px;
+}
+
+.bot_btns .mini-button {
+	margin: 0 5px;
+}
+
+/* 底部按钮样式2 */
+.bot_btn {
+	position: absolute;
+	z-index: 1000;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	padding: 10px 0;
+	text-align: center;
+}
+
+.bot_btn > * {
+	margin: 0 10px;
+}
+
+body .bot_btn.mini-toolbar {
+	border: none;
+	border-top: solid 1px #ccc;
+}
+
+.bot_btn .mini-button {
+	margin-right: 10px;
+}
+
+.bot_btn_wrapper {
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 100%;
+	padding-bottom: 55px;
+}
+
+.datagrid_wrapper {
+	margin-bottom: 20px;
+}
+
+label.required:before {
+	content: '*';
+	color: #f00;
+}
+
+body .mini-textbox *, body .mini-buttonedit * {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+body .mini-textbox, body .mini-buttonedit {
+	height: auto;
+	overflow: visible;
+}
+
+body .mini-textbox-border, body .mini-buttonedit-border {
+	height: 28px;
+	border-radius: 3px;
+}
+
+body .mini-textbox-input, body .mini-buttonedit-input {
+	height: 26px;
+}
+
+body .mini-buttonedit-button, body .mini-buttonedit-close {
+	/*margin-top: 4px;*/
+	height: 24px;
+}
+
+body .mini-htmlfile .mini-buttonedit-button {
+	line-height: 22px;
+	border: none;
+	background: none;
+	color: #333;
+}
+
+body .mini-htmlfile .mini-buttonedit-button:hover {
+	background: none;
+	color: #111;
+}
+
+body .mini-textarea {
+	/*min-height: 100px;*/
+	
+}
+
+body .mini-textarea.mini-textbox-readOnly {
+	/*min-height: 150px;*/
+	
+}
+
+body .mini-textarea.mini-textbox-readOnly .mini-textbox-input {
+	resize: vertical;
+}
+
+body .mini-textbox-focus .mini-textbox-border, body .mini-buttonedit-focus .mini-buttonedit-border,
+	body .mini-pager-num:focus {
+	background: none;
+	border-color: #66afe9;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
+		rgba(102, 175, 233, .6);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
+		rgba(102, 175, 233, .6);
+	color: #333;
+}
+
+.mini-state-error, body .mini-error .mini-textbox-border, body .mini-error .mini-buttonedit-border,
+	body .mini-error .mini-textboxlist-border {
+	background: none;
+	border-color: #a94442;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	color: #333;
+}
+
+body .mini-error.mini-textbox-focus .mini-textbox-border, body .mini-error.mini-buttonedit-focus .mini-buttonedit-border,
+	body .mini-error .mini-textboxlist-border {
+	border-color: #843534;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+}
+
+.textarea_desc {
+	padding: 0 0 0 2px;
+	border: solid 1px #a5acb5;
+	background: #eee;
+	line-height: 20px;
+}
+
+/* 只读表单背景色 */
+body .mini-textbox-readOnly .mini-textbox-border, body .mini-buttonedit-readOnly .mini-buttonedit-border
+	{
+	/*background: #f5f5f5;*/
+	
+}
+
+/* 单选框 复选框默认样式 */
+body .mini-icon {
+	outline: none;
+}
+
+body .mini-icon.mini-checkbox-icon, body .mini-checkboxlist-item .mini-icon,
+	body .mini-radiobuttonlist-item .mini-icon {
+	color: #666;
+	/*color: #66afe9;*/
+	width: 22px;
+	height: 22px;
+	line-height: 22px;
+	font-size: 20px;
+	margin-right: 0;
+}
+
+body .mini-checkbox-checked .mini-icon.mini-checkbox-icon, body .mini-checkboxlist-item-selected.mini-checkboxlist-item .mini-icon,
+	body .mini-radiobuttonlist-item-selected.mini-radiobuttonlist-item .mini-icon,
+	body .mini-grid-row-selected .mini-grid-cell-inner>.mini-icon {
+	color: #3ba6ee;
+}
+
+body .mini-checkbox {
+	margin-right: 5px;
+}
+
+body .mini-checkbox-icon.mini-icon {
+	outline: none;
+}
+
+/* 下拉框默认样式 */
+body .mini-listbox-item-hover td {
+	background: #f5f7fa;
+	cursor: pointer;
+}
+
+body .mini-listbox-item-selected {
+	background: #f5f7fa;
+}
+
+body .mini-listbox-item-selected td {
+	background: none;
+	font-weight: bold;
+	color: #409eff;
+}
+
+/* 其他组合样式 */
+body .mini-tabs-bodys {
+	/*padding: 20px;*/
+	
+}
+
+body .mini-grid-rows-view {
+	overflow-x: hidden;
+}
+
+/* 顶部的tabs */
+body .mini-tabs-scrollCt, body .mini-tabs .mini-tabs-space {
+	border-color: #ccc;
+}
+
+body .mini-tabs .mini-tabs-space.mini-tabs-firstSpace {
+	display: none;
+}
+
+body .mini-tabs-header-top .mini-tab {
+	padding: 5px 15px;
+	border-radius: 3px 3px 0 0;
+	background: #f8f8f9;
+}
+
+body .mini-tabs-header-top .mini-tab-active {
+	background: #fff;
+	color: #3ba6ee;
+	/*border-color: #3ba6ee;
+	border-bottom-color: #fff;*/
+}
+
+body .mini-tab-hover {
+	border-color: #ccc;
+	color: #3ba6ee;
+}
+
+/* 左侧的tabs */
+body .mini-tabs-header-left .mini-tab {
+	background: #f8f8f9;
+}
+
+body .mini-tabs-header-left .mini-tab-active {
+	background: #fff;
+}
+
+body .mini-tabs .mini-tabs-space {
+	background: #fff;
+	border-bottom: solid 1px #ccc;
+}
+
+body .mini-tabs .mini-tabs-space2 {
+	background: #fff;
+}
+
+body .mini-tabs-header-left .mini-tab-active {
+	border-right-color: #ccc;
+}
+
+/* panel */
+body .mini-panel-header {
+	border-color: #ccc;
+}
+
+/* 表单排列方式的布局 */
+body .mini-textbox, body .mini-buttonedit {
+	width: 100%;
+}
+
+body .mini-buttonedit.mini-calendar-timespinner {
+	width: 85px;
+}
+
+body .mini-calendar-timespinner .mini-buttonedit-border {
+	height: 22px;
+}
+
+body .mini-calendar-timespinner .mini-buttonedit-input {
+	height: 20px;
+}
+
+body .mini-calendar-timespinner .mini-buttonedit-button {
+	height: 20px;
+}
+
+body .mini-radiobuttonlist table td, body .mini-checkboxlist table td {
+	padding-bottom: 0;
+}
+
+body .mini-radiobuttonlist table tr>td:first-child, body .mini-checkboxlist table tr>td:first-child
+	{
+	text-align: left;
+}
+
+.single_column_form table td, .double_column_form table td {
+	padding-bottom: 15px;
+}
+
+/* 普通单列表单 */
+.single_column_form {
+	
+}
+
+.single_column_form .mini-textbox, .single_column_form .mini-buttonedit
+	{
+	margin-bottom: 15px;
+}
+
+.single_column_form table tr>td:first-child {
+	padding-right: 10px;
+	text-align: right;
+}
+
+.single_column_form table td .mini-textbox, .single_column_form table td .mini-buttonedit
+	{
+	margin-bottom: 0;
+}
+
+/* 普通双列表单 */
+.double_column_form table {
+	table-layout: fixed;
+}
+
+.double_column_form table td {
+	vertical-align: top;
+	padding-right: 10px;
+}
+
+/* 根据miniui自带的嵌套类名设置排列样式 */
+.mini-toolbar table {
+	border-collapse: separate;
+}
+
+.mini-toolbar table td {
+	/*padding-bottom: 10px;*/
+	vertical-align: middle;
+	/*padding-right: 10px;*/
+}
+
+/*
+.mini-toolbar table tr td:last-child {
+	padding-right: 0;
+}
+
+.mini-toolbar table tr:last-child td {
+	padding-bottom: 0;
+}*/

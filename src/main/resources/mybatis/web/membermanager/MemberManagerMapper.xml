@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.membermanager.MemberManagerMapper">
+
+	<!-- 获取会员信息列表 -->
+    <select id="getMemberList" parameterType="map" resultType="com.manhui.gsl.jbqgsl.controller.web.membermanager.MemberListResult">
+    	SELECT
+			t.*
+		FROM
+			(
+				SELECT
+					mjm.joinId AS joinId,
+					mjm.createUserId AS app_user_id,
+					mjm.createUserName AS app_user_name,
+					mjm.joinObjId AS commerce_id,
+					mjm.joinObjName AS commerce_name,
+					mjm.memberId AS member_id,
+					mjm.memberType AS member_type,
+					mrr.XM AS member_name,
+					mrr.XM AS linkman_name,
+					mrt.YDDH AS linkman_phone,
+					mjm.createTime AS apply_time,
+					mjm.state AS approve_status,
+					ma.approve_id AS approve_id,
+					ma.approve_time AS approve_time,
+					ma.approve_fail_info AS approve_fail_info,
+					ma.approve_fail_reason AS approve_fail_reason
+				FROM
+					member_join_manager mjm
+				INNER JOIN member_ry_ryjbxx mrr ON mjm.memberId = mrr.ID
+				AND mjm.state <![CDATA[!=]]> 'HYSP-00'
+				AND mjm.state <![CDATA[!=]]> 'HYSP-04'
+				INNER JOIN member_ry_txfs mrt ON mjm.memberId = mrt.RYID
+				LEFT JOIN (
+					SELECT
+						a.*
+					FROM
+						member_approve a
+					WHERE
+						a.approve_time IN (
+							SELECT
+								max(mp1.approve_time)
+							FROM
+								member_approve mp1
+							WHERE
+								member_id IN (
+									SELECT
+										memberId
+									FROM
+										member_join_manager
+								)
+							GROUP BY
+								mp1.member_id
+						)
+				) AS ma ON ma.member_id = mjm.memberId
+				UNION ALL
+					SELECT
+						mjm.joinId AS joinId,
+						mjm.createUserId AS app_user_id,
+						mjm.createUserName AS app_user_name,
+						mjm.joinObjId AS commerce_id,
+						mjm.joinObjName AS commerce_name,
+						mjm.memberId AS member_id,
+						mjm.memberType AS member_type,
+						mqqjb.QYMC AS member_name,
+						mqqlx.LXRXM AS linkman_name,
+						mqqlx.LXRLXFS AS linkman_phone,
+						mjm.createTime AS apply_time,
+						mjm.state AS approve_status,
+						ma.approve_id AS approve_id,
+						ma.approve_time AS approve_time,
+						ma.approve_fail_info AS approve_fail_info,
+						ma.approve_fail_reason AS approve_fail_reason
+					FROM
+						member_join_manager mjm
+					INNER JOIN member_qy_qyjbxx mqqjb ON mjm.memberId = mqqjb.JBXXZJ
+					AND mjm.state <![CDATA[!=]]> 'HYSP-00'
+					AND mjm.state <![CDATA[!=]]> 'HYSP-04'
+					INNER JOIN member_qy_qylxrxx mqqlx ON mjm.memberId = mqqlx.QYID
+					LEFT JOIN (
+						SELECT
+							a.*
+						FROM
+							member_approve a
+						WHERE
+							a.approve_time IN (
+								SELECT
+									max(mp1.approve_time)
+								FROM
+									member_approve mp1
+								WHERE
+									member_id IN (
+										SELECT
+											memberId
+										FROM
+											member_join_manager
+									)
+								GROUP BY
+									mp1.member_id
+							)
+					) AS ma ON ma.member_id = mjm.memberId
+			) AS t
+		WHERE
+			1 = 1
+        <if test="commerce_name != null and commerce_name != ''">
+            AND t.commerce_id = #{commerce_name}
+        </if>
+        <if test="member_type != null and member_type != ''">
+            AND t.member_type = #{member_type}
+        </if>
+        <if test="approve_status != null and approve_status != ''">
+            AND t.approve_status = #{approve_status}
+        </if>
+        <if test="member_name != null and member_name != ''">
+            AND t.member_name like '%${member_name}%'
+        </if>
+        <if test="linkman_name != null and linkman_name != ''">
+            AND t.linkman_name like '%${linkman_name}%'
+        </if>
+        <if test="linkman_phone != null and linkman_phone != ''">
+            AND t.linkman_phone like '%${linkman_phone}%'
+        </if>
+		ORDER BY
+			t.apply_time DESC
+	</select>
+	
+	<!-- 获取商会职务内容 -->
+    <select id="getCommerceForMemberList" parameterType="map" resultType="HashMap">
+    	SELECT
+			mjm.*
+		FROM
+			member_join_manager mjm
+		WHERE
+			1 = 1
+        <if test="app_user_id != null and app_user_id != ''">
+            AND mjm.createUserId like '%${app_user_id}%'
+        </if>
+        <if test="app_user_name != null and app_user_name != ''">
+            AND mjm.createUserName like '%${app_user_name}%'
+        </if>
+		ORDER BY
+			mjm.createTime DESC
+	</select>
+	
+    <!-- 插入会员审批记录 -->
+    <insert id="insertMemberApprove" parameterType="map">
+        INSERT INTO member_approve (
+			approve_id,
+			approver_id,
+			approver_name,
+			member_id,
+			member_type,
+			approve_status,
+			approve_time,
+			approve_fail_info,
+			approve_fail_reason
+		)
+		VALUES
+        (
+          #{approve_id},
+          #{approver_id},
+          #{approver_name},
+          #{member_id},
+          #{member_type},
+          #{approve_status},
+          #{approve_time},
+          #{approve_fail_info},
+          #{approve_fail_reason}
+        )
+    </insert>
+    
+    <!-- 更新会员商会中间表中的状态 -->
+    <update id="updateMemberJoinManager" parameterType="map">
+        UPDATE member_join_manager
+        <set>
+            <if test="approve_status != null and approve_status != ''">state=#{approve_status},</if>
+            updateTime=#{update_time}
+        </set>
+        WHERE 1=1
+        	AND joinId=#{joinId}
+    </update>
+    
+    <!-- 修改审批未通过资料类别，根据memberId修改 -->
+    <update id="updateApprove_fail_infoByMemberId" parameterType="HashMap" >
+	   update member_approve a inner join (SELECT approve_id from member_approve where member_id = #{member_id} order by approve_time desc limit 0 ,1)  b
+	         set a.approve_fail_info = replace(a.approve_fail_info,#{approve_fail_info},'')
+	    where a.approve_id = b.approve_id
+	</update>
+</mapper> 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.st.MemberJgStjsMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.st.MemberJgStjs">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="STJJ" jdbcType="VARCHAR" property="stjj" />
+        <result column="STZZJG" jdbcType="VARCHAR" property="stzzjg" />
+        <result column="STATE" jdbcType="VARCHAR" property="state" />
+        <result column="STID" jdbcType="VARCHAR" property="stid" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.st.MemberJgStjs">
+        insert into member_jg_stjs(ID,STJJ,STZZJG,STATE,STID) values (#{id},#{stjj},#{stzzjg},#{state},#{stid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.st.MemberJgStjs">
+        update member_jg_stjs
+        <set>
+            <if test="stjj!=null ">STJJ=#{stjj},</if>
+            <if test="stzzjg!=null ">STZZJG=#{stzzjg},</if>
+            <if test="state!=null ">STATE=#{state},</if>
+            <if test="stid!=null ">STID=#{stid},</if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!--根据社团id 查询数据-->
+    <select id="queryCompanyApplyData" parameterType="String" resultType="HashMap">
+        select * from member_jg_stjs where STID = #{stid}
+    </select>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.activity.ActivityPersonMapper">
+	    
+    <insert id="insertActivityPerson" parameterType="java.util.List">
+		insert into activity_person 
+			(
+			activity_person_id,
+			activity_id,
+			member_id,
+			member_name,
+			member_job,
+			member_linkman_name,
+			member_linkman_phone,
+			sh_name,
+			create_time
+			)
+			values
+		<foreach collection="list" item="item" index= "index" separator =",">
+			(
+			#{item.activity_person_id},
+			#{item.activity_id},
+			#{item.member_id},
+			#{item.member_name},
+			#{item.member_job},
+			#{item.member_linkman_name},
+			#{item.member_linkman_phone},
+			#{item.sh_name},
+			now()
+			)
+		</foreach>
+		</insert>
+		
+		  <select id="queryActivityPersonList" resultType="com.manhui.gsl.jbqgsl.model.activitymanager.ActivityPerson">
+    	SELECT
+			*
+		FROM
+			activity_person
+		WHERE activity_id=#{activity_id}
+	    </select>
+	
+	   <update id="updateActivityPerson" parameterType="com.manhui.gsl.jbqgsl.model.activitymanager.ActivityPerson">
+        UPDATE activity_person
+        <set>
+	        <if test="member_id != null and member_id != ''">
+            	member_id=#{member_id},
+	        </if>
+	        <if test="member_name != null and member_name != ''">
+            	member_name=#{member_name},
+	        </if>
+	        <if test="member_job != null and member_job != ''">
+            	member_job=#{member_job},
+	        </if>
+	        <if test="member_linkman_name != null and member_linkman_name != ''">
+            	member_linkman_name=#{member_linkman_name},
+	        </if>
+	        <if test="member_linkman_phone != null and member_linkman_phone != ''">
+            	member_linkman_phone=#{member_linkman_phone},
+	        </if>
+	        <if test="update_time != null and update_time != ''">
+            	update_time=#{update_time},
+	        </if>
+	        <if test="sh_name != null and sh_name != ''">
+            	sh_name=#{sh_name},
+	        </if>
+        </set>
+        WHERE activity_id=#{activity_id}
+    </update>
+    
+     <delete id="deleteActivityPerson">
+        DELETE FROM activity_person WHERE 1=1
+        <if test="activity_id != null and activity_id != ''">
+        and activity_id=#{activity_id}
+        </if>
+        <if test="member_id != null and member_id != ''">
+        and member_id=#{member_id}
+        </if>
+         
+    </delete>
+    
+</mapper> 

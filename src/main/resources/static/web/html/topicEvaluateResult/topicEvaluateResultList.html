@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>主题评价结果列表</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.cookie.js"></script>
+	<style type="text/css">
+		body .mini-grid-rows-view {overflow-x: hidden;}
+	</style>
+</head>
+
+<body>
+	<div class="flow_hidden">
+		<div id="searchForm" style="margin-bottom:10px;">
+			<input name="topic_type" class="mini-hidden" th:value="${topic_type}">
+			<input name="evaluate_state" class="mini-hidden" value="3">
+			<div style="margin:0;padding:0px;border-bottom:none;">
+				<table class="search_table_border">
+					<tr>
+						<td>
+							<label style="font-family:Verdana;padding-left:5px;">评价主题</label>
+							<input name="topic_name" emptyText="请输入评价主题" class="mini-textbox" width="200px" onenter="loadGridData"/>
+							<label style="font-family:Verdana;padding-left:10px;">评价时间</label>
+				            <input name="evaluate_start_time" emptyText="开始时间" class="mini-datepicker" allowInput="false" style="width:150px;" format="yyyy-MM-dd HH:mm" timeFormat="HH:mm" showTime="true"/>&nbsp;-
+				            <input name="evaluate_end_time" emptyText="结束时间" class="mini-datepicker" allowInput="false" style="width:150px;" format="yyyy-MM-dd HH:mm" timeFormat="HH:mm" showTime="true"/>
+							<a class="mini-button searchBtn"><i class="fa fa-search"></i>查询</a>
+							<a class="mini-button cleanBtn"><i class="fa fa-repeat"></i>重置</a>
+							<a class="mini-button" onclick="exportRows()"><i class="fa fa-download"></i>批量导出</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div id="mini-fit" class="mini-fit" >
+		<div id="datagrid_topicEvaluateResultList" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[10,20,50,100]" pageSize="20"
+			 url="/web/v1/topicEvaluateResult/getTopicEvaluateResultList" idField="topic_id" multiSelect="true">
+			<div property="columns">
+				<div type="checkcolumn" width="50px" headerAlign="center"></div>
+				<div field="topic_number" width="8%" headerAlign="center" align="center">主题编号</div>
+				<div field="topic_name" width="10%" headerAlign="center">主题名称</div>
+				<div field="topic_type" headerAlign="center" align="center" renderer="onConvertTopicType">主题类型</div>
+				<div field="institution_name_passives" width="20%" headerAlign="center">被评价方</div>
+				<div field="institution_name_actives" width="20%" headerAlign="center">评价方</div>
+				<div field="evaluate_start_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm">评价开始时间</div>
+				<div field="evaluate_end_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm">评价结束时间</div>
+				<div width="10%" headerAlign="center" align="center" renderer="onActionRenderer">操作</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/topicEvaluateResult/topicEvaluateResultList.js"></script>
+</body>
+</html>

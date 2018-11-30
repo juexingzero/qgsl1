@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.memberapproval.AppMemberApprovalMapper">
+	<select id="checkAccound" resultType="com.manhui.gsl.jbqgsl.controller.app.memberapproval.result.CommerceResult" parameterType="String">
+		SELECT
+			ID,SHMC
+		FROM
+			member_jg_shxx
+		WHERE
+			SJ = #{user_phone}
+	</select>
+	<select id="queryCommerce" resultType="com.manhui.gsl.jbqgsl.controller.app.memberapproval.result.CommerceResult" parameterType="String">
+		SELECT
+		sh.ID,
+		sh.SHMC
+	FROM
+		member_jg_shxx sh
+	INNER JOIN member_join_manager mjm ON mjm.joinObjId = sh.ID
+	WHERE
+		mjm.memberId = #{member_id}
+	</select>
+	<select id="getMemberPersonBaseDetailInfo" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			mjm.createTime,
+			mjm.position,
+			mryjb.XM,mryjb.XB,mryjb.CSRQ,mryjb.JG,mryjb.MZ,
+			mrydp.DPSF,
+			mryjb.HYZK,mryjb.ZC,
+			mryxl.XLMC,mryxl.XXMC,
+			mryzj.RYZJLX,mryzj.RYZJBM,
+			mrytx.YDDH,mrytx.GDDH,mrytx.DZYX,mrytx.GSMC,mrytx.GSZW,
+			mryzw.RDZW,mryzw.ZXZW,mryzw.TTXHMC,mryzw.TTXHZW
+		FROM
+			member_join_manager mjm
+		INNER JOIN member_ry_ryjbxx mryjb ON  mryjb.ID = mjm.memberId
+		INNER JOIN member_ry_dpsf mrydp ON mrydp.RYID = mjm.memberId
+		INNER JOIN member_ry_xlyxw mryxl ON mryxl.RYID = mjm.memberId
+		INNER JOIN member_ry_ryzj mryzj ON mryzj.RYID = mjm.memberId
+		INNER JOIN member_ry_txfs mrytx ON mrytx.RYID = mjm.memberId
+		INNER JOIN member_ry_fgrszyzw mryzw ON mryzw.PARAMID = mjm.memberId
+		where mjm.memberId = #{member_id}
+	</select>
+	<select id="getMemberGroupBaseDetailInfo" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			mjm.createTime,
+			mjm.position,
+			mryjb.XM,mryjb.XB,mryjb.CSRQ,mryjb.JG,mryjb.MZ,
+			mrydp.DPSF,
+			mryjb.HYZK,mryjb.ZC,
+			mryxl.XLMC,mryxl.XXMC,
+			mryzj.RYZJLX,mryzj.RYZJBM,
+			mrytx.YDDH,mrytx.GDDH,mrytx.DZYX,mrytx.GSMC,mrytx.GSZW,
+			mryzw.RDZW,mryzw.ZXZW,mryzw.TTXHMC,mryzw.TTXHZW
+		FROM
+			member_join_manager mjm
+		INNER JOIN member_ry_ryjbxx mryjb ON  mryjb.ID = mjm.memberId
+		INNER JOIN member_ry_dpsf mrydp ON mrydp.RYID = mjm.memberId
+		INNER JOIN member_ry_xlyxw mryxl ON mryxl.RYID = mjm.memberId
+		INNER JOIN member_ry_ryzj mryzj ON mryzj.RYID = mjm.memberId
+		INNER JOIN member_ry_txfs mrytx ON mrytx.RYID = mjm.memberId
+		INNER JOIN member_ry_fgrszyzw mryzw ON mryzw.PARAMID = mjm.memberId
+		where mjm.memberId = #{member_id}
+	</select>
+	<!-- 会员商会中间表 个人,企业,团体共用-->
+	   <update id="updateMemberjoinManager" parameterType="map">
+	        update member_join_manager
+	        <set>
+	            <if test="update_time !=null and update_time !='' ">updateTime=#{update_time},</if>
+	            <if test="createUserId!=null and createUserId !='' ">createUserId=#{createUserId},</if>
+	            <if test="createUserName!=null and createUserName !='' ">createUserName=#{createUserName},</if>
+	            <if test="member_type !=null and member_type !='' ">memberType=#{member_type},</if>
+	            <if test="joinId!=null and joinId !='' ">joinId=#{joinId},</if>
+	            <if test="approve_status !=null and approve_status !='' ">state=#{approve_status},</if>
+	            <if test="joinObjId!=null and joinObjId !='' ">joinObjId=#{joinObjId},</if>
+	            <if test="joinObjName!=null and joinObjName !='' ">joinObjName=#{joinObjName},</if>
+	            <if test="position!=null and position !='' ">position=#{position},</if>
+	        </set>
+	        where memberId = #{member_id}
+    </update>
+    <!-- 人员基本信息表 修改 -->
+	   <update id="updateMemberRyjbxxPerson" parameterType="map">
+	        update member_ry_ryjbxx
+	        <set>
+	            <if test="STATE!=null and STATE !='' ">STATE=#{STATE},</if>
+	        </set>
+	        where ID = #{member_id}
+    </update>
+    <!-- 证件 个,企业,团体共用-->
+	   <update id="updateMemberRyzjManager" parameterType="map">
+	        update member_ry_ryzj
+	        <set>
+	            <if test="STATE!=null and STATE !='' ">STATE=#{STATE},</if>
+	        </set>
+	        where RYID = #{member_id}
+    </update>
+    <!--非公人士荣誉表 个人,企业 团体共用 -->
+	   <update id="updateMemberRyManager" parameterType="map">
+	        update member_ry_fgrszyry
+	        <set>
+	            <if test="STATE!=null and STATE !='' ">STATE=#{STATE},</if>
+	        </set>
+	        where PARAMID = #{member_id}
+    </update>
+    <!--会员入会记录表 新增  -->
+	  <insert id="saveMemberApprove" parameterType="map" >
+	        insert into member_approve
+	        (
+		        approve_id,
+		        approver_id,
+		        approver_name,
+		        member_id,
+		        member_type,
+		        approve_status,
+		        approve_time,
+		        approve_fail_info,
+		        approve_fail_reason
+	        )
+	        values
+	        (
+		        #{approve_id},
+		        #{approver_id},
+		        #{approver_name},
+		        #{member_id},
+		        #{member_type},
+		        #{approve_status},
+		        #{create_time},
+		        #{approve_fail_info},
+		        #{approve_fail_reason}
+	        )
+    </insert>
+    <!--企业基本信息  -->
+     <update id="updateMemberQyjbxx" parameterType="map">
+	        update member_qy_qyjbxx
+	        <set>
+	            <if test="STATE !=null and STATE !='' ">STATE=#{STATE},</if>
+	        </set>
+	       where 
+	       		RYID = #{member_id}
+    </update>
+    <!--企业法人  -->
+     <update id="updateMemberQyfrxx" parameterType="map">
+	        update member_qy_qyfrxx
+	        <set>
+	            <if test="STATE !=null and STATE !='' ">STATE=#{STATE},</if>
+	            <if test="STATE !=null and STATE !='' ">STATE=#{STATE},</if>
+	        </set>
+	       where 
+	       		FRXXZJ = #{member_id}
+    </update>
+    <!--企业介绍  -->
+     <update id="updateMemberQyJs" parameterType="map">
+	        update member_qy_qyjs
+	        <set>
+	            <if test="STATE !=null and STATE !='' ">STATE=#{STATE},</if>
+	        </set>
+	       where 
+	       		QYJSZJ = #{member_id}
+    </update>
+    <!--审批记录 个人企业 -->
+     <select id="queryApprovalHistory" parameterType="map" resultType="com.manhui.gsl.jbqgsl.controller.app.memberapproval.MemberHistoryInfo">
+		SELECT
+			b.*
+		FROM
+			(
+		SELECT
+			mjm.joinId AS joinId,
+			mjm.joinObjId AS joinObjId,
+			mjm.createTime AS create_time,
+			mp.approve_id AS approve_id,
+			mp.approver_id AS approver_id,
+			mp.approver_name AS approver_name,
+			mp.member_id AS member_id,
+			mryjb.XM AS member_name,
+			mryjb.XM AS contact_name,
+			mrytx.YDDH AS contact_telephone,
+			mp.member_type AS member_type,
+			mp.approve_status AS approve_status,
+			mp.approve_fail_info AS approve_fail_info,
+			mp.approve_fail_reason AS approve_fail_reason,
+			mp.approve_time AS approval_time
+		FROM
+			member_approve mp
+		INNER JOIN member_ry_ryjbxx mryjb ON mryjb.ID = mp.member_id
+		INNER JOIN member_ry_txfs mrytx ON mrytx.RYID = mp.member_id
+		INNER JOIN member_join_manager mjm ON mjm.memberId = mp.member_id
+		UNION ALL
+			SELECT
+				mjm.joinId AS joinId,
+				mjm.joinObjId AS joinObjId,
+				mjm.createTime AS create_time,
+				mp.approve_id AS approve_id,
+				mp.approver_id AS approver_id,
+				mp.approver_name AS approver_name,
+				mp.member_id AS member_id,
+				mqyjb.QYMC AS member_name,
+				mqylxr.LXRXM AS contact_name,
+				mqylxr.LXRLXFS AS contact_telephone,
+				mp.member_type AS member_type,
+				mp.approve_status AS approve_status,
+				mp.approve_fail_info AS approve_fail_info,
+				mp.approve_fail_reason AS approve_fail_reason,
+				mp.approve_time AS approval_time
+			FROM
+				member_approve mp
+			INNER JOIN member_qy_qyjbxx mqyjb ON mqyjb.JBXXZJ = mp.member_id
+			INNER JOIN member_qy_qylxrxx mqylxr ON mqylxr.QYID = mp.member_id
+			INNER JOIN member_join_manager mjm ON mjm.memberId = mp.member_id
+		UNION ALL
+			SELECT
+				mjm.joinId AS joinId,
+				mjm.joinObjId AS joinObjId,
+				mjm.createTime AS create_time,
+				mp.approve_id AS approve_id,
+				mp.approver_id AS approver_id,
+				mp.approver_name AS approver_name,
+				mp.member_id AS member_id,
+				mstjb.STMC AS member_name,
+				mqyfr.xm AS contact_name,
+				mqyfr.lxdh AS contact_telephone,
+				mp.member_type AS member_type,
+				mp.approve_status AS approve_status,
+				mp.approve_fail_info AS approve_fail_info,
+				mp.approve_fail_reason AS approve_fail_reason,
+				mp.approve_time AS approval_time
+			FROM
+				member_approve mp
+			INNER JOIN member_jg_stjbxx mstjb ON mstjb.ID = mp.member_id
+			INNER JOIN member_qy_qyfrxx mqyfr ON mqyfr.QYID = mp.member_id
+			INNER JOIN member_join_manager mjm ON mjm.memberId = mp.member_id
+	) AS b
+		WHERE
+			b.approval_time IN (
+				SELECT
+					result.approval_time
+				FROM
+					(
+						SELECT
+							mp1.approver_id,
+							mp1.member_id,
+							SUBSTRING_INDEX(
+								group_concat(
+									mp1.approve_time
+									ORDER BY
+										`approve_time` DESC
+								),
+								',',
+								1
+							) AS approval_time
+						FROM
+							member_approve mp1
+						GROUP BY
+							mp1.member_id
+						ORDER BY
+							mp1.approve_time DESC
+					) AS result
+				WHERE
+					result.approver_id = #{approver_id}
+				ORDER BY
+					result.approval_time DESC
+	)AND b.approve_status !="HYSP-04"
+    </select>
+    <!--审批记录模糊查询  个人企业 -->
+     <select id="queryMemberList" parameterType="map" resultType="com.manhui.gsl.jbqgsl.controller.app.memberapproval.MemberHistoryInfo">
+			SELECT
+				b.*
+			FROM
+				(
+			SELECT
+				mjm.joinId AS joinId,
+				mjm.joinObjId AS joinObjId,
+				mjm.createTime AS create_time,
+				mp.approve_id AS approve_id,
+				mp.approver_id AS approver_id,
+				mp.approver_name AS approver_name,
+				mp.member_id AS member_id,
+				mryjb.XM AS member_name,
+				mryjb.XM AS contact_name,
+				mrytx.YDDH AS contact_telephone,
+				mp.member_type AS member_type,
+				mp.approve_status AS approve_status,
+				mp.approve_fail_info AS approve_fail_info,
+				mp.approve_fail_reason AS approve_fail_reason,
+				mp.approve_time AS approval_time
+			FROM
+				member_approve mp
+			INNER JOIN member_ry_ryjbxx mryjb ON mryjb.ID = mp.member_id
+			INNER JOIN member_ry_txfs mrytx ON mrytx.RYID = mp.member_id
+			INNER JOIN member_join_manager mjm ON mjm.memberId = mp.member_id
+			UNION ALL
+				SELECT
+					mjm.joinId AS joinId,
+					mjm.joinObjId AS joinObjId,
+					mjm.createTime AS create_time,
+					mp.approve_id AS approve_id,
+					mp.approver_id AS approver_id,
+					mp.approver_name AS approver_name,
+					mp.member_id AS member_id,
+					mqyjb.QYMC AS member_name,
+					mqylxr.LXRXM AS contact_name,
+					mqylxr.LXRLXFS AS contact_telephone,
+					mp.member_type AS member_type,
+					mp.approve_status AS approve_status,
+					mp.approve_fail_info AS approve_fail_info,
+					mp.approve_fail_reason AS approve_fail_reason,
+					mp.approve_time AS approval_time
+				FROM
+					member_approve mp
+				INNER JOIN member_qy_qyjbxx mqyjb ON mqyjb.JBXXZJ = mp.member_id
+				INNER JOIN member_qy_qylxrxx mqylxr ON mqylxr.QYID = mp.member_id
+				INNER JOIN member_join_manager mjm ON mjm.memberId = mp.member_id
+			UNION ALL
+				SELECT
+					mjm.joinId AS joinId,
+					mjm.joinObjId AS joinObjId,
+					mjm.createTime AS create_time,
+					mp.approve_id AS approve_id,
+					mp.approver_id AS approver_id,
+					mp.approver_name AS approver_name,
+					mp.member_id AS member_id,
+					mstjb.STMC AS member_name,
+					mqyfr.xm AS contact_name,
+					mqyfr.lxdh AS contact_telephone,
+					mp.member_type AS member_type,
+					mp.approve_status AS approve_status,
+					mp.approve_fail_info AS approve_fail_info,
+					mp.approve_fail_reason AS approve_fail_reason,
+					mp.approve_time AS approval_time
+				FROM
+					member_approve mp
+				INNER JOIN member_jg_stjbxx mstjb ON mstjb.ID = mp.member_id
+				INNER JOIN member_qy_qyfrxx mqyfr ON mqyfr.QYID = mp.member_id
+				INNER JOIN member_join_manager mjm ON mjm.memberId = mp.member_id
+		) AS b
+			WHERE
+				b.approval_time IN (
+					SELECT
+						result.approval_time
+					FROM
+						(
+							SELECT
+								mp1.approver_id,
+								mp1.member_id,
+								SUBSTRING_INDEX(
+									group_concat(
+										mp1.approve_time
+										ORDER BY
+											`approve_time` DESC
+									),
+									',',
+									1
+								) AS approval_time
+							FROM
+								member_approve mp1
+							GROUP BY
+								mp1.member_id
+							ORDER BY
+								mp1.approve_time DESC
+						) AS result
+					WHERE
+						result.approver_id = "2"
+					ORDER BY
+						result.approval_time DESC
+		) AND b.member_name LIKE CONCAT('%',#{member_name},'%') AND b.approve_status !="HYSP-04"
+    </select>
+    
+    <select id="queryMemberPerson" resultType="java.util.Map" parameterType="String">
+		SELECT
+			mjm.createUserId AS user_id,
+			mryjb.XM AS sign_name,
+			mryjb.XM AS company_name,
+			mrtx.GSZW AS company_title,
+			mrtx.YDDH AS sign_phone
+		FROM
+			member_join_manager mjm
+		INNER JOIN member_ry_ryjbxx mryjb ON mryjb.ID = mjm.memberId
+		INNER JOIN member_ry_txfs mrtx ON mrtx.RYID = mjm.memberId
+		WHERE
+			mjm.memberId = #{member_id}
+		UNION ALL
+			SELECT
+				mjm.createUserId AS user_id,
+				mqyfr.XM AS sign_name,
+				mqyjb.QYMC AS company_name,
+				mqyfr.GSZW AS company_title,
+				mqyfr.LXDH AS sign_phone
+			FROM
+				member_join_manager mjm
+			INNER JOIN member_qy_qyfrxx mqyfr ON mqyfr.QYID = mjm.memberId
+			INNER JOIN member_qy_qyjbxx mqyjb ON mqyjb.JBXXZJ  = mjm.memberId
+			WHERE
+				mjm.memberId = #{member_id}
+		UNION ALL
+			SELECT
+				mjm.createUserId AS user_id,
+				mqyfr.XM AS sign_name,
+				mqstjb.STMC AS company_name,
+				mqyfr.GSZW AS company_title,
+				mqyfr.LXDH AS sign_phone
+			FROM
+				member_join_manager mjm
+			INNER JOIN member_qy_qyfrxx mqyfr ON mqyfr.QYID = mjm.memberId
+			INNER JOIN member_jg_stjbxx mqstjb ON mqstjb.ID  = mjm.memberId
+			WHERE
+				mjm.memberId = #{member_id}
+	</select>
+    
+</mapper>

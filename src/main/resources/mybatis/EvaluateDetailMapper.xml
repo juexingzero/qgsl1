@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.EvaluateDetailMapper">
+
+<insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateDeatil">
+	insert into evaluate_standard_detail
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+		detail_id,
+		standard_id,
+		detail_name,
+		<if test="detail_plan_score != null">detail_plan_score,</if>
+		<if test="detail_level != null">detail_level,</if>
+		<if test="p_detail_id != null">p_detail_id,</if>
+		<if test="order_no != null">order_no,</if>
+		<if test="create_time != null">create_time,</if>
+		<if test="update_time != null">update_time,</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides="," >
+		#{detail_id},
+		#{standard_id},
+		#{detail_name},
+		<if test="detail_plan_score != null">#{detail_plan_score},</if>
+		<if test="detail_level != null">#{detail_level},</if>
+		<if test="p_detail_id != null">#{p_detail_id},</if>
+		<if test="order_no != null">#{order_no},</if>
+		<if test="create_time != null">#{create_time},</if>
+		<if test="update_time != null">#{update_time},</if>
+	</trim>
+</insert>
+<update id="update" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateDeatil">
+	update evaluate_standard_detail 
+	<set>
+		detail_name = #{detail_name},
+		detail_plan_score = #{detail_plan_score},
+		detail_level = #{detail_level},
+		<if test="p_detail_id != null">p_detail_id = #{p_detail_id},</if>
+		<if test="order_no != null">order_no = #{order_no},</if>
+		<if test="create_time != null">create_time = #{create_time},</if>
+		<if test="update_time != null">update_time = #{update_time},</if>
+	</set>
+	where detail_id = #{detail_id} AND standard_id = #{standard_id}
+</update>
+<delete id="delete" parameterType="java.lang.String">
+	delete from evaluate_standard_detail where standard_id = #{standard_id} AND detail_id = #{detail_id}
+</delete>
+
+	<select id="showEvaluateDeatil" resultType="com.manhui.gsl.jbqgsl.model.EvaluateDeatil">
+		SELECT
+			esd.*
+		FROM
+			evaluate_standard_detail esd
+		WHERE 1=1
+	    <if test="standard_id != null and standard_id != ''">
+	        AND esd.standard_id = #{standard_id}
+	    </if>
+	    <if test="detail_id != null and detail_id != ''">
+	        AND esd.p_detail_id = #{detail_id}
+	    </if>
+	    <if test="detail_level != null">
+	        AND esd.detail_level = #{detail_level}
+	    </if>
+	    order by esd.create_time
+	</select>
+	
+<select id="queryDetailNameByLevel2" parameterType="java.lang.String" resultType="java.lang.String">
+	select detail_name from evaluate_standard_detail where standard_id = #{standard_id}
+	AND detail_level = 1 order by create_time
+</select>
+<select id="queryEvaluateDeatilByKey" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.EvaluateDeatil">
+	select * from evaluate_standard_detail where standard_id = #{standard_id}
+	AND detail_id = #{detail_id}
+</select>
+<select id="queryScoreCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select sum(detail_plan_score) from evaluate_standard_detail
+	where standard_id = #{standard_id} AND p_detail_id = #{p_detail_id}
+</select>
+<select id="queryEvaluateDeatilList" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.EvaluateDeatil">
+	select * from evaluate_standard_detail where standard_id = #{standard_id}
+	AND p_detail_id = #{p_detail_id}
+</select>
+</mapper>

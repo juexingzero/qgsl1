@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppTopicEvaluateMapper">
+<!--计算待评价总数  -->
+	<select id="CountToTopicEvaluateByInstitution_id" resultType="int">
+		select count(*) 
+		from 
+			topic_active_info a 
+		left join 
+			topic_evaluate e
+		 on 
+		 	a.topic_id =e.topic_id
+		<where>
+				 and e.del_flag ='0'
+				<if test="institution_id != null and institution_id != ''">
+					and a.institution_id = #{institution_id} 
+				</if>
+				<if test="topic_type != null and topic_type != ''">
+					and e.topic_type = #{topic_type}
+				</if>
+				<if test="evaluate_state != null and evaluate_state != ''">
+					and e.evaluate_state = #{evaluate_state}
+				</if>
+		</where>
+	</select>
+	<!-- 计算机构已完成的评价数 -->
+	<select id="CountFinalTopicEvaluateByInstitution_id" resultType="int">
+		select count(*) 
+		from 
+			topic_active_info a 
+		left join 
+			topic_evaluate e
+		 on 
+		 	a.topic_id =e.topic_id
+		<where>
+			and a.is_evaluate= '1' and e.del_flag ='0'
+			<if test="institution_id != null and institution_id != ''">
+					and a.institution_id = #{institution_id}
+			</if>
+			<if test="topic_type != null and topic_type != ''">
+					and e.topic_type = #{topic_type}
+			</if>
+			<if test="evaluate_state != null and evaluate_state != ''">
+					and e.evaluate_state = #{evaluate_state}
+			</if>
+		</where>
+	</select>
+	<!-- 根据机构id 主题状态 主体类型 获取 主题内容   -->
+	<select id="queryTopicEvaluateByInstitutionId" resultType="map">
+		select a.institution_id,e.evaluate_start_time,e.evaluate_end_time,
+			   e.topic_name,e.topic_id,e.topic_number,e.topic_describe
+		from 
+			topic_active_info a 
+		left join 
+			topic_evaluate e
+		 on 
+		 	a.topic_id =e.topic_id
+		<where>
+			and e.del_flag ='0'
+				<if test="institution_id != null and institution_id != ''">
+					and a.institution_id = #{institution_id}
+				</if>
+				<if test="topic_type != null and topic_type != ''">
+					and e.topic_type = #{topic_type}
+				</if>
+				<if test="evaluate_state != null and evaluate_state != ''">
+					and e.evaluate_state = #{evaluate_state}
+				</if>
+				<if test="is_evaluate != null and is_evaluate != ''">
+					and a.is_evaluate = #{is_evaluate}
+				</if>
+		</where>
+	</select>
+	<!-- 根据机构id获取到 机构类型 企业 街镇 部门 -->
+	<select id="queryInstitutionType" resultType="string">
+		select i.institution_type
+		from 
+			topic_active_info a 
+		left join 
+			institution_info i
+		 on 
+		 	a.institution_id =i.institution_id
+		 where 
+		 	a.institution_id = #{institution_id} 
+		 limit 0,1
+	</select>
+	<!--获取到被评价放的  -->
+	<select id="queryPassiveInstitution" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+		select result.* from (
+			SELECT
+				*
+			FROM
+				institution_info
+			WHERE
+				institution_id IN (
+					SELECT
+						tpi.institution_id
+					FROM
+						topic_active_info tai
+					LEFT JOIN topic_passive_info tpi ON tai.topic_id = tpi.topic_id AND (tai.street_main_id = tpi.institution_id or tpi.institution_type='1')	
+					WHERE
+						tai.topic_id = #{topic_id} 
+					AND tai.institution_id =#{institution_id}
+					
+		)
+	)as result where result.del_flag='0'
+	</select>
+	<!--获取到被评价方所有的信息  -->
+	<select id="queryInstitution" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+		select * 
+		from 
+			institution_info where institution_id 
+		in(
+		select 
+			DISTINCT tpi.institution_id
+		from
+			topic_active_info tai
+		left join
+			topic_passive_info tpi
+		on
+			tai.topic_id = tpi.topic_id
+	<where>
+		<if test="topicEvaluateList !=null and topicEvaluateList.size()>0">
+			and tai.topic_id in
+			 <foreach collection="topicEvaluateList" index="index" item="item" open="(" separator="," close=")">
+                   #{item.topic_id}
+             </foreach>
+		</if>
+	</where>
+		   )
+	</select>
+	<!--根据机构id获取到主题id  -->
+	<select id="queryTopicEvaluateIds" resultType="string" >
+		SELECT
+				topic_id
+		FROM
+				topic_active_info
+		<where>
+			<if test="institution_id !=null and institution_id !=''">
+				and institution_id = #{institution_id}
+			</if>
+			<if test="is_evaluate !=null and is_evaluate !=''">
+				and is_evaluate = #{is_evaluate}
+			</if>
+		</where>
+	</select>
+	<!--根据机构id 生效的标准id 获取到主题id  -->
+	<select id="queryTopicEvaluateIds2" resultType="string" >
+		SELECT
+				topic_id
+		FROM
+				topic_active_info
+		<where>
+			<if test="institution_id !=null and institution_id !=''">
+				and institution_id = #{institution_id}
+			</if>
+			<if test="is_evaluate !=null and is_evaluate !=''">
+				and is_evaluate = #{is_evaluate}
+			</if>
+			<if test="standardIds != null and standardIds.size()>0">
+				and  standard_id in
+				<foreach collection="standardIds" open="(" close=")" separator="," item="obj">
+					#{obj}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<!--根据机构id 生效的标准id 获取到主题id  -->
+	<select id="getTopicEvaluateIds2" resultType="string" >
+		SELECT
+				topic_id
+		FROM
+				topic_active_info
+		<where>
+			<if test="institution_id !=null and institution_id !=''">
+				and institution_id = #{institution_id}
+			</if>
+			<if test="is_evaluate !=null and is_evaluate !=''">
+				and is_evaluate = #{is_evaluate}
+			</if>
+		<!-- 	<if test="standardIds != null and standardIds.size()>0">
+				and  standard_id in
+				<foreach collection="standardIds" open="(" close=")" separator="," item="obj">
+					#{obj}
+				</foreach>
+			</if> -->
+		</where>
+	</select>
+	
+	<select id="queryTopicEvaluates" resultType="com.manhui.gsl.jbqgsl.model.TopicEvaluate">
+			SELECT
+				topic_id,
+				topic_number,
+				topic_name,
+				topic_type,
+				evaluate_start_time,
+				evaluate_end_time,
+				evaluate_state,
+				del_flag
+			FROM
+				topic_evaluate
+			<where>
+					and del_flag ='0' 
+				<if test="topicEvaluateIdsList !=null and topicEvaluateIdsList.size()>0">
+					and topic_id in
+					<foreach collection="topicEvaluateIdsList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="evaluate_state !=null and evaluate_state !=''">
+					and evaluate_state = #{evaluate_state}
+				</if>
+			</where>
+			limit #{pageNo},#{pageSize}	
+	</select>
+	<select id="queryTopicTotal" resultType="long">
+		select count(*) from topic_evaluate
+		<where>
+			<if test="topicEvaluateIdsList !=null and topicEvaluateIdsList.size()>0">
+				and topic_id in
+				<foreach collection="topicEvaluateIdsList" index="index" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="evaluate_state !=null and evaluate_state !=''">
+				and evaluate_state = #{evaluate_state}
+			</if>
+			</where>	
+	</select>
+	
+	<select id="queryPassiveInstitution2" resultType="com.manhui.gsl.jbqgsl.model.Institution">
+		select *
+		 from 
+		 	institution_info
+		 <where>
+		 		institution_id in
+				(select  tpi.institution_id
+				from
+					topic_active_info tai
+				left join
+					topic_passive_info tpi
+				on
+					tai.topic_id = tpi.topic_id
+				where
+				    tai.topic_id = #{topic_id} and tai.institution_id =#{institution_id}
+				)
+			 <if test="institution_type != null and institution_type !=''">
+				and institution_type = #{institution_type}
+			 </if>
+		 </where>
+	</select>
+</mapper>

@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>风采新增</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<!--富文本编辑器-->
+	<script src="http://kindeditor.net/ke4/kindeditor-all-min.js?t=20160331.js" type="text/javascript"></script>
+	<!--文本编译器tolbars-->
+	<script type="text/javascript" charset="utf-8" src="/resources/ueditor/utf8-jsp/toolbars.js"></script>
+	<script type="text/javascript" src="/resources/miniui/res/third-party/swfupload/swfupload.js"></script>
+	<!-- 图片上传 -->
+	<script type="text/javascript" src="/resources/fileUpload/fileUpload.js"></script>
+	<link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        /**修改文件上传框的大小**/
+        body .upload .image { width:160px; height:200px; }
+        body .upload .image .image_font { height: 165px; line-height: 165px; }
+        body .upload .image .image_content { width: auto; height: auto; }
+        .sel_div span{display:inline-block;}
+    </style>
+</head>
+
+<body>
+	<div id="form_elegant_add" style="overflow-x:hidden;overflow-y:auto;">
+	    <div class="table_edit" style="margin:5px 5px 5px 5px;padding:0px;border-bottom:none;">
+		    <table style="width:100%; background-color:#ffffff;border-collapse:separate; border-spacing:10px;">
+		    	<colgroup>
+		    		<col style="width: 100px;">
+		    	</colgroup>
+	            <tr>
+	               <td class="td1" ><span style="color: red; margin-right:2px;">*</span>会议主题：</td>
+	                <td>
+	                    <input name="meeting_theme" class="mini-textbox" style="width:240px;" required="true" maxLength="30"/>
+	                </td>
+	            </tr>
+		        <tr>
+	               <td class="td1" ><span style="color: red; margin-right:2px;">*</span>会议时间：</td>
+	                <td>
+	               		<input name="meeting_starttime" emptyText="开始时间" class="mini-datepicker" style="width:150px" allowInput="false" format="yyyy-MM-dd H:mm" timeFormat="H:mm" showTime="true" required="true"/>
+	               		<label style="line-height:30px;padding-left:5px;">-&nbsp;</label>
+	               	    <input name="meeting_endtime" emptyText="结束时间" class="mini-datepicker" style="width:150px" allowInput="false" format="yyyy-MM-dd HH:mm" timeFormat="HH:mm" showTime="true" required="true"/>
+	                </td>
+		        </tr>
+		        <tr>
+	               <td class="td1" ><span style="color: red; margin-right:2px;">*</span>会议地址：</td>
+	                <td>
+	                    <input name="meeting_address" class="mini-textbox" style="width:240px;" required="true" maxLength="30"/>
+	                </td>
+	            </tr>
+	            <tr>
+	               <td class="td1" ><span style="color: red; margin-right:2px;">*</span>会议导航：</td>
+	                <td>
+	                        <input name="meeting_ll" class="mini-hidden" style="width:240px;" required="true" maxLength="30"/>
+	                    <input  id="meeting_navigation" name="meeting_navigation" emptyText="将作为手机导航地址" class="mini-textbox" style="width:240px;" required="true" maxLength="30"/>
+	                    <a class="mini-button searchBtn" onclick="onPositioning()">定位</a>
+	                </td>
+	            </tr> 
+	           
+		        <tr>
+		            <td><label style="line-height:30px;padding-left:5px;">会议资料：</label></td>
+		            <td>
+	                    
+	                      <input id="file" class="mini-fileupload" name="file" limitType="*.docx" style="width: 400px;height: 26px;"
+                       flashUrl="/resources/miniui/res/third-party/swfupload/swfupload.swf"
+                       uploadUrl="/upload/uploadFile"
+                       onuploadsuccess="onUploadSuccess"
+                       onuploaderror="onUploadError"
+                />
+                <a checkOnClick="true" groupName="search" class="mini-button" id="fileupload" onclick="startUpload()">上传</a>
+                <a checkOnClick="true" groupName="search" class="mini-button" id="filedel" onclick="delUpload()">删除</a>
+		            </td>
+		        </tr>
+		        <tr>
+		             <td>
+	                	<label style="line-height:30px;padding-left:5px;">会议投票：</label>
+	                </td>
+	                <td>
+	                	<input id="is_vote" name="is_vote" class="mini-radiobuttonlist" style="vertical-align: middle; display: inline-block" data="[{id:0, text:'需要'}, {id:1, text:'不需要'}]" value="0"/>
+	                </td>
+		        </tr>
+		        <tr id="xxxz">
+	                <td><label style="line-height:30px;padding-left:5px;">允许选择：</label></td>
+	                <td>
+	                    <select name="allow_select" class="mini-combobox" style="width:50px;" valueField="param_key" textField="param_value" value="1">
+	                        <option value="1">1</option>
+	                        <option value="2">2</option>
+	                        <option value="2">3</option>
+	                        <option value="2">4</option>
+	                    </select>项
+	                </td>
+	            </tr>
+	         <tr id="yt">
+	              <td><label style="line-height:30px;padding-left:5px;">议题一：</label></td>
+	            <td colspan="5">
+	                <input name="meetings" id="memo" class="mini-textarea" style="height:80px;width:545px;" />
+	            </td>
+	        </tr>
+	        <tr class='selectTxt'>
+	                <td><label style="line-height:30px;padding-left:5px;">选项：</label></td>
+	                <td>
+	                    <input name="company_name" class="mini-textbox" style="width:240px;" maxLength="30"/>
+	                </td>
+	        </tr>
+	        <tr id="tjxx">
+	        	<td></td>
+	        	<td style="line-height:30px;padding-left:5px;" >
+	        		 <a class="mini-button searchBtn">添加选项</a>
+	        	</td>
+	        </tr>
+	        <tr>
+	        	<td></td>
+	        	<td style="line-height:30px;padding-left:5px;" >
+	        		 <div id="passive_active_tabs" class="mini-tabs" style="margin-top:20px;width:100%;" onactivechanged="onMeetingShow">
+			    	 	<div id="id_passive" class="mini-tabs" title="会议内容"></div>
+			   		 	<div id="id_active" class="mini-tabs" title="参会人员"></div>
+					 </div>
+	        	</td>
+	        </tr>
+		        <tr id="meetingcontent_tr">
+		        	<td></td>
+		            <td>
+		                <script name="meeting_content" id="editor" type="text/plain" style="width:100%;height:300px;"></script>
+		            </td>
+		        </tr>
+		        <tr id="meetingperson_tr" style="display:none;">
+		        	<td></td>
+		        	<td>
+		        		<div class="mini-toolbar">
+			    <div class="sel_div">
+			    	<a class="mini-button"><span onclick="onInstitutionSelect('meetingperson_tr')">+选择</span></a>&nbsp;
+			    	<a class="mini-button">已选<span id="active_total">0</span>家 | <span onclick="onInstitutionClear('meetingperson_tr', 'active_total')">清空</span></a>
+			    </div>
+			    <div id="datagrid_activeList" class="mini-datagrid" style="width:100%;height:300px;" 
+			    	sizeList="[10,20,50,100]" pageSize="10" idField="topic_id" multiSelect="true" showPager="false">
+			        <div property="columns">
+        				<div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div> 
+			            <div field="company_name" width="" headerAlign="center">团体/企业名称</div>
+			            <div field="concats_title" width="" headerAlign="center" align="center" visible="false">商会职务</div>
+			            <div field="concats_name" width="" headerAlign="center" align="center">联系人</div>
+			            <div field="concats_telephone" width="" headerAlign="center" align="center">手机号码</div>
+			            <div field="operation_but" width="10%" headerAlign="center" align="center" renderer="onPassiveOperation">操作</div>
+			        </div>
+			    </div>
+	    	</div>
+		        	</td>
+		        </tr>
+		        
+		        
+		    </table>
+		</div>
+	    <div style="margin:20px 0px 30px 0px;padding:0px;border-bottom:none;" align="center">
+	        <a class="mini-button saveBut" checkOnClick="true" groupName="search" id="submit" onclick="save()">保存</a>
+	        <a class="mini-button cancelBut" checkOnClick="true" groupName="search" onclick="onCancel()">取消</a>
+		    <a class="mini-button closeBut" style="width:60px;display:none;" onclick="onCancel()">关闭</a>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/meetingManager/meetingAdd.js"></script>
+</body>
+</html>

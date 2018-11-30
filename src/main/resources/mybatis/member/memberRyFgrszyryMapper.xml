@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.MemberRyFgrszyryMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.MemberRyFgrszyry">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="RYBM" jdbcType="VARCHAR" property="rybm" />
+        <result column="ZYRYLB" jdbcType="VARCHAR" property="zyrylb" />
+        <result column="RYJB" jdbcType="VARCHAR" property="ryjb" />
+        <result column="JE" jdbcType="VARCHAR" property="je" />
+        <result column="HQSJ" jdbcType="VARCHAR" property="hqsj" />
+        <result column="RYZSBH" jdbcType="VARCHAR" property="ryzsbh" />
+        <result column="BFDW" jdbcType="VARCHAR" property="bfdw" />
+        <result column="HDYY" jdbcType="VARCHAR" property="hdyy" />
+        <result column="QTZYRY" jdbcType="VARCHAR" property="qtzyry" />
+        <result column="PARAMID" jdbcType="VARCHAR" property="paramid" />
+        <result column="STATE" jdbcType="VARCHAR" property="state" />
+        <result column="RYMC" jdbcType="VARCHAR" property="RYMC" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberRyFgrszyry">
+        insert into member_ry_fgrszyry(ID,RYBM,ZYRYLB,RYJB,JE,HQSJ,RYZSBH,BFDW,HDYY,QTZYRY,PARAMID,STATE,RYMC)
+        values
+        (#{id},#{rybm},#{zyrylb},#{ryjb},#{je},#{hqsj},#{ryzsbh},#{bfdw},#{hdyy},#{qtzyry},#{paramid},#{state},#{rymc})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberRyFgrszyry">
+        update member_ry_fgrszyry
+        <set>
+            <if test="rybm!=null">RYBM=#{rybm},</if>
+            <if test="zyrylb!=null">ZYRYLB=#{zyrylb},</if>
+            <if test="ryjb!=null">RYJB=#{ryjb},</if>
+            <if test="je!=null">JE=#{je},</if>
+            <if test="hqsj!=null">HQSJ=#{hqsj},</if>
+            <if test="ryzsbh!=null">RYZSBH=#{ryzsbh},</if>
+            <if test="bfdw!=null">BFDW=#{bfdw},</if>
+            <if test="hdyy!=null">HDYY=#{hdyy},</if>
+            <if test="qtzyry!=null">QTZYRY=#{qtzyry},</if>
+            <if test="paramid!=null">PARAMID=#{paramid},</if>
+            <if test="state!=null">STATE=#{state},</if>
+            <if test="rymc!=null and rymc != ''">RYMC=#{rymc},</if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!--根据关联表 id，查询荣誉信息-->
+    <select id="appQueryMapByRyid" parameterType="Map" resultType="HashMap">
+        select id,zyrylb,ryjb,je,hqsj,ryzsbh,bfdw,hdyy,state,rymc from member_ry_fgrszyry where PARAMID = #{paramid}
+        <if test="state != null and state != ''">
+            and state = #{state}
+        </if>
+    </select>
+</mapper>

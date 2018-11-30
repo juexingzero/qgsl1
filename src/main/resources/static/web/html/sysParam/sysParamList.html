@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统参数列表</title>
+    <link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+    <script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+    <script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+    <script src="/resources/js/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="/resources/js/jquery.form.min.js" type="text/javascript"></script>
+    <style>
+        body{
+            background: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+<div class="mini-splitter" style="width:100%;height:100%;">
+    <div size="250" showCollapseButton="false">
+        <div class="mini-toolbar" style="margin:0 -5px 0 -5px;padding:0px;border-top:0;border-left:0;border-right:0;">
+            <table style="width:100%; table-layout:fixed;">
+                <tr>
+                    <td align="left" width="60" nowrap="nowrap">
+                    	<label style="font-family:Verdana; margin-left:10px;">参数类型</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mini-fit">
+            <ul id="tree1" class="mini-tree" url="/common/v1/sysParam/SysParamMenu" style="width:100%;" resultAsTree="false"
+                showTreeLines="true" showTreeIcon="true" expandOnLoad="0" selectOnLoad="true" textField="param_value"
+                idField="param_id" parentField="p_param_id" onnodeselect="loadDatagrid">
+            </ul>
+        </div>
+    </div>
+    <div showCollapseButton="false">
+        <div class="mini-toolbar toolbar-header" style="padding:0px;border-top:0;border-left:0;border-right:0;">
+            <table style="width:100%;">
+                <tr>
+                    <td align="center" width="60" nowrap="nowrap"><label style="font-family:Verdana;">类型数据</label></td>
+                    <td align="right">
+                        <a id="btnNewPosition" class="mini-button" iconCls=""><i class="fa fa-plus"></i>新增</a>
+                        <a id="btnDeletePosition" class="cus_btn_del" iconCls=""><i class="fa fa-trash"></i>删除</a>
+                        <a id="btnInputPosition" class="mini-button" iconCls="" onclick="btnModInpot()"><i class="fa fa-upload"></i>批量导入</a>
+                        <a id="btnModDown" class="mini-button" iconCls="" onclick="btnModDown()"><i class="fa fa-download"></i>下载模板</a>
+                    </td>
+                </tr>
+            </table>
+            <form id="form1" action="/common/v1/sysParam/sysParamFileInport" enctype="multipart/form-data" method="post">
+                <input type="file" id="btn_file" name="myfile" style="display:none" accept=".xls,.xlsx" onchange="uploadFile()">
+            </form>
+        </div>
+        
+        <div class="mini-fit">
+		    <div id="menu_name" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[5,10,20,50]" pageSize="20"
+		         url="/common/v1/sysParam/paramDataList" idField="user_id" multiSelect="true" onrowdblclick="onRowDblClickForFunc">
+		        <div property="columns">
+		            <div type="checkcolumn" width="50px" headerAlign="center" align="center"></div>
+	                <div field="param_key" headerAlign="center" align="center">参数key</div>
+	                <div field="param_value" headerAlign="center" align="center">参数value</div>
+	                <div field="param_describe" width="20%" headerAlign="center">参数描述</div>
+	                <div field="create_time" width="10%" headerAlign="center" align="center" renderer="onConvertCreateTime">创建时间</div>
+	            </div>
+	        </div>
+        </div>
+    </div>
+</div>
+
+<script src="/resources/js/sysParam/sysParam.js" type="text/javascript"></script>
+</body>
+</html>

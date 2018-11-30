@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.meetingmanager.MeetingPersonMapper">
+	    
+    <insert id="insertMeetingPerson" parameterType="java.util.List">
+		insert into meeting_person 
+			(
+			meeting_id,
+			member_id,
+			sh_name,
+			group_name,
+			office,
+			person_name,
+			phone,
+			create_time
+			)
+			values
+		<foreach collection="list" item="item" index= "index" separator =",">
+			(
+			#{item.meeting_id},
+			#{item.member_id},
+			#{item.sh_name},
+			#{item.group_name},
+			#{item.office},
+			#{item.person_name},
+			#{item.phone},
+			now()
+			)
+		</foreach>
+		</insert>
+		  <select id="queryMeetingPersonList" resultType="com.manhui.gsl.jbqgsl.model.MeetingPerson">
+    	SELECT
+			*
+		FROM
+			meeting_person
+		WHERE meeting_id=#{meeting_id}
+	    </select>
+	
+	   <update id="updateMeetingPerson" parameterType="com.manhui.gsl.jbqgsl.model.MeetingPerson">
+        UPDATE meeting_person
+        <set>
+	        <if test="member_id != null and member_id != ''">
+            	member_id=#{member_id},
+	        </if>
+	        <if test="sh_name != null and sh_name != ''">
+            	sh_name=#{sh_name},
+	        </if>
+	        <if test="group_name != null and group_name != ''">
+            	group_name=#{group_name},
+	        </if>
+	        <if test="office != null and office != ''">
+            	office=#{office},
+	        </if>
+	        <if test="person_name != null and person_name != ''">
+            	person_name=#{person_name},
+	        </if>
+	        <if test="phone != null and phone != ''">
+            	phone=#{phone},
+	        </if>
+	        <if test="update_time != null and update_time != ''">
+            	update_time=#{update_time},
+	        </if>
+        </set>
+        WHERE meeting_id=#{meeting_id}
+    </update>
+    
+     <delete id="deleteMeetingPerson">
+        DELETE FROM meeting_person WHERE 1=1
+        <if test="meeting_id != null and meeting_id != ''">
+        and meeting_id=#{meeting_id}
+        </if>
+        <if test="member_id != null and member_id != ''">
+        and member_id=#{member_id}
+        </if>
+         
+    </delete>
+    
+    <select id="queryMeetingPersonNum" resultType="int">
+    	select count(*) from meeting_person
+    	where meeting_id=#{meeting_id} and vote_options is not null and vote_options !=''
+    </select>
+    
+     <select id="getMeetingPersonLists" resultType="com.manhui.gsl.jbqgsl.model.MeetingPerson">
+    	SELECT
+			*
+		FROM
+			meeting_person
+		WHERE
+			meeting_id=#{meeting_id} and sing_time !=''
+			
+ 		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+	    
+	    <select id="queryMeetingPersonTotal" resultType="int">
+    	SELECT
+			count(*)
+		FROM
+			meeting_person
+		WHERE
+			meeting_id=#{meeting_id} and sing_time !=''
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+	    
+	    <select id="querypersonNum" resultType="int">
+    	SELECT
+			count(*)
+		FROM
+			meeting_person
+		WHERE
+			vote_options like #{vote_options}
+	    </select>
+	    
+	    <select id="queryvotePerson" resultType="com.manhui.gsl.jbqgsl.model.MeetingPerson">
+    	SELECT
+			*
+		FROM
+			meeting_person
+		WHERE
+			meeting_id=#{meeting_id}
+			
+		<if test="vote_options != null and vote_options != ''">
+			and vote_options like #{vote_options}
+		</if>
+			and vote_options !=''
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+	    
+	    <select id="queryvotePersonNum" resultType="int">
+    	SELECT
+			count(*)
+		FROM
+			meeting_person
+		WHERE
+			meeting_id=#{meeting_id}
+			
+		<if test="vote_options != null and vote_options != ''">
+			and vote_options like #{vote_options}
+		</if>
+			and vote_options !=''
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+</mapper> 

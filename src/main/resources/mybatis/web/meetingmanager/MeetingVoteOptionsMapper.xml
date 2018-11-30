@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.meetingmanager.MeetingVoteOptionsMapper">
+	    
+    <insert id="insertMeetingVoteOptions" parameterType="java.util.List">
+		insert into meeting_vote_options 
+			(
+			vote_id,
+			options_id,
+			options,
+			sorting,
+			create_time
+			)
+			values
+		<foreach collection="list" item="item" index= "index" separator =",">
+			(
+			#{item.vote_id},
+			#{item.options_id},
+			#{item.options},
+			#{item.sorting},
+			now()
+			)
+		</foreach>
+	</insert>
+	
+	<select id="queryMeetingVoteOptionsList" resultType="com.manhui.gsl.jbqgsl.model.MeetingVoteOptions">
+    	SELECT
+			*
+		FROM
+			meeting_vote_options
+		WHERE
+         vote_id=#{vote_id}
+         order by sorting asc
+	    </select>
+	    
+	      <update id="updateMeetingVoteOptions" parameterType="com.manhui.gsl.jbqgsl.model.MeetingVoteOptions">
+        UPDATE meeting_vote_options
+        <set>
+	        <if test="options != null and options != ''">
+            	options=#{options},
+	        </if>
+	        <if test="update_time != null and update_time != ''">
+            	update_time=#{update_time},
+	        </if>
+        </set>
+        WHERE options_id=#{options_id}
+    </update>
+    
+    <delete id="deleteMeetingVoteOptions">
+    	delete from meeting_vote_options
+    	where vote_id=#{vote_id}
+    </delete>
+</mapper> 

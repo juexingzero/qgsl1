@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>被评价方得分列表</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.cookie.js"></script>
+</head>
+
+<body>
+    <div id="form_detail" style="overflow-y:auto;">
+	    <div class="table_edit" style="margin:5px 5px 5px 5px;padding:0px;border-bottom:none;">
+	        <table style="width:100%; table-layout:fixed;background-color:#ffffff;">
+	            <tr>
+	                <td width="350">
+	                	<label style="font-family:Verdana;">评价主题:</label>
+	                    <input class="mini-textbox" style="width:250px;" enabled="false" th:value="${evaluate.topic_name}"/>
+	                </td>
+	                <td width="350">
+	                	<label style="font-family:Verdana;">开始时间:</label>
+	                	<input class="mini-textbox" style="width:250px" enabled="false" th:value="${evaluate.evaluate_start_time}"/>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td width="350">
+	                	<label style="font-family:Verdana;">主题编号:</label>
+	                    <input class="mini-textbox" style="width:250px;" enabled="false" th:value="${evaluate.topic_number}"/>
+	                </td>
+	                <td width="350">
+	                	<label style="font-family:Verdana;">结束时间:</label>
+	                    <input class="mini-textbox" style="width:250px" enabled="false" th:value="${evaluate.evaluate_end_time}"/>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td width="350">
+	                	<label style="font-family:Verdana;">主题类型:</label>
+	                    <input class="mini-textbox" name="topic_type" style="width:250px" enabled="false" th:value="${evaluate.topic_type}"/>
+	                </td>
+	                <td width="350">
+	                	<label style="font-family:Verdana;">评价标准:</label>
+	                    <input class="mini-hidden" name="standard_id" style="width:200px;" enabled="false" th:value="${evaluate.standard_id}"/>
+	                    <input class="mini-textbox" style="width:250px;" enabled="false" th:value="${evaluate.standard_name}"/>
+	                    <a id="standardDetail" onclick="onToStandardDetail()" style="color:blue;cursor:pointer;">标准详情</a>
+	                </td>
+	            </tr>
+	        </table>
+	    </div>
+
+		<div>
+	        <div id="datagrid_passiveInfoList" class="mini-datagrid" style="width:100%;height:460px;" sizeList="[10,20,50,100]" pageSize="20" 
+	        	url="/web/v1/topicEvaluateResult/getTopicPassiveInfoList" idField="institution_id">
+	            <div property="columns">
+	                <div type="indexcolumn" headerAlign="center" align="center">得分排名</div>
+	                <div field="institution_name" headerAlign="center" align="center">被评价方</div>
+	                <div field="real_score_avg" headerAlign="center" align="center">得分</div>
+	                <div field="institution_id" headerAlign="center" align="center">操作</div>
+	            </div>
+	        </div>
+	    </div>
+
+	    <div class="mini-toolbar bot_btn">
+		    <a class="mini-button closeBut" style="width:60px;" onclick="onClose()">关闭</a>
+	    </div>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var topic_id = [[${evaluate.topic_id}]];
+        /*]]>*/
+    </script>
+    <script type="text/javascript">
+        mini.parse();
+        var tree = mini.get("form_detail");
+        var grid = mini.get("datagrid_passiveInfoList");
+        var user_type = getCookie("jbqgsl_user_type");
+        var mobile_no = getCookie("jbqgsl_mobile_no");
+        
+        $(function(){
+        	var topic_type = mini.getByName("topic_type").getValue();
+        	if(topic_type == "1"){
+        		mini.getByName("topic_type").setValue("半年评价");
+        	}else{
+        		mini.getByName("topic_type").setValue("年度评价");
+        	}
+        	
+            grid.load ({"topic_id":topic_id, "user_type":user_type, "mobile_no":mobile_no});
+        });
+
+	    //展示标准详情
+	    function onToStandardDetail(){
+	      	var standard_id = mini.getByName("standard_id").getValue();
+	      	mini.open({
+	      		url: "/web/v1/topicEvaluate/toStandardDetail?standard_id="+standard_id,
+	      		title: "标准详情", 
+	      		width: 800,
+	      		height: 700,
+	      		ondestroy: function (action) {}
+	      	});
+	    }
+		
+        //绘制单元格时触发
+        grid.on("drawcell", function (e) {
+            var record = e.record;
+            var column = e.column;
+            if (column.field == "institution_id") {
+                var row = e.row;
+                e.cellStyle = "text-align:center";
+                var html = '<a href="javascript:details(\'' + record.institution_id + '\')"  style="text-decoration:none;">详情</a>&nbsp;&nbsp;';
+                e.cellHtml = html;
+            }
+        });
+		
+        //查看详情
+        function details(institution_id){
+	      	mini.open({
+	      		url: "/web/v1/topicEvaluateResult/getTopicEvaluateDetailsList?institution_id="+institution_id+"&topic_id="+topic_id+"&page_type=evaluate_result",
+	      		title: "被评价方得分详情列表", 
+	      		width: 800,
+	      		height: 650,
+	      		ondestroy: function (action) {}
+	      	});
+        }
+
+      	//关闭
+      	function onClose() {
+        	CloseWindow("cancel");
+      	}
+    </script>
+</body>
+</html>

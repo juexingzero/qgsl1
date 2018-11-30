@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.TopicEvaluateResultMapper">
+    <!-- 获取主题评价列表 -->
+    <select id="getTopicEvaluateResultList" resultType="com.manhui.gsl.jbqgsl.model.TopicEvaluate">
+    	SELECT
+			topic.*
+		FROM
+			topic_evaluate topic
+		WHERE
+			1 = 1
+        <if test="topic_type != null and topic_type != ''">
+            AND topic.topic_type = #{topic_type}
+        </if>
+        <if test="topic_name != null and topic_name != ''">
+            AND topic.topic_name LIKE CONCAT('%',#{topic_name},'%')
+        </if>
+        <if test="evaluate_state != null and evaluate_state != ''">
+            AND topic.evaluate_state = #{evaluate_state}
+        </if>
+        <if test="evaluate_start_time != null and evaluate_start_time != ''">
+            AND topic.evaluate_start_time &gt; #{evaluate_start_time}
+        </if>
+        <if test="evaluate_end_time != null and evaluate_end_time != ''">
+            AND topic.evaluate_end_time &lt;= #{evaluate_end_time}
+        </if>
+		AND topic.del_flag = '0'
+		ORDER BY
+			topic.create_time DESC
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!-- 获取主题评价总数 -->
+    <select id="getTopicEvaluateResultTotal" resultType="int">
+        SELECT
+			COUNT(*)
+		FROM
+			(
+				SELECT
+					topic.*
+				FROM
+					topic_evaluate topic
+				WHERE
+					1 = 1
+		        <if test="topic_type != null and topic_type != ''">
+		            AND topic.topic_type = #{topic_type}
+		        </if>
+		        <if test="topic_name != null and topic_name != ''">
+		            AND topic.topic_name LIKE CONCAT('%',#{topic_name},'%')
+		        </if>
+		        <if test="evaluate_state != null and evaluate_state != ''">
+		            AND topic.evaluate_state = #{evaluate_state}
+		        </if>
+		        <if test="evaluate_start_time != null and evaluate_start_time != ''">
+		            AND topic.evaluate_start_time &gt; #{evaluate_start_time}
+		        </if>
+		        <if test="evaluate_end_time != null and evaluate_end_time != ''">
+		            AND topic.evaluate_end_time &lt;= #{evaluate_end_time}
+		        </if>
+				AND topic.del_flag = '0'
+			) t
+    </select>
+    
+    <!-- 获取跟被评价方相关的列表通过联系人电话 -->
+    <select id="getPassivesByLinkmanPhone" resultType="string">
+        SELECT
+			GROUP_CONCAT(
+				tpi.topic_id SEPARATOR ','
+			) passives
+		FROM
+			topic_passive_info tpi
+		WHERE
+			1 = 1
+            AND tpi.institution_linkman_phone = #{mobile_no}
+    </select>
+    
+    <!-- 根据主题id获取对应的被评价方名称集合 -->
+    <select id="getPassivesByTopicId" resultType="string">
+        SELECT
+			GROUP_CONCAT( tp.institution_name SEPARATOR '，' ) passives 
+		FROM
+			topic_passive_info tp 
+		WHERE
+			1 = 1
+            AND tp.topic_id = #{topic_id}
+    </select>
+    
+    <!-- 根据主题id获取对应的评价方名称集合 -->
+    <select id="getActivesByTopicId" resultType="string">
+        SELECT
+			GROUP_CONCAT( ta.institution_name SEPARATOR '，' ) actives 
+		FROM
+			topic_active_info ta  
+		WHERE
+			1 = 1
+            AND ta.topic_id = #{topic_id}
+    </select>
+
+	<!--根据topic_id 查询主题数据 -->
+	<select id="getTopicEvaluateById" resultType="Map">
+		SELECT
+			te.*, tes.standard_id, tes.standard_name
+		FROM
+			topic_evaluate te
+		LEFT JOIN topic_evaluate_standard tes ON te.topic_id = tes.topic_id
+		WHERE
+			1 = 1
+		AND te.topic_id = #{topic_id}
+	</select>
+
+	<!--根据topic_id 查询被评价单位-->
+	<select id="getTopicPassiveInfoListTopic_id" parameterType="com.manhui.gsl.jbqgsl.model.TopicPassiveInfo"
+			resultType="com.manhui.gsl.jbqgsl.model.TopicPassiveInfo">
+		SELECT topic.* FROM topic_passive_info topic
+		WHERE topic.topic_id = #{topic_id}
+		  <if test="institution_id != null and institution_id != ''">
+			  and topic.institution_id = #{institution_id}
+		  </if>
+		 order by real_score_avg desc
+        <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	</select>
+
+	<!--根据主题id、机构id 查询数据-->
+	<select id="getTopicPassiveInfoByTopicInstitutionId" resultType="com.manhui.gsl.jbqgsl.model.TopicPassiveInfo">
+		SELECT topic.* FROM topic_passive_info topic
+		WHERE 1=1
+		  <if test="topic_id != null and topic_id != ''">
+			  and topic.topic_id = #{topic_id}
+		  </if>
+		  <if test="institution_id != null and institution_id != ''">
+			  and topic.institution_id = #{institution_id}
+		  </if>
+	</select>
+
+	<!--根据主题id查询 被评价方总数-->
+	<select id="getTopicPassiveInfoTotalByTopic_id" parameterType="com.manhui.gsl.jbqgsl.model.TopicPassiveInfo" resultType="int">
+        SELECT
+			COUNT(*)
+		FROM
+			(
+				SELECT topic.* FROM topic_passive_info topic
+				WHERE topic.topic_id = #{topic_id}
+				  <if test="institution_id != null and institution_id != ''">
+					  and topic.institution_id = #{institution_id}
+				  </if>
+				 order by real_score_avg desc
+			) t
+	</select>
+</mapper>

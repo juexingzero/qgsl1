@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>意见反馈展示页面</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+		body .mini-grid-rows-view {overflow-x: hidden;}
+	</style>
+</head>
+
+<body>
+	<div id="searchForm" style="margin-top:10px;margin-bottom:1px;">
+	    <input name="is_answer" class="mini-textbox" visible="false"/>
+		<div id="is_answer_tabs" class="mini-tabs" style="margin-top:10px;width:100%;" onactivechanged="changeTabs">
+		    <div id="evaluate_state0" class="mini-tabs" title="未回复"></div>
+		    <div id="evaluate_state1" class="mini-tabs" title="已回复"></div>
+		</div>
+	</div>
+	
+	<div id="mini-fit" class="mini-fit">
+		<div id="datagrid_userSuggestList" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[10,20,50,100]" pageSize="20"
+			 url="/web/v1/userSuggest/getUserSuggestList" idField="id" multiSelect="true">
+	        <div property="columns">
+	        	 <div type="indexcolumn" width="50px" headerAlign="center" align="center" >序号</div>
+	             <div field="content" headerAlign="center">反馈内容</div>
+	             <div field="user_name" headerAlign="center" align="center" >意见反馈人</div>
+	             <div field="create_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm:ss">反馈时间</div>
+	             <div field="answer_man_name" headerAlign="center" align="center" visible="false" >意见回复人</div>
+	             <div field="answer_time" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm:ss" visible="false">意见回复时间</div>
+	             <div headerAlign="center" width="10%" align="center" renderer="onConvertOperation">操作</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/userSuggest/userSuggestList.js"></script>
+</body>
+</html>

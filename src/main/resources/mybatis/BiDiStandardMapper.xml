@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.BiDiStandardMapper">
+	    <!-- 评价标准总数 -->
+    <select id="queryEvaluateCount" resultType="int">
+        SELECT COUNT(*) FROM evaluate_standard
+        where del_flag = 0
+        <if test="standard_type !=null and standard_type !=''">
+       		and standard_type = #{standard_type}
+       	</if>
+       	<if test="is_effect !=null and is_effect !=''">
+       		and is_effect = #{is_effect}
+       	</if>
+    </select>
+    <!-- 评价 -->
+    <select id="queryEvaluate" resultType="com.manhui.gsl.jbqgsl.model.EvaluateStandard">
+        SELECT * from evaluate_standard 
+        where del_flag = 0
+        	<if test="standard_type !=null and standard_type !=''">
+        		and standard_type = #{standard_type}
+        	</if>
+        	<if test="is_effect !=null and is_effect !=''">
+        		and is_effect = #{is_effect}
+        	</if>
+        order by create_time
+          <if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+        
+    </select>
+	<!--根据标准分类 标准名称 进行条件查询  -->
+	<select id="queryEvaluateByCondition" resultType="Map">
+		select
+			ea.standard_id,ea.standard_name,ea.standard_type,
+			ea.standard_belonged,ea.standard_describe,ea.standard_plan_score,
+			ea.order_no,ea.del_flag,ea.create_time,ea.update_time,
+			ed.detail_id,ed.standard_id,ed.detail_name,
+			ed.detail_plan_score,detail_level,p_detail_id,ed.create_time,ed.update_time
+		from
+			evaluate_standard ea
+		left join
+			evaluate_detail ed
+		on
+			ea.standard_id = ed.standard_id
+		where ea.del_flag = '0'
+			<if test="standard_type !=null and standard_type !=''">
+				and ea.standard_type = #{standard_type}
+			</if>
+			<if test="standard_name !=null and standard_name !=''">
+				and ea.standard_name like '%' #{standard_name} '%'
+			</if>
+			<if test="standard_id !=null and standard_id !=''">
+				and ea.standard_id = #{standard_id}
+			</if>
+			<if test="standard_belonged !=null and standard_belonged !=''">
+				and ea.standard_belonged = #{standard_belonged}
+			</if>
+	</select>
+	<update id="deleteEvaluateStandards" parameterType="java.lang.String">
+		update evaluate_standard set
+		del_flag = '1' where standard_id = #{standard_id}
+	</update>
+	
+	<insert id="saveEvaluateStandards" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateStandard">
+		insert into evaluate_standard 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			standard_id,
+			standard_name,
+			standard_type,
+			standard_belonged,
+			<if test="standard_describe != null">standard_describe,</if>
+			standard_plan_score,
+			<if test="order_no != null">order_no,</if>
+			<if test="del_flag != null">del_flag,</if>
+			<if test="create_time != null">create_time,</if>
+			<if test="update_time != null">update_time,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			#{standard_id},
+			#{standard_name},
+			#{standard_type},
+			#{standard_belonged},
+			<if test="standard_describe != null">#{standard_describe},</if>
+			#{standard_plan_score},
+			<if test="order_no != null">#{order_no},</if>
+			<if test="del_flag != null">#{del_flag},</if>
+			<if test="create_time != null">#{create_time},</if>
+			<if test="update_time != null">#{update_time}</if>
+		</trim>
+	</insert>
+	
+	<select id="showEvaluateStandard" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.EvaluateStandard">
+		select * from evaluate_standard where del_flag = 0 and standard_id = #{standard_id}
+	</select>
+	
+	<update id="updateEvaluateStandards" parameterType="com.manhui.gsl.jbqgsl.model.EvaluateStandard">
+		update evaluate_standard
+		<set>
+			standard_name = #{standard_name},
+			standard_type = #{standard_type},
+			<if test="standard_belonged != null">standard_belonged = #{standard_belonged},</if>
+			<if test="standard_describe != null">standard_describe = #{standard_describe},</if>
+			standard_plan_score = #{standard_plan_score},
+			<if test="order_no != null">order_no = #{order_no},</if>
+			<if test="del_flag != null">del_flag = #{del_flag},</if>
+			<if test="create_time != null">create_time = #{create_time},</if>
+			<if test="update_time != null">update_time = #{update_time},</if>
+		</set>
+		where standard_id = #{standard_id}
+	</update>
+	
+	<update id="vaildStandard" parameterType="java.lang.String">
+		update evaluate_standard
+		<set>
+			is_effect = 1
+		</set>
+	where standard_id = #{standard_id}
+	</update>
+	
+	<update id="invaildStandard" parameterType="java.lang.String">
+		update evaluate_standard
+		<set>
+			is_effect = 0
+		</set>
+	where standard_id = #{standard_id}
+	</update>
+	
+	<select id="queryEvaluateStandardByBelonged" resultType="com.manhui.gsl.jbqgsl.model.EvaluateStandard">
+		select * from evaluate_standard where standard_belonged = '2' AND del_flag = 0
+	</select>
+</mapper>

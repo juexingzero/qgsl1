@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.ry.MemberRyDpsfMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyDpsf">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="RYBM" jdbcType="VARCHAR" property="rybm" />
+        <result column="DPSF" jdbcType="VARCHAR" property="dpsf" />
+        <result column="JRDPRQ" jdbcType="VARCHAR" property="jrdprq" />
+        <result column="DPPJ" jdbcType="VARCHAR" property="dppj" />
+        <result column="RYID" jdbcType="VARCHAR" property="ryid" />
+    </resultMap>
+
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyDpsf">
+       insert into member_ry_dpsf(ID,RYBM,DPSF,JRDPRQ,DPPJ,RYID) values (#{id},#{rybm},#{dpsf},#{jrdprq},#{dppj},#{ryid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyDpsf">
+        update member_ry_dpsf
+        <set>
+            <if test="rybm!=null">RYBM = #{rybm},</if>
+            <if test="dpsf!=null">DPSF = #{dpsf},</if>
+            <if test="jrdprq!=null">JRDPRQ = #{jrdprq},</if>
+            <if test="dppj!=null">DPPJ = #{dppj},</if>
+            <if test="ryid!=null and ryid !='' ">RYID = #{ryid},</if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!--根据人员表id 查询数据-->
+    <select id="appQueryMapByRyid" parameterType="String" resultType="HashMap">
+          select id,rybm,dpsf,jrdprq,dppj from member_ry_dpsf where RYID = #{ryid}
+    </select>
+
+    <!--根据人员基本信息表id 修改数据-->
+    <update id="updateByRyid" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyDpsf">
+        update member_ry_dpsf
+        <set>
+            <if test="rybm!=null">RYBM = #{rybm},</if>
+            <if test="dpsf!=null ">DPSF = #{dpsf},</if>
+            <if test="jrdprq!=null ">JRDPRQ = #{jrdprq},</if>
+            <if test="dppj!=null ">DPPJ = #{dppj},</if>
+            <if test="ryid!=null and ryid != ''">RYID = #{ryid},</if>
+        </set>
+        where RYID = #{ryid}
+    </update>
+</mapper>

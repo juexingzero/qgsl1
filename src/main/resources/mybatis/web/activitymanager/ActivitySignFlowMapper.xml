@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.activity.ActivitySignFlowMapper">
+
+	<select id="queryPersonNum" resultType="int">
+		select count(*) from activity_sign_flow
+		where
+		activity_id=#{activity_id}
+	</select>
+	
+	<select id="getActivitySignLists" resultType="com.manhui.gsl.jbqgsl.model.activitymanager.ActivitySignFlow">
+    	SELECT
+			*
+		FROM
+			activity_sign_flow
+		WHERE
+			activity_id=#{activity_id}
+			
+ 		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	  </select>
+	    
+	  <select id="queryActivitySignTotal" resultType="int">
+    	SELECT
+			count(*)
+		FROM
+			activity_sign_flow
+		WHERE 1=1
+		<if test="activity_id != null and activity_id != ''">
+			and activity_id=#{activity_id}		
+		</if>
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	  </select>
+</mapper>

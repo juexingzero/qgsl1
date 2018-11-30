@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppUserMapper">
+	<!-- 个人用户注册 -->
+	<insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.AppUser">
+		INSERT INTO 
+		app_user_info
+		(
+			user_id,
+			login_password,
+			user_phone,
+			login_username,
+			user_name,
+			del_flag,
+			login_num,
+			create_time
+		)
+		VALUES
+		(
+			#{user_id},
+			#{login_password},
+			#{user_phone},
+			#{login_username},
+			#{user_name},
+			#{del_flag},
+			#{login_num},
+			#{create_time}
+		)
+	</insert>
+	
+	<insert id="saveUser" parameterType="com.manhui.gsl.jbqgsl.model.AppUser">
+		INSERT INTO 
+		app_user_info
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		user_id,
+		<if test="institution_id != null">institution_id,</if>
+		login_username,
+		login_password,
+		user_name,
+		user_sex,
+		user_phone,
+		<if test="user_email != null">user_email,</if>
+		<if test="head_img != null">head_img,</if>
+		<if test="qr_code_img != null">qr_code_img,</if>
+		user_type,
+		is_public,
+		<if test="login_num != null">login_num,</if>
+		<if test="last_time != null">last_time,</if>
+		<if test="create_time != null">create_time,</if>
+		<if test="update_time != null">update_time,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		#{user_id},
+		<if test="institution_id != null">#{institution_id},</if>
+		#{login_username},
+		#{login_password},
+		#{user_name},
+		#{user_sex},
+		#{user_phone},
+		<if test="user_email != null">#{user_email},</if>
+		<if test="head_img != null">#{head_img},</if>
+		<if test="qr_code_img != null">#{qr_code_img},</if>
+		#{user_type},
+		#{is_public},
+		<if test="login_num != null">#{login_num},</if>
+		<if test="last_time != null">#{last_time},</if>
+		<if test="create_time != null">#{create_time},</if>
+		<if test="update_time != null">#{update_time},</if>
+		</trim>
+	</insert>
+
+	<select id="getByUser" resultType="HashMap" parameterType="com.manhui.gsl.jbqgsl.model.AppUser">
+		SELECT
+			login_num,user_id,institution_id,login_username,login_password,
+			user_name,user_sex,user_phone,user_email,
+			head_img,qr_code_img,user_type,is_public,
+			last_time,create_time,update_time,del_flag
+			FROM
+			app_user_info
+		<where> 
+			<if test="user_phone !=null and user_phone !=''">
+				and  user_phone = #{user_phone}
+			</if>
+			<if test="user_name !=null and user_name !=''">
+				and  user_name = #{user_name}
+			</if>
+			<if test="login_password !=null and login_password !=''">
+				and  login_password = #{login_password}
+			</if>
+			<if test="user_id !=null and user_id !=''">
+				and  user_id = #{user_id}
+			</if>
+		</where>
+	</select>
+
+	<select id="getUserPhonesByUser" resultType="int" parameterType="com.manhui.gsl.jbqgsl.model.AppUser">
+		SELECT
+			count(user_phone)
+		FROM
+			app_user_info
+		WHERE
+			user_phone = #{user_phone}
+	</select>
+	<update id="updateUserPassWord" parameterType="com.manhui.gsl.jbqgsl.model.AppUser">
+		UPDATE
+			app_user_info
+		SET
+			login_password = #{login_password} ,
+			update_time=#{update_time}
+		where
+			user_phone = #{user_phone}
+	</update>
+	<update id="updateUserInfo" parameterType="com.manhui.gsl.jbqgsl.model.AppUser">
+		UPDATE
+			app_user_info
+		<set>
+			<if test="login_username!=null and login_username !='' ">login_username=#{login_username},</if>
+			<if test="login_password!=null and login_password !='' ">login_password=#{login_password},</if>
+			<if test="user_name!=null and user_name !='' ">user_name=#{user_name},</if>
+			<if test="user_sex!=null and user_sex !='' ">user_sex=#{user_sex},</if>
+			<if test="user_phone!=null and user_phone !='' ">user_phone=#{user_phone},</if>
+			<if test="user_email!=null and user_email !='' ">user_email=#{user_email},</if>
+			<if test="head_img!=null and head_img !='' ">head_img=#{head_img},</if>
+			<if test="qr_code_img!=null and qr_code_img!='' ">qr_code_img=#{qr_code_img},</if>
+			<if test="user_type!=null and user_type !='' ">user_type=#{user_type},</if>
+			<if test="is_public!=null and is_public !='' ">is_public=#{is_public},</if>
+			<if test="login_num !=null">login_num=#{login_num},</if>
+			<if test="last_time!=null and last_time !='' ">last_time=#{last_time},</if>
+			<if test="del_flag!=null and del_flag !='' ">del_flag=#{del_flag},</if>
+			<if test="create_time!=null and create_time !='' ">create_time=#{create_time},</if>
+			<if test="update_time!=null and update_time !='' ">update_time=#{update_time},</if>
+			<if test="phoneId!=null and phoneId !='' ">phoneId=#{phoneId},</if>
+		</set>
+		 <where>
+			<if test="user_phone !=null and user_phone !=''">
+				 and user_phone = #{user_phone} 
+			</if>
+			<if test="user_name !=null and user_name !=''">
+				or user_name = #{user_name} 
+			</if>
+			<if test="user_id !=null and user_id !=''">
+				or user_id = #{user_id} 
+			</if>
+			<if test="institution_id !=null and institution_id !=''">
+				or institution_id = #{institution_id} 
+			</if>
+		 
+		 </where>
+		
+	</update>
+	<!-- <update id="updateUserInfo" parameterType="com.manhui.gsl.jbqgsl.model.AppUser" >
+		UPDATE
+			app_user_info
+		set is_public =#{is_public} where user_id =#{user_id}
+		
+	</update> -->
+	<select id="queryAppUser" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.AppUser">
+		SELECT
+			user_id,
+			login_username,
+			user_name,
+			user_sex,
+			user_phone,
+			user_email,
+			head_img,
+			qr_code_img,
+			user_type,
+			is_public,
+			login_num,
+			last_time,
+			create_time,
+			update_time
+	    FROM
+		   app_user_info
+	    WHERE
+		   user_id = #{user_id}
+	</select>
+	<update id="updateUserHeadPhoto">
+		UPDATE 
+			app_user_info
+		SET 
+			head_img = #{head_img},qr_code_img=#{qr_code_img} 
+		WHERE
+			user_id = #{user_id}
+	</update>
+	
+	<select id="queryInstitutionHeadPhoto" resultType="com.manhui.gsl.jbqgsl.model.AppUser">
+		select 
+			head_img,institution_id 
+		 FROM 
+		 	app_user_info
+		<where>
+			<if test="passiveIdsList !=null and passiveIdsList.size()>0">
+				and institution_id in
+				<foreach collection="passiveIdsList" open="(" separator="," close=")" item="obj">
+					#{obj}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryUserInfo" resultType="com.manhui.gsl.jbqgsl.model.AppUser" parameterType="com.manhui.gsl.jbqgsl.model.ForthwithEvaluate">
+		select 
+			*
+		 FROM 
+		 	app_user_info
+		<where>
+			<if test="passive_id !=null and passive_id !=''">
+				institution_id = #{passive_id}
+			</if>
+		</where>
+	</select>
+	<select id="queryUser" resultType="com.manhui.gsl.jbqgsl.model.AppUser" >
+		select 
+			*
+		 FROM 
+		 	app_user_info
+		<where>
+			<if test="institution_id !=null and institution_id !=''">
+				institution_id = #{institution_id}
+			</if>
+		</where>
+	</select>
+	<select id="checkUserPhone" resultType="com.manhui.gsl.jbqgsl.model.AppUser" >
+		select 
+			*
+		 FROM 
+		 	app_user_info
+		<where>
+			<if test="institution_linkman_phone !=null and institution_linkman_phone !=''">
+				user_phone = #{institution_linkman_phone}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryUserAndInstitutionInfo" resultType="com.manhui.gsl.jbqgsl.model.AppUser" >
+		SELECT
+			u.user_name,
+			u.user_phone,
+			u.institution_id,
+			i.institution_name as institution_name
+		FROM
+			app_user_info u
+		LEFT JOIN institution_info i ON u.institution_id = i.institution_id
+		<where>
+			<if test="caller_id !=null and caller_id !=''">
+				user_id = #{caller_id}
+			</if>
+		</where>
+	</select>
+
+	<!--获得用户角色类型-->
+	<select id="getUserRoleType" parameterType="String" resultType="HashMap">
+		select b.RYJSLX_02,c.RYJSLX_01,e.RYJSLX_06,e.RYJSLX_07,f.RYJSLX_05,g.RYJSLX_04
+		from (select user_id from app_user_info
+				union all
+				select user_id from sys_user) a
+		left join (select 'RYJSLX_02' RYJSLX_02,createUserId  from member_join_manager <!--商会会员-->
+			where createUserId = #{userId} and state='HYSP-03' group by createUserId) b on b.createUserId = a.user_id
+		left join (select 'RYJSLX_01' RYJSLX_01,user_id from app_user_info <!--未认证用户-->
+			where user_id = #{userId} and user_type = '1' ) c
+			on c.user_id = a.user_id
+		left join (select 'RYJSLX_03' RYJSLX_03,RYBM from member_jg_shldbz  <!--商会联系人-->
+			where RYBM = #{userId}) d on d.RYBM = a.user_id
+		left join (select 'RYJSLX_06' RYJSLX_06,'RYJSLX_07' RYJSLX_07,user_id from app_user_info <!--区级部门 ， 街镇部门-->
+			where user_id = #{userId} and user_type = '2' ) e
+			on e.user_id = a.user_id
+		left join (select user.user_id,'RYJSLX_05' RYJSLX_05 from sys_dept dept left join sys_position position on dept.dept_id = position.dept_id
+			left join sys_user_position user_position on user_position.position_id = position.position_id
+			left join sys_user user on user.user_id = user_position.user_id
+			  where dept.dept_id = 'e0ad76ebc46f40b4a86189f20378aafb') f on f.user_id = a.user_id <!--工商联领导-->
+		left join (select user.user_id,'RYJSLX_04' RYJSLX_04 from sys_dept dept left join sys_position position on dept.dept_id = position.dept_id
+			left join sys_user_position user_position on user_position.position_id = position.position_id
+			left join sys_user user on user.user_id = user_position.user_id
+			where dept.dept_id != 'e0ad76ebc46f40b4a86189f20378aafb' and dept.p_dept_id = '01e4fbf57fde4e06bad1385eeb499624') g on f.user_id = a.user_id <!--工商联部室-->
+		where a.user_id = #{userId}
+	</select>
+</mapper>

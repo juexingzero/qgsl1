@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>不通过原因</title>
+    <script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+    <script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+    <link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .text-span{
+            width: 400px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            word-break:keep-all;
+            display:block;
+        }
+        .body_wrappper {
+            padding-bottom: 60px;
+        }
+        .content {
+            height: 100%;
+            overflow-y: auto;
+        }
+        .bot_btns_layer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align:right;
+            padding:10px;
+            border-top: solid 1px #e1e1e1;
+        }
+    </style>
+</head>
+<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+<body class="body_wrappper">
+    <div class="content">
+    <table border="0" cellpadding="1" cellspacing="2" style="border-collapse:separate; border-spacing:10px;">
+        <tr>
+         <td class="td1" style="width:150px;"><span style="color: red; margin-right:2px;"></span>不通过原因：</td>
+            <td style="width:200px">
+                <select id="noReason" name="noReason" class="mini-combobox" style="width:120px">
+                    <option value="1">内容不合法</option>
+                    <option value="2">信息敏感</option>
+                    <option value="3">其他</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    </div>
+    <div class="bot_btns_layer" id="isButton">
+        <a class="mini-button" onclick="onOk()" style="width:80px;margin-right:20px;">确定</a>
+        <a class="mini-button" onclick="CloseWindow('cancel')" style="width:80px;margin-right:20px;">取消</a>
+    </div>
+<script type="text/javascript">
+
+    mini.parse();
+    $(function(){
+    });
+    //同意
+    function onOk() {
+        CloseWindow("ok");
+    }
+    function getData() {
+        var data = mini.get("noReason").getText();
+        return data;
+    }
+</script>
+</body>
+</html>

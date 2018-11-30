@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>企业之声列表</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+</head>
+
+<body>
+	<div id="searchForm" style="margin-top:10px;margin-bottom:1px;">
+	    <input name="is_answer" class="mini-textbox" visible="false"/>
+	    <div style="margin:0;padding:0px;border-bottom:none;">
+			<table>
+				<tr>
+					<td>
+						<label style="font-family:Verdana;padding-left:5px;">人数：</label>
+						<input th:value="${people}" class="mini-textbox" width="200px" onenter="loadGridData" readonly="readonly"/>
+	                </td>
+				</tr>
+			</table>
+	    </div>
+	</div>
+	
+	<div id="mini-fit" class="mini-fit" >
+	    <div id="datagrid1_standardLibararyList" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[5,10,20,50]" pageSize="20"
+	         url="/web/v1/meetingManager/getVotePersonNumList" idField="standardLibraryList_id" multiSelect="true">
+	        <div property="columns">
+	            <div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div>
+	            <div field="group_name" headerAlign="center" align="center" >公司名称</div>
+	            <div field="person_name" headerAlign="center" align="center" >姓名</div>
+	            <div field="update_time" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm:ss" >投票时间</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" >
+		/*<![CDATA[*/
+    var meeting_id = "[[${meeting_id}]]";
+    var vote_options = "[[${vote_options}]]";
+    /*]]>*/
+    	mini.parse();
+	var datagrid = mini.get("datagrid1_standardLibararyList");
+	
+	$(function(){
+		loadGridData();
+	});
+	
+	function loadGridData(){
+	    var form = new mini.Form("#datagrid1_standardLibararyList");
+	    form.validate();
+	    if (form.isValid() == false){
+	        return;
+	    }
+	    var data = form.getData(true);
+	    var json = mini.encode(data);
+	    datagrid.load({meeting_id:meeting_id,vote_options:vote_options});
+	}
+	
+    </script>
+</body>
+</html>

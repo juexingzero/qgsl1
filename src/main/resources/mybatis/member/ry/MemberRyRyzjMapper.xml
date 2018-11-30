@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.ry.MemberRyRyzjMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyRyzj">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="RYBM" jdbcType="VARCHAR" property="rybm" />
+        <result column="RYZJLX" jdbcType="VARCHAR" property="ryzjlx" />
+        <result column="RYZJBM" jdbcType="VARCHAR" property="ryzjbm" />
+        <result column="ZJQFRQ" jdbcType="VARCHAR" property="zjqfrq" />
+        <result column="ZJYXQ" jdbcType="VARCHAR" property="zjyxq" />
+        <result column="ZJYXQSRQ" jdbcType="VARCHAR" property="zjyxqsrq" />
+        <result column="ZHYXJSRQ" jdbcType="VARCHAR" property="zhyxjsrq" />
+        <result column="ZJQFDD" jdbcType="VARCHAR" property="zjqfdd" />
+        <result column="SE" jdbcType="VARCHAR" property="se" />
+        <result column="SI" jdbcType="VARCHAR" property="si" />
+        <result column="XA" jdbcType="VARCHAR" property="xa" />
+        <result column="ZJZT" jdbcType="VARCHAR" property="zjzt" />
+        <result column="RYID" jdbcType="VARCHAR" property="ryid" />
+        <result column="fileUrl" jdbcType="VARCHAR" property="fileUrl" />
+        <result column="PAN" jdbcType="VARCHAR" property="pan" />
+        <result column="STATE" jdbcType="VARCHAR" property="state" />
+    </resultMap>
+
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyRyzj">
+       insert into member_ry_ryzj(ID,RYBM,RYZJLX,RYZJBM,ZJQFRQ,ZJYXQ,ZJYXQSRQ,ZHYXJSRQ,ZJQFDD,SE,SI,XA,ZJZT,RYID,fileUrl,PAN,STATE)
+       values
+        (#{id},#{rybm},#{ryzjlx},#{ryzjbm},#{zjqfrq},#{zjyxq},#{zjyxqsrq},#{zhyxjsrq},#{zjqfdd},#{se},#{si},#{xa},#{zjzt},#{ryid},#{fileUrl},#{pan},#{state})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyRyzj">
+        update member_ry_ryzj
+        <set>
+            <if test="rybm!=null">RYBM = #{rybm},</if>
+            <if test="ryzjlx!=null">RYZJLX = #{ryzjlx},</if>
+            <if test="ryzjbm!=null">RYZJBM = #{ryzjbm},</if>
+            <if test="zjqfrq!=null">ZJQFRQ = #{zjqfrq},</if>
+            <if test="zjyxq!=null">ZJYXQ = #{zjyxq},</if>
+            <if test="zjyxqsrq!=null">ZJYXQSRQ = #{zjyxqsrq},</if>
+            <if test="zhyxjsrq!=null">ZHYXJSRQ = #{zhyxjsrq},</if>
+            <if test="zjqfdd!=null">ZJQFDD = #{zjqfdd},</if>
+            <if test="se!=null">SE = #{se},</if>
+            <if test="si!=null">SI = #{si},</if>
+            <if test="xa!=null">XA = #{xa},</if>
+            <if test="zjzt!=null">ZJZT = #{zjzt},</if>
+            <if test="ryid!=null">RYID = #{ryid},</if>
+            <if test="fileUrl!=null">fileUrl = #{fileUrl},</if>
+            <if test="pan!=null">PAN = #{pan},</if>
+            <if test="state!=null">STATE = #{state},</if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!--通过人员信息表id 查询数据 -->
+    <select id="appQueryMapByRyid" parameterType="String" resultType="HashMap">
+        select id,ryzjlx,fileUrl,pan,state from member_ry_ryzj where RYID = #{ryid} and state = 'SFYX-01'
+    </select>
+
+    <!--根据人员信息基本表id 修改数据-->
+    <update id="updateByRyid" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyRyzj">
+        update member_ry_ryzj
+        <set>
+            <if test="rybm!=null">RYBM = #{rybm},</if>
+            <if test="ryzjlx!=null">RYZJLX = #{ryzjlx},</if>
+            <if test="ryzjbm!=null">RYZJBM = #{ryzjbm},</if>
+            <if test="zjqfrq!=null">ZJQFRQ = #{zjqfrq},</if>
+            <if test="zjyxq!=null">ZJYXQ = #{zjyxq},</if>
+            <if test="zjyxqsrq!=null">ZJYXQSRQ = #{zjyxqsrq},</if>
+            <if test="zhyxjsrq!=null">ZHYXJSRQ = #{zhyxjsrq},</if>
+            <if test="zjqfdd!=null">ZJQFDD = #{zjqfdd},</if>
+            <if test="se!=null">SE = #{se},</if>
+            <if test="si!=null">SI = #{si},</if>
+            <if test="xa!=null">XA = #{xa},</if>
+            <if test="zjzt!=null">ZJZT = #{zjzt},</if>
+            <if test="fileUrl!=null">fileUrl = #{fileUrl},</if>
+            <if test="pan!=null">PAN = #{pan},</if>
+            <if test="state!=null">STATE = #{state},</if>
+            <if test="ryid!=null and ryid != ''">RYID = #{ryid},</if>
+        </set>
+        where RYID = #{ryid}
+    </update>
+</mapper>

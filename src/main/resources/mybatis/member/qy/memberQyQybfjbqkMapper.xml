@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyQybfjbqkMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQybfjbqk">
+        <id column="BFZJ" jdbcType="VARCHAR" property="bfzj" />
+        <result column="PKCMC" jdbcType="VARCHAR" property="pkcmc" />
+        <result column="CZRKSL" jdbcType="VARCHAR" property="czrksl" />
+        <result column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="BFJDLKPKZRKS" jdbcType="VARCHAR" property="bfjdlkpkzrks" />
+        <result column="BFJDLKPK_ZHS" jdbcType="VARCHAR" property="bfjdlkpk_zhs" />
+        <result column="CSSXZQH" jdbcType="VARCHAR" property="cssxzqh" />
+        <result column="KSSJ" jdbcType="VARCHAR" property="kssj" />
+        <result column="QYID" jdbcType="VARCHAR" property="qyid" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQybfjbqk">
+       insert into member_qy_qybfjbqk(BFZJ,PKCMC,CZRKSL,JBXXZJ,BFJDLKPKZRKS,BFJDLKPK_ZHS,CSSXZQH,KSSJ,QYID)
+       values
+       (#{bfzj},#{pkcmc},#{czrksl},#{jbxxzj},#{bfjdlkpkzrks},#{bfjdlkpk_zhs},#{cssxzqh},#{kssj},#{qyid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQybfjbqk">
+        update member_qy_qybfjbqk
+        <set>
+            <if test="bfzj!=null and bfzj != ''">BFZJ=#{bfzj},</if>
+            <if test="pkcmc!=null">PKCMC=#{pkcmc},</if>
+            <if test="czrksl!=null">CZRKSL=#{czrksl},</if>
+            <if test="jbxxzj!=null">JBXXZJ=#{jbxxzj},</if>
+            <if test="bfjdlkpkzrks!=null">BFJDLKPKZRKS=#{bfjdlkpkzrks},</if>
+            <if test="bfjdlkpk_zhs!=null">BFJDLKPK_ZHS=#{bfjdlkpk_zhs},</if>
+            <if test="cssxzqh!=null">CSSXZQH=#{cssxzqh},</if>
+            <if test="kssj!=null">KSSJ=#{kssj},</if>
+            <if test="qyid!=null">QYID=#{qyid},</if>
+        </set>
+        where BFZJ = #{bfzj}
+    </update>
+
+</mapper>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+	<title>个人会员-新增、编辑、查看</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+		.td1{
+			text-align: right;
+	    	vertical-align: middle;
+		}
+		.cus_table {border-spacing: 0;}
+		.cus_table td,.cus_table th {border-bottom: solid 1px #ccc;border-right: solid 1px #ccc;}
+		.cus_table td {padding: 5px 0;}
+		.cus_table th {background: #EEE;}
+	</style>
+</head>
+
+<body>
+	<div id="form_personDetail" class="from" style="overflow-y:hidden">
+		<div style="display:none;">
+			<input class="mini-hidden" name="joinId" th:value="${joinId}">
+			<input class="mini-hidden" name="app_user_id" th:value="${app_user_id}">
+			<input class="mini-hidden" name="app_user_name" th:value="${app_user_name}">
+			<input class="mini-hidden" name="member_id" th:value="${member_id}">
+			<input class="mini-hidden" name="member_type" th:value="${member_type}">
+			<input class="mini-hidden" name="approve_status" th:value="${approve_status}">
+			<input class="mini-hidden" name="approve_fail_info" th:value="${approve_fail_info}">
+			<input class="mini-hidden" name="approve_fail_reason" th:value="${approve_fail_reason}">
+			<input class="mini-hidden" name="operator_type" th:value="${operator_type}">
+			<input class="mini-hidden" name="requestUrl" th:value="${requestUrl}">
+		</div>
+		
+	    <div id="div_approve_btn" style="margin:5px 0px 5px 0px;display:none;" >
+			<table>
+				<tr>
+					<td>
+						<a class="mini-button" onclick="onApprove('HYSP-02')">审批通过</a>
+				    	<a class="cus_btn_del" onclick="onApprove('HYSP-03')">审批拒绝</a>
+					</td>
+				</tr>
+			</table>
+	    </div>
+		
+	    <div id="div_approve_content" style="margin:5px 0px 5px 0px;display:none;">
+		    <table class="cus_table" style="border:1px solid #ccc;">
+		    	<tbody>
+		    		<tr style="height:50px;">
+		    			<td style="width:100px;">审批拒绝说明：</td>
+		    			<td>
+		    				<span id="span_approve_fail_info" style="margin-left:10px;"></span><br/>
+		    				<span id="span_approve_fail_reason" style="margin-left:10px;"></span>
+		    			</td>
+		    		</tr>
+		    	</tbody>
+		    </table>
+		</div>
+		
+		<div id="div_tab" class="mini-tabs" style="margin-top:5px;" onactivechanged="onChangeTabs">
+		    <div id="tab1" class="mini-tabs" title="基本信息"></div>
+		    <div id="tab2" class="mini-tabs" title="商会职务"></div>
+		    <div id="tab3" class="mini-tabs" title="主要荣誉"></div>
+		</div>
+		
+		<!-- 基本信息 -->
+		<div id="div_jbxx" style="height:590px; overflow:auto">
+		    <table align="center" cellpadding="2" >
+		        <tr>
+		            <td class="td1" style="width:140px;">姓名：</td>
+		            <td><input class="mini-textbox" name="xm" style="width:200px;" th:value="${dataMap.base.data.xm}"/></td>
+		      	    <td class="td1" style="width:140px;">性别：</td>
+		      	    <td><input class="mini-combobox" name="xb" style="width:200px;" th:value="${dataMap.base.data.xb}" data="[{id:'XB-01', text:'男'},{id:'XB-02', text:'女'}]" /></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">出生日期：</td>
+		            <td><input class="mini-datepicker" name="csrq" style="width:200px" th:value="${dataMap.base.data.csrq}" format="yyyy-MM-dd" allowInput="false" showTime="false"/></td>
+		          	<td class="td1">籍贯：</td>
+		            <td><input class="mini-combobox" name="jg" style="width:200px;" th:value="${dataMap.base.data.jg}" textField="param_value" valueField="param_key" value="ZJLX-11" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.0"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">民族：</td>
+		            <td><input class="mini-combobox" name="mz" style="width:200px;" th:value="${dataMap.base.data.mz}" textField="param_value" valueField="param_key" value="MZ-01" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.5"/></td>
+		          	<td class="td1">党派身份：</td>
+		            <td><input class="mini-textbox" name="dpsf" style="width:200px;" th:value="${dataMap.base.data.dpsf}"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">婚姻状况：</td>
+		            <td><input class="mini-combobox" name="hyzk" style="width:200px;" th:value="${dataMap.base.data.hyzk}" textField="param_value" valueField="param_key" value="HY—01" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.6"/></td>
+		          	<td class="td1">职称：</td>
+		            <td><input class="mini-combobox" name="zc" style="width:200px;" th:value="${dataMap.base.data.zc}" textField="param_value" valueField="param_key" value="ZC-01" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.14"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">职业：</td>
+		            <td><input class="mini-textbox" name="zy" style="width:200px;" th:value="${dataMap.base.data.zy}"/></td>
+		          	<td class="td1">学历名称：</td>
+		            <td><input class="mini-combobox" name="xlmc" style="width:200px;" th:value="${dataMap.base.data.xlmc}" textField="param_value" valueField="param_key" value="XL-01" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.9"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">学校（单位）名称：</td>
+		            <td><input class="mini-textbox" name="xxmc" style="width:200px;" th:value="${dataMap.base.data.xxmc}"/></td>
+		          	<td class="td1">人员证件类型：</td>
+		            <td><input class="mini-combobox" name="ryzjlx" style="width:200px;" th:value="${dataMap.base.data.ryzjlx}" textField="param_value" valueField="param_key" value="ZJLX-11" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.10"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">人员证件编码：</td>
+		            <td><input class="mini-textbox" name="ryzjbm" style="width:200px;" th:value="${dataMap.base.data.ryzjbm}"/></td>
+		          	<td class="td1">手机号码：</td>
+		            <td><input class="mini-textbox" name="yddh" style="width:200px;" th:value="${dataMap.base.data.yddh}"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">座机：</td>
+		            <td><input class="mini-textbox" name="gddh" style="width:200px;" th:value="${dataMap.base.data.gddh}"/></td>
+		          	<td class="td1">邮箱：</td>
+		            <td><input class="mini-textbox" name="dzyx" style="width:200px;" th:value="${dataMap.base.data.dzyx}"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">公司名称：</td>
+		            <td><input class="mini-textbox" name="gsmc" style="width:200px;" th:value="${dataMap.base.data.gsmc}"/></td>
+		          	<td class="td1">公司职务：</td>
+		            <td><input class="mini-textbox" name="gszw" style="width:200px;" th:value="${dataMap.base.data.gszw}"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">人大职务：</td>
+		            <td><input class="mini-combobox" name="rdzw" style="width:200px;" th:value="${dataMap.base.data.rdzw}" textField="param_value" valueField="param_key" value="RDZW-040101" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.26"/></td>
+		          	<td class="td1">政协职务：</td>
+		            <td><input class="mini-combobox" name="zxzw" style="width:200px;" th:value="${dataMap.base.data.zxzw}" textField="param_value" valueField="param_key" value="ZXZW-020102" url="/common/v1/sysParam/getSysParamList?p_param_id=4.1.25"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">团体、协会名称：</td>
+		            <td><input class="mini-textbox" name="ttxhmc" style="width:200px;" th:value="${dataMap.base.data.ttxhmc}"/></td>
+		          	<td class="td1">团体、协会职务：</td>
+		            <td><input class="mini-textbox" name="ttxhzw" style="width:200px;" th:value="${dataMap.base.data.ttxhzw}"/></td>
+		        </tr>
+		        <tr>
+		      	    <td class="td1">人员分类：</td>
+		            <td><input class="mini-textbox" name="ryfl" style="width:200px;" value="非公有制经济代表人士"/></td>
+		          	<td class="td1"></td>
+		            <td></td>
+		        </tr>
+		        <tr>
+		         	<td class="td1">身份证正面复印件：</td>
+		         	<td><img id="ZJZPLX-0201" style="width:250px;height:140px;" src=""/></td>
+		         	<td class="td1">身份证反面复印件：</td>
+		         	<td><img id="ZJZPLX-0202" style="width:250px;height:140px;" src=""/></td>
+		        </tr>
+		        <tr>
+		         	<td class="td1">登记照片：</td>
+		         	<td><img id="ZJZPLX-01" style="width:250px;height:140px;" src=""/></td>
+		         	<td class="td1">最高学历学位复印件：</td>
+		         	<td><img id="ZJZPLX-03" style="width:250px;height:140px;" src=""/></td>
+		        </tr>
+		    </table>
+		</div>
+		
+		<!-- 商会职务 -->
+		<div id="div_shzw" style="display:none;">
+		    <table class="cus_table" cellpadding="2" >
+		    	<thead align="center">
+			        <tr>
+		    			<th>序号</th>
+		    			<th>商会名称</th>
+		    			<th>商会职务</th>
+			        </tr>
+		    	</thead>
+		    	<tbody align="center"></tbody>
+		    </table>
+		</div>
+	    
+		<!-- 主要荣誉 -->
+		<div id="div_zyry" style="display:none;">
+		    <table class="cus_table" cellpadding="2" >
+		    	<thead align="center">
+		    		<tr align="center">
+		    			<th>序号</th>
+		    			<th>荣誉类别</th>
+		    			<th>操作</th>
+		    		<tr>
+		    	</thead>
+		    	<tbody align="center"></tbody>
+		    </table>
+		</div>
+	    
+	    <div class="mini-toolbar bot_btn">
+			<a class="mini-button cancel" onclick="onClose()">关闭</a>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/memberManager/memberPersonDetail.js"></script>
+</body>
+</html>

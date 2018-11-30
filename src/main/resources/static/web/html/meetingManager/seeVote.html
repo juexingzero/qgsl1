@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>企业之声列表</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+</head>
+
+<body>
+	<div id="searchForm" style="margin-top:10px;margin-bottom:1px;">
+	    <input name="is_answer" class="mini-textbox" visible="false"/>
+	    <div style="margin:0;padding:0px;border-bottom:none;">
+	    <input  class="mini-hidden" name="meeting_id" th:value="${mv.meeting_id}"/>
+			<table>
+				<tr>
+					<td>
+						<label style="font-family:Verdana;padding-left:5px;">会议主题：</label>
+						<!-- <input name="meeting_theme" class="mini-textbox" width="200px" onenter="loadGridData" readonly="readonly"/> -->
+						 <span id="meeting_theme"></span>
+	                </td>
+				</tr>
+				<tr>
+					<td>
+					<label style="font-family:Verdana;padding-left:5px;">投票时间：</label>
+						<input name="vote_starttime" emptyText="开始时间" class="mini-datepicker" style="width:150px" allowInput="false" format="yyyy-MM-dd H:mm" timeFormat="H:mm" showTime="true"/>&nbsp;
+	               		<label style="line-height:30px;padding-left:5px;">-</label>
+	               			                	 <input name="vote_endtime" emptyText="结束时间" class="mini-datepicker" style="width:150px" allowInput="false" format="yyyy-MM-dd HH:mm" timeFormat="HH:mm" showTime="true" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label style="font-family:Verdana;padding-left:5px;">议题：</label>
+						 <span id="meetings"></span>
+	                </td>
+				</tr>
+				<tr class='selectTxt'>
+	                <td><label style="line-height:30px;padding-left:5px;">选项1：</label>
+	                    <!-- <input name="company_name" class="mini-textbox" readonly="readonly" style="width:240px;" required="true" maxLength="30"/> -->
+	                     <span id="company_name"></span>
+	                </td>
+	       	    </tr>
+	       	    <tr>
+					<td>
+						<label style="font-family:Verdana;padding-left:5px;">投票人数：</label>
+						 <span id="votePerson"></span>
+						<a href="javascript:votepersondetail()" style="text-decoration:none;" >详情</a>
+	                </td>
+				</tr>
+				<tr class='selectxx'>
+	                <td><label style="line-height:30px;padding-left:5px;">选项1：</label>
+	                    <!-- <input name="" class="mini-textbox" readonly="readonly" style="width:240px;" required="true" maxLength="30"/> -->
+	                     <span id=""></span>
+	                </td>
+	       	    </tr>
+			</table>
+	    </div>
+	</div>
+	<div style="margin:20px 0px 30px 0px;padding:0px;border-bottom:none;" align="center">
+		    <a class="mini-button closeBut" style="width:60px;display:none;" onclick="onCancel()">关闭</a>
+	    </div>
+	<script type="text/javascript" src="/resources/js/meetingManager/seeVote.js"></script>
+</body>
+</html>

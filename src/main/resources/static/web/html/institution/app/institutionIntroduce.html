@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<title>机构详情</title>
+	<link rel="stylesheet" href="/resources/app/css/reset.css">
+	<link rel="stylesheet" href="/resources/app/css/news_detail.css">
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/app/js/rem.js"></script>
+	<style type="text/css">
+		.company_wrapper {
+			height: 0;
+			padding-bottom: 30%;
+			overflow: hidden;
+		}
+		.news_content img {
+			display: inline-block;
+			max-width: 100% !important;
+			height: auto !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="wrapper">
+        <input id="institution_name" th:value="${institution.institution_name}" class="mini-hidden"/>
+        <input id="company_image" th:value="${institution.headImg}" class="mini-hidden"/>
+        <input id="requestUrl" th:value="${requestUrl}" class="mini-hidden"/>
+		<!-- 机构图片 -->
+		<div class="company_wrapper" style="display: none">
+			<img id="topImg">
+		</div>
+		<!-- 机构描述 -->
+		<div class="news_content" th:utext="${institution.institution_describe}"></div>
+	</div>
+	<script type="text/javascript">
+	    window.onload = function() {
+	        var institution_name = $("#institution_name").val();
+	        if(institution_name != "" && institution_name.length > 10){
+	        	institution_name = institution_name.substring(0,10)+"...";
+	        }
+	        $("title").html(institution_name);
+
+	        var company_image = $("#company_image").val();
+	        var requestUrl = $("#requestUrl").val();
+	        if(company_image != ""){
+	        	$('.company_wrapper').show();
+	        	company_image = company_image.substring(8,company_image.length);
+		        $('#topImg').attr('src', requestUrl+"upload/downloadImage?imageName="+company_image);
+	        }
+
+	        // 清除图片的行内样式
+	        var aImgs = document.getElementsByTagName('img');
+	        for (var i = 0; i < aImgs.length; i++) {
+	            aImgs[i].style = '';
+	        }
+	    }
+	</script>
+</body>
+</html>

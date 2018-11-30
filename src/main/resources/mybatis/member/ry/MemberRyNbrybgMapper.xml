@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.ry.MemberRyNbrybgMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyNbrybg">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="RYBM" jdbcType="VARCHAR" property="rybm" />
+        <result column="BGDZ" jdbcType="VARCHAR" property="bgdz" />
+        <result column="BGDH" jdbcType="VARCHAR" property="bgdh" />
+        <result column="MSDH" jdbcType="VARCHAR" property="msdh" />
+        <result column="NBJGBM" jdbcType="VARCHAR" property="nbjgbm" />
+        <result column="NBJGMC" jdbcType="VARCHAR" property="nbjgmc" />
+        <result column="DRSJ" jdbcType="VARCHAR" property="drsj" />
+        <result column="RYID" jdbcType="VARCHAR" property="ryid" />
+    </resultMap>
+
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyNbrybg">
+       insert into member_ry_nbrybg(ID,RYBM,BGDZ,BGDH,MSDH,NBJGBM,NBJGMC,DRSJ,RYID)
+       values
+       (#{id},#{rybm},#{bgdz},#{bgdh},#{msdh},#{nbjgbm},#{nbjgmc},#{drsj},#{ryid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.ry.MemberRyNbrybg">
+        update member_ry_nbrybg
+        <set>
+            <if test="rybm!=null">RYBM = #{rybm},</if>
+            <if test="bgdz!=null">BGDZ = #{bgdz},</if>
+            <if test="bgdh!=null">BGDH = #{bgdh},</if>
+            <if test="msdh!=null">MSDH = #{msdh},</if>
+            <if test="nbjgbm!=null">NBJGBM = #{nbjgbm},</if>
+            <if test="nbjgmc!=null">NBJGMC = #{nbjgmc},</if>
+            <if test="drsj!=null">DRSJ = #{drsj},</if>
+            <if test="ryid!=null">RYID = #{ryid},</if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!--根据人员基本信息表id 查询数据-->
+    <select id="appQueryMapByRyid" parameterType="String" resultType="HashMap">
+        select id,bgdz,bgdh,msdh,nbjgbm,nbjgmc,drsj from member_ry_nbrybg where RYID = #{ryid}
+    </select>
+</mapper>

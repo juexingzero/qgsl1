@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>企业之声列表</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+</head>
+
+<body>
+	<div id="searchForm" style="margin-top:10px;margin-bottom:1px;">
+	    <input name="is_answer" class="mini-textbox" visible="false"/>
+	    <div style="margin:0;padding:0px;border-bottom:none;">
+			<table>
+				<tr>
+					<td>
+						<label style="font-family:Verdana;padding-left:5px;">会议主题：</label>
+						<input th:value="${meeting_theme}" class="mini-textbox" width="200px" onenter="loadGridData" readonly="readonly"/>
+	                </td>
+	                <td>
+						<label style="font-family:Verdana;padding-left:5px;">已回执单位数量：</label>
+						<input th:value="${total}" class="mini-textbox" width="200px" onenter="loadGridData" readonly="readonly"/>家
+	                </td>
+					<td style="padding-right:5px;">
+						<a class="mini-button searchBtn" onclick="exportRow()"><i class="fa fa-download"></i>导出</a>
+					</td>
+				</tr>
+			</table>
+	    </div>
+	</div>
+	 <div id="passive_active_tabs" class="mini-tabs" style="margin-top:20px;width:100%;" onactivechanged="changeTabs">
+			    	 	<div id="id_passive" class="mini-tabs" title="已回执"></div>
+			   		 	<div id="id_active" class="mini-tabs" title="未回执"></div>
+	</div>
+	<div id="mini-fit" class="mini-fit" >
+	    <div id="datagrid1_standardLibararyList" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[5,10,20,50]" pageSize="20"
+	         url="/web/v1/meetingManager/getMeetingReceiptList" idField="standardLibraryList_id" multiSelect="true">
+	        <div property="columns">
+	            <div type="indexcolumn" width="50px" headerAlign="center" align="center">序号</div>
+	            <div field="participate_state" width="10%" headerAlign="center" align="center" renderer="coverttpi" >是否参会</div>
+	            <div field="company_name" width="10%" headerAlign="center" align="center">会员名称/姓名</div>
+	            <div field="person_num" width="10%" headerAlign="center" align="center">参会人员数</div>
+	            <div field="person_content" width="25%" headerAlign="center" align="center">参会人员信息</div>
+	            <div field="plate_number" width="10%" headerAlign="center" align="center">车牌号</div>
+	            <div field="leave_reason" width="25%" headerAlign="center" align="center">请假理由</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/meetingManager/seeReceipt.js"></script>
+	<script type="text/javascript" >
+		/*<![CDATA[*/
+    var meeting_id = "[[${meeting_id}]]";
+    /*]]>*/
+    </script>
+</body>
+</html>

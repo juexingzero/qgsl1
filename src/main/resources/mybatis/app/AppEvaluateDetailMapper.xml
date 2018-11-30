@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppEvaluateDetailMapper">
+	<select id="showEvaluateDeatil" resultType="com.manhui.gsl.jbqgsl.model.EvaluateDeatil">
+		SELECT
+			esd.*
+		FROM
+			evaluate_standard_detail esd
+		WHERE 1=1
+	    <if test="detail_id != null and detail_id != ''">
+	        AND esd.p_detail_id = #{detail_id}
+	    </if>
+	    <if test="standard_id != null and standard_id != ''">
+	        AND esd.standard_id = #{standard_id}
+	    </if>
+	    <if test="detail_level != null">
+	        AND esd.detail_level = #{detail_level}
+	    </if>
+	    order by create_time asc
+	</select>
+	
+</mapper>

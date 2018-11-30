@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>版本更新</title>
+	<script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+	<link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+	<script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+	<style>
+		.form-table tr > td {
+			padding-bottom: 10px;
+		}
+		.form-table tr > td:first-child {
+			text-align: right;
+			width: 115px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="addForm" style="height:100%;">
+		<input class="mini-hidden" name="id" id="id" th:value="${id}"/>
+		<div style="padding: 10px; border-top: 0; border-left: 0; border-right: 0;">
+			<table class="form-table" border="0" cellpadding="1" cellspacing="2">
+				<tr>
+					<td class="title noEmpty"><span style="color: red; margin-right:2px;">*</span>版本号：</td>
+					<td>
+						<input id="version" name="version" class="mini-textbox" style="width: 197px;" required="true" maxlength="8" emptyText="请输入版本号（如：1.0.0）"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty"><span style="color:red;margin-right:2px;">*</span>更新平台：</td>
+					<td>
+						<input id="channal" name="channal" class="mini-combobox" style="width: 197px;" emptyText="--请选择--" data="[{id: 1, text: 'IOS'}, {id: 2, text: '安卓'}]" textField="text" valueField="id" value="2"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:20px;">更新文件： </td>
+					<td>
+	                    <input id="file" class="mini-fileupload" name="file" limitType="*.apk;" style="width: 197px;height: 26px;"
+	                           flashUrl="/resources/miniui/res/third-party/swfupload/swfupload.swf"
+	                           uploadUrl="/upload/uploadApkFile"
+	                           onuploadsuccess="onUploadSuccess"
+	                           onuploaderror="onUploadError" onfileselect="onFileSelect"/>
+	                    <a checkOnClick="true" groupName="search" class="mini-button" id="fileupload" onclick="startUpload()">上传</a>
+	                    <a checkOnClick="true" groupName="search" class="mini-button" id="filedel" onclick="delUpload()">删除</a>
+                	</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty"><span style="color:red;margin-right:3px;">*</span>更新内容：</td>
+					<td>
+						<textarea id="introduce" name="introduce"class="mini-textarea" emptyText="请输入更新内容（0~100字）" required="true" maxlength="100" style=" width:300px; height:100px;"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="title noEmpty">更新设置：</td>
+           		 	<td>
+           		 		<input id="is_force" name="is_force" class="mini-checkbox" text="强制更新" onvaluechanged="onValueChanged" hidden="true" checked="checked"/>
+           		 		<input id="is_force1" name="is_force1" class="mini-hidden" value="1"/>
+           		 	</td>
+           		 </tr>
+			</table>
+		</div>
+		<!-- bot btns -->
+		<div class="mini-toolbar bot_btn">
+			<a checkOnClick="true" groupName="search" class="mini-button" onclick="save()">保存</a>
+			<a checkOnClick="true" groupName="search" class="mini-button" onclick="returns('ok')">取消</a>
+		</div>
+	</div>
+	<script src="/resources/miniui/res/third-party/swfupload/swfupload.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/resources/js/appVersion/appVersionSave.js"></script>
+</body>
+</html>

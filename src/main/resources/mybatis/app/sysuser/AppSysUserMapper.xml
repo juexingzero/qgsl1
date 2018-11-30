@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.sysuser.AppSysUserMapper">
+		<select id="querySysUser" resultType="HashMap" parameterType="com.manhui.gsl.jbqgsl.model.AppUser">
+			select 
+				su.user_id as user_id,
+				su.login_name as user_name,
+				su.login_name as login_name,
+				su.user_sex as user_sex,
+				su.mobile_no as user_phone,
+				su.email as user_email,
+				su.head_img as head_img,
+				su.create_time as create_time,
+				su.account_status as del_flag,
+				su.last_login_time as last_time
+			from sys_user su
+			<where>
+				AND su.user_status='1' 
+				<if test="user_name !=null and user_name!=''">
+					AND su.login_name = #{user_name}
+				</if>
+				<if test="user_phone !=null and user_phone!=''">
+					AND su.mobile_no = #{user_phone}
+				</if>
+				<if test="login_password !=null and login_password!=''">
+					AND su.password = #{login_password}
+				</if>
+			</where>
+		</select>
+</mapper>

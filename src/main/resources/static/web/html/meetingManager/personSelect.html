@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>岗位选择</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+		body .mini-grid-rows-view {overflow-x: hidden;}
+	</style>
+</head>
+
+<body>
+	<div class="mini-toolbar" style="text-align:center;line-height:20px;" borderStyle="border:0;">
+	    <select name="joinObjName" class="mini-combobox" valueField="id" textField="shmc" style="width:20%;" onvaluechanged="onKeyEnter"  emptyText="全部商会" >
+	       <!--  <option value="3">副会长</option>
+	        <option value="SHZWLX-01">主席</option>
+	        <option value="2">副主席</option>
+	        <option value="5">执常委</option>
+	        <option value="6">执委</option> -->
+        </select>
+        
+        <input id=contact emptyText="请输入会员名称/姓名/联系人姓名" defaultText="sss" class="mini-textbox" style="width:180px;margin-right:80px;" maxlength="30" onenter="onKeyEnter"/>
+        <input id=user_phone emptyText="请输入手机号码" defaultText="sss" class="mini-textbox" style="width:180px;margin-right:80px;" maxlength="30" onenter="onKeyEnter"/>
+	    <a class="mini-button" style="width:60px;" onclick="search()">查询</a>
+	</div>
+	
+	<div class="mini-fit">
+	    <div id="datagrid_institutionList" class="mini-datagrid" url="/web/v1/meetingManager/getAllAttendeesResultList" style="width:100%;height:100%;"
+	     idField="id" borderStyle="border-left:0;border-right:0;">
+	        <div property="columns">
+	            <div type="checkcolumn" width="50px" headerAlign="center" align="center" renderer="onSelectRow">
+	            	<span style="color:#0000FF;cursor:pointer;" onclick="selectAll()">全选</span>
+	            </div>
+			    <div field="joinObjName" width="" headerAlign="center">商会名称</div>
+			    <div field="position" width="" headerAlign="center" align="center" renderer="covertshzw">商会职务</div>
+			    <div field="user_name" width="" headerAlign="center">会员名称/姓名</div>
+			    <div field="contact" width="" headerAlign="center" align="center">联系人</div>
+			    <div field="user_phone" width="" headerAlign="center" align="center">手机号码</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="mini-toolbar" style="text-align:center;padding-top:10px;padding-bottom:5px; margin-top: 15px;" borderStyle="border-left:0;border-right:0;border-bottom:0;">
+	    <a class="mini-button" style="width:60px;" onclick="onOk()">确定</a>
+	    <a class="mini-button" style="width:60px;" onclick="onCancel()">取消</a>
+	</div>
+
+	<script type="text/javascript" src="/resources/js/meetingManager/personSelect.js"></script>
+</body>
+</html>

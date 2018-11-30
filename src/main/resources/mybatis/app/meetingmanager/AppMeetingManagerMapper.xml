@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.meetingmanager.AppMeetingManagerMapper">
+	<select id="queryMeetingList" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.MeetingListResult" parameterType="map">
+		select a.* from 
+		(select
+		    mm.meeting_id,
+			mp.member_id,
+			mp.vote_options,
+		    mm.meeting_state,
+			mm.meeting_theme,
+			mm.meeting_address,
+			mm.meeting_ll,
+			mm.meeting_navigation,
+			mm.allow_select,
+			mm.meeting_starttime,
+			mm.meeting_endtime,
+			mr.receipt_id ,
+			mr.participate_state,
+			mr.is_leave,
+			msf.sign_id
+		FROM
+			meeting_manager mm
+		inner join 
+			meeting_person mp
+		on mp.meeting_id = mm.meeting_id
+		left join 
+			meeting_receipt mr
+		on  mm.meeting_id = mr.meeting_id AND mr.member_id = mp.member_id
+		left join 
+			<!-- (SELECT msf.*
+				FROM
+				meeting_sign_flow msf where msf.company_name=#{company_name} limit 0,1)as msf  -->
+			(SELECT msf.*
+				FROM
+				meeting_sign_flow msf where msf.member_id=#{member_id} limit 0,1)as msf 
+		on  msf.meeting_id = mr.meeting_id
+		<where>
+			and mm.is_delete ='0' 
+			<if test="member_id !=null and member_id !=''">
+				and mp.member_id = #{member_id}
+			</if>
+			<if test="meeting_state !=null and meeting_state !=''">
+			<!--  待开会议  
+				条件:会议状态 1:
+				 会议开始时间大于当前时间
+				 待开+参加+不请假
+				 待开+不参加
+			  -->
+				<if test="meeting_state =='1'.toString()">
+					AND mm.meeting_state = '1' AND (mr.participate_state="0" OR (mr.participate_state ='1' and mr.is_leave ='0') )
+				</if>
+					<!--  会议中  
+				条件:
+				    会议状态 2并且有回执参加并且没有请假
+				      或者 会议状态 2并且未回执 
+			  -->
+				<if test="meeting_state =='2'.toString()">
+					AND(mm.meeting_state = '2' and mr.receipt_id is not null and mr.participate_state='1' and mr.is_leave = '0')
+					OR (mm.meeting_state = '2' and mr.receipt_id is null )
+				</if>
+					<!--  已开会议  
+				条件:
+				   1):会议状态 3 回执参加 未请假 
+				   或者 回执“参加”,但是请假了 状态 is_leave:1 会议状态为2,<开会中>
+				   或者:回执不参加,会注意状态为任何值都可以
+				   或者:没有回执 ,会议结束后<>
+			  -->
+				<if test="meeting_state =='3'.toString()">
+					AND(mm.meeting_state = '3' and mr.receipt_id is not null and mr.participate_state='1' and mr.is_leave = '0')
+					OR(mm.meeting_state = '2' and mr.receipt_id is not null and mr.participate_state='1' and mr.is_leave = '1')
+					OR(mr.receipt_id is not null and mr.participate_state='0')
+					OR(mm.meeting_state = '3' and  mr.receipt_id is null)
+				</if>
+			</if>
+			)as a
+				where a.member_id = #{member_id} <!-- and a.meeting_state=#{meeting_state} -->
+		</where>
+		
+	</select>
+	<select id="getMeetingContent" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.MeetingContent">
+		SELECT
+			mm.meeting_id,
+			mm.meeting_content
+		FROM
+			meeting_manager mm
+		WHERE
+			mm.meeting_id = #{meeting_id}
+		AND mm.is_delete = '0'
+	</select>
+	<select id="getMeetingData" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.MeetingData">
+		SELECT
+			mm.meeting_id,
+			mm.meeting_data
+		FROM
+			meeting_manager mm
+		WHERE
+			mm.meeting_id = #{meeting_id}
+		AND mm.is_delete = '0'
+	</select>
+	<select id="meetingResponse" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.MeetingData">
+		SELECT
+			mm.meeting_id,
+			mm.meeting_data
+		FROM
+			meeting_manager mm
+		WHERE
+			mm.meeting_id = #{meeting_id}
+		AND mm.is_delete = '0'
+	</select>
+
+	<select id="getMeetingAddress" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.MeetingAddress">
+		SELECT
+			mm.meeting_id,
+			mm.meeting_address,
+			mm.meeting_navigation,
+			mm.meeting_ll
+		FROM
+			meeting_manager mm
+		WHERE
+			mm.meeting_id = #{meeting_id}
+		AND mm.is_delete = '0'
+	</select>
+	<select id="queryMeetingTime" parameterType="String" resultType="com.manhui.gsl.jbqgsl.model.MeetingManager">
+		SELECT
+			mm.meeting_id,mm.meeting_starttime,mm.meeting_endtime
+		FROM
+			meeting_manager mm
+		WHERE
+			mm.meeting_id = #{meeting_id} 
+</select>
+	<select id="getMeetingMinutes" parameterType="String" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.MeetingContent">
+		SELECT
+			mm.meeting_id,mm.meeting_minutes
+		FROM
+			meeting_manager mm
+		WHERE
+			mm.meeting_id = #{meeting_id} 
+	</select>
+	<select id="getMeetingManager" parameterType="String" resultType="String">
+		SELECT
+			mm.receipt_time
+		FROM
+			meeting_manager mm
+		WHERE
+			mm.meeting_id = #{meeting_id} 
+	</select>
+	<select id="getMeetingManagerAndRecept" parameterType="String" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.ManagerAndRecept">
+		SELECT
+			mm.meeting_id,
+			mr.member_id,
+			mm.meeting_starttime,
+			mr.participate_state
+		FROM
+			meeting_manager mm
+		inner join
+			meeting_receipt mr
+		on mm.meeting_id = mr.meeting_id
+		WHERE
+			mm.meeting_id = #{meeting_id} and mr.member_id = #{member_id} and mm.is_delete = '0'
+	</select>
+</mapper>

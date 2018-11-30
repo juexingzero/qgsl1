@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.meetingmanager.MeetingReceiptMapper">
+	  <select id="getMeetingReceiptList" resultType="com.manhui.gsl.jbqgsl.model.MeetingReceipt">
+    	SELECT
+			*
+		FROM
+			meeting_receipt
+		WHERE
+			meeting_id=#{meeting_id}
+		<if test="participate_state==''">
+			and participate_state is null or participate_state=''
+		</if>
+		<if test="participate_state!=null and participate_state!=''">
+			and participate_state is not null and participate_state !=''
+		</if>
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+	    
+	    <select id="queryMeetingReceiptTotal" resultType="int">
+    	SELECT
+			count(*)
+		FROM
+			meeting_receipt
+		WHERE
+			meeting_id=#{meeting_id}
+		<if test="participate_state==''">
+			and participate_state is null or participate_state=''
+		</if>
+		<if test="participate_state!=null and participate_state!=''">
+			and participate_state is not null and participate_state !=''
+		</if>
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+</mapper> 

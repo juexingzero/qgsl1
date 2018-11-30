@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.meetingmanager.AppMeetingPersonMapper">
+	<update id="updateSign">
+		UPDATE 
+			meeting_person
+		SET 
+		sign_name = #{sign_name},
+		sign_phone = #{sign_phone},
+		sing_time = #{sing_time},
+		update_time = #{update_time}
+		WHERE
+			meeting_id = #{meeting_id} and member_id = #{member_id}
+	</update>
+	<select id="getMeetingPerson" resultType="com.manhui.gsl.jbqgsl.controller.app.meetingmanager.MeetingSignFlow" parameterType="map">
+		Select *
+		from
+			meeting_sign_flow
+		WHERE
+			meeting_id = #{meeting_id} and member_id = #{member_id} limit 0,1
+	</select>
+
+	<update id="saveVoteResult">
+		UPDATE 
+			meeting_person
+		SET 
+			vote_options = #{vote_options}
+		WHERE
+			meeting_id = #{meeting_id} and member_id = #{member_id}
+	</update>
+	<update id="updateMeetingSignQr">
+		UPDATE 
+			meeting_sign_flow
+		SET 
+			sign_id = #{sign_id},
+			company_title = #{company_title},
+			sign_name = #{sign_name},
+			sign_phone = #{sign_phone},
+			sing_time = #{sing_time}
+		WHERE
+			meeting_id = #{meeting_id} and member_id = #{member_id}
+	</update>
+	<insert id="saveMeetingSignQr">
+		insert into  
+			meeting_person
+			(
+			meeting_id,
+			group_name,
+			company_title,
+			sign_name,
+			sign_phone,
+			sing_time,
+			create_time,
+			update_time
+			)
+			VALUES
+        (
+          #{meeting_id},
+          #{group_name},
+          #{company_title},
+          #{sign_name},
+          #{sign_phone},
+          #{sing_time},
+          #{create_time},
+          #{update_time}
+        )
+	</insert>
+		<select id="queryGroupName" resultType="com.manhui.gsl.jbqgsl.model.MeetingPerson" parameterType="string">
+		Select *
+		from
+			meeting_person
+		<where>
+			<if test="group_name !=null and group_name !=''">
+				and group_name  like  CONCAT('%',#{group_name},'%') 
+			</if>
+			<if test="meeting_id !=null and meeting_id !=''">
+				and meeting_id =#{meeting_id} 
+			</if>
+		</where>
+		
+	</select>
+		<select id="queryMeetingGroupName" resultType="com.manhui.gsl.jbqgsl.model.MeetingPerson" parameterType="map">
+		Select *
+		from
+			meeting_person
+		<where>
+			<if test="member_id !=null and member_id !=''">
+				and member_id  =#{member_id} 
+			</if>
+		</where>
+		limit 0,1
+	</select>
+		<select id="queryIsVote" resultType="String" parameterType="map">
+			select vote_options
+			from
+				meeting_person
+			<where>
+				<if test="member_id !=null and member_id !=''">
+					and member_id  =#{member_id} 
+				</if>
+				<if test="meeting_id !=null and meeting_id !=''">
+					and meeting_id  =#{meeting_id} 
+				</if>
+			</where>
+	</select>
+</mapper>

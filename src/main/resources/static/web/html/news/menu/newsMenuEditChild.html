@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>修改子栏目</title>
+
+        <style type="text/css">
+            /**修改文件上传框的大小**/
+            body .upload .image {
+                width: 158px;
+                height: 196px;
+            }
+            body .upload .image .image_font {
+                height: 165px;
+                line-height: 165px;
+            }
+            body .upload .image .image_content {
+                width: auto;
+                height: auto;
+            }
+            body .upload .uploadBtn {
+                width: auto;
+            }
+            /***修改文件上传框的大小**/
+        </style>
+    </head>
+    <script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+    <link href="/resources/organizational/css/from.css" rel="stylesheet" type="text/css" />
+    <body>
+        <div id="form1">
+        <table border="0" cellpadding="1" cellspacing="2" style="border-collapse:separate; border-spacing:10px;">
+            <tr>
+                <td style="width:120px;" >父栏目：</td>
+                <td>
+                    <input th:value="${menu.superiorName}" class="mini-textbox" style="width:200px" required="true" allowInput="false" enabled="false"/>
+                </td>
+            </tr>
+            <tr>
+             <td class="td1" style="width:120px;"><span style="color: red; margin-right:2px;">*</span>栏目名称：</td>
+                <td>
+                    <input name="menuName" class="mini-textbox" style="width:200px" required="true" th:value="${menu.menuName}" maxLength="50"/>
+                    <input type="hidden" name="menuId" id="menuId" th:value="${menu.menuId}"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:120px;">排序：</td>
+                <td>
+                    <input name="sequence" class="mini-spinner" style="width:200px" value="0" maxValue="100" th:value="${menu.sequence}"/>
+                </td>
+            </tr>
+            <tr>
+             <td class="td1" style="width:120px;"><span style="color: red; margin-right:2px;">*</span>栏目模型：</td>
+                <td>
+                    <input class="mini-combobox" style="width:200px;" textField="name" valueField="id" name="menuModel" id="menuModel" th:value="${menu.menuModel}"
+                           url="/web/v1/newsMenu/getMenuModel" showNullItem="true" allowInput="true" showPopupOnClick="true" required="true" >
+                </td>
+            </tr>
+            <!--<tr>
+                <td style="width:120px;" >链接地址：</td>
+                <td>
+                    <input name="menuUrl" class="mini-textbox" style="width:200px" th:value="${menu.menuUrl}" maxLength="100"/>
+                </td>
+            </tr>-->
+            <tr>
+             <td class="td1" style="width:120px;"><span style="color: red; margin-right:2px;">*</span>栏目说明：</td>
+                <td>
+                    <input name="remark" class="mini-textarea" style="width: 400px; height:80px;" required="true" th:value="${menu.remark}" maxLength="200"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:120px;">栏目图片：</td>
+                <td>
+                    <input visible="false" name="fileImg" id="fileImg" class="mini-textbox" required="true" th:value="${menu.fileImg}"/>
+                    <div id="uploadImage"></div>
+                </td>
+            </tr>
+        </table>
+            <!-- bot btns -->
+            <div class="mini-toolbar bot_btn">
+                <a checkOnClick="true" groupName="search" class="mini-button" onclick="save()">保存</a>
+                <a checkOnClick="true" groupName="search" class="mini-button" onclick="backtrack('ok')">取消</a>
+            </div>
+        </div>
+        <!-- 图片上传 -->
+        <script src="/resources/fileUpload/fileUpload.js" type="text/javascript"></script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            //图片内容i
+            var imgObj = [[${menu.imgObj}]];
+            /*]]>*/
+        </script>
+        <script type="text/javascript">
+            mini.parse();
+            var cpi_pathText = mini.get("fileImg");//图片
+
+            $(function(){
+                // 图片
+                $("#uploadImage").uploadFile({
+                    size : 1,
+                    fileSize:'2MB',
+                    imagePath:imgObj,
+                    success: function (data) {
+                        var fileObj;
+                        var fileName = '';
+                        var filePath = '';
+                        for (var i = 0; i < data.length; i++) {
+                            fileObj = data[i];
+                            fileName += fileObj.fileName+",";
+                            filePath += fileObj.path+",";
+                        }
+                        if(fileName != ""){
+                            fileName = fileName.substring(0, fileName.length-1);
+                            filePath = filePath.substring(0, filePath.length-1);
+                        }
+                        cpi_pathText.setValue(filePath);
+                        cpi_pathText.setText(fileName);
+                    }
+                });
+            });
+
+            function save(){
+                //提交表单数据
+                var form = new mini.Form("#form1");
+
+                form.validate();//验证
+                if (form.isValid() == false) return;
+
+                var data = form.getData();      //获取表单多个控件的数据
+                data.menuId = $("#menuId").val();
+                data.fileImgName = cpi_pathText.getText();
+
+                var json = mini.encode(data);   //序列化成JSON
+                $("#submit").off("click");
+                $.ajax({
+                    url: "/web/v1/newsMenu/saveChildMenu",
+                    type: "post",
+                    data: { json: json },
+                    dataType: "json",
+                    success: function (result) {
+                       if(result.state == 0){
+                           // window.location.href = "/web/v1/newsMenu/queryListPage";
+                           backtrack('ok');
+                       }else{
+                          $("#submit").on("click", save);
+                           alert(result.message);
+                       }
+                    }
+                });
+                $("#submit").on("click", save);
+            }
+
+            //取消
+            function backtrack(action){
+                // window.location.href = "/web/v1/newsMenu/queryListPage";
+                if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+                else window.close();
+            }
+        </script>
+    </body>
+</html>

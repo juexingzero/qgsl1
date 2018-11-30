@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.commerce.LeadershipMapper">
+    <select id="queryLeadershipList" parameterType="map" resultType="com.manhui.gsl.jbqgsl.controller.web.commerce.LeadershipResult">
+        select sh.ID as SHID,sh.SHMC,ld.JIE,ld.ID as LDID,ld.PX  from member_jg_shldbz ld left join member_jg_shxx sh
+        on ld.SHBMID = sh.ID
+        where ld.SHBMID= #{SHBMID}
+        group by ld.JIE order by ld.PX + 0 asc
+    </select>
+    <select id="queryLeadershipListSize" parameterType="String" resultType="integer">
+        select count(ld.ID)  from member_jg_shldbz ld left join member_jg_shxx sh
+        on ld.SHBMID = sh.ID
+        where ld.SHBMID= #{SHBMID}
+    </select>
+    <select id="queryLeadershipDetailList" parameterType="String" resultType="map">
+        select sh.ID as SHID,sh.SHMC,ld.JIE,ld.ID as LDID,ld.SHZWLX,ry.XM,txfs.YDDH from member_jg_shldbz ld left join member_jg_shxx sh
+        on ld.SHBMID = sh.ID left join member_ry_ryjbxx ry on ld.RYBM = ry.ID left join member_ry_txfs txfs on ld.RYBM = txfs.RYBM
+        where ld.SHBMID= #{SHBMID}
+    </select>
+    <select id="queryLeadership" parameterType="map" resultType="map">
+        select ld.ID as LDID,ld.SHZWLX,ry.XM,txfs.YDDH from member_jg_shldbz ld left join member_jg_shxx sh
+        on ld.SHBMID = sh.ID left join member_ry_ryjbxx ry on ld.RYBM = ry.ID left join member_ry_txfs txfs on ld.RYBM = txfs.RYBM
+        where ld.SHBMID= #{SHBMID} and ld.JIE = #{JIE} and ld.SHZWLX is not null
+        <if test="SHZWLX != null and SHZWLX != ''">
+            and ld.SHZWLX = #{SHZWLX}
+        </if>
+        <if test="XM != null and XM != ''">
+            and ry.XM = #{XM}
+        </if>
+    </select>
+    <select id="queryLeaderMemberInfo" parameterType="map" resultType="map">
+        select result.* from (
+            select ry.id,ry.xm,ry.xm as lxr,tx.yddh from member_join_manager mjm
+            INNER JOIN member_ry_ryjbxx ry
+            INNER JOIN member_ry_txfs tx
+            where mjm.memberType = 'HYLX-01' and mjm.joinObjName = '江北区工商联（总商会）'
+            and  mjm.memberId = ry.ID and ry.ID = tx.RYID
+            UNION ALL
+            select ry.id,ry.xm,ry.xm as lxr,tx.yddh from member_join_manager mjm
+            INNER JOIN member_qy_qylxrxx qy
+            INNER JOIN member_ry_ryjbxx ry
+            INNER JOIN member_ry_txfs tx
+            where mjm.memberType = 'HYLX-03' and mjm.joinObjName = '江北区工商联（总商会）'
+            and  mjm.memberId = qy.QYID
+            and qy.LXRXXZJ = ry.ID and ry.ID = tx.RYID
+            UNION ALL
+            select ry.id,ry.xm,ry.xm as lxr,tx.yddh from member_join_manager mjm
+            INNER JOIN member_jg_stjbxx jg
+            INNER JOIN member_ry_ryjbxx ry
+            INNER JOIN member_ry_txfs tx
+            where mjm.memberType = 'HYLX-02' and mjm.joinObjName = '江北区工商联（总商会）'
+            and mjm.joinObjId = jg.ID
+            and jg.STLXR = ry.ID  and ry.ID = tx.RYID
+        ) as result
+        where 1=1
+        <if test="XM != null and XM != ''">
+            and result.xm = #{XM}
+        </if>
+        <if test="YDDH != null and YDDH != ''">
+            and result.yddh = #{YDDH}
+        </if>
+    </select>
+    <select id="queryLeaderCheck" resultType="map" parameterType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShldbz">
+        select * from member_jg_shldbz where jie = #{JIE} and shzwlx = #{SHZWLX}
+    </select>
+    <select id="queryLeaderMemberCheck" resultType="map" parameterType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShldbz">
+        select * from member_jg_shldbz where jie = #{JIE} and rybm = #{RYBM}
+    </select>
+    <insert id="saveLeadership" parameterType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShldbz">
+        insert into member_jg_shldbz
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            ID,
+            <if test="SHBM != null">SHBM,</if>
+            <if test="SHBMID != null">SHBMID,</if>
+            <if test="JIE != null">JIE,</if>
+            <if test="RYBM != null">RYBM,</if>
+            <if test="SHZWLX != null">SHZWLX,</if>
+            <if test="PX != null">PX,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{ID},
+            <if test="SHBM != null">#{SHBM},</if>
+            <if test="SHBMID != null">#{SHBMID},</if>
+            <if test="JIE != null">#{JIE},</if>
+            <if test="RYBM != null">#{RYBM},</if>
+            <if test="SHZWLX != null">#{SHZWLX},</if>
+            <if test="PX != null">#{PX},</if>
+        </trim>
+    </insert>
+    <update id="editLeadership" parameterType="com.manhui.gsl.jbqgsl.model.commerce.MemberJgShldbz">
+        update member_jg_shldbz
+        <set>
+            <if test="SHBM != null">SHBM = #{SHBM},</if>
+            <if test="SHBMID != null">SHBMID = #{SHBMID},</if>
+            <if test="JIE != null">JIE = #{JIE},</if>
+            <if test="RYBM != null">RYBM = #{RYBM},</if>
+            <if test="SHZWLX != null">SHZWLX = #{SHZWLX},</if>
+        </set>
+        where ID = #{ID}
+    </update>
+
+    <delete id="deleteLeadership" parameterType="String" >
+        delete from member_jg_shldbz
+        where ID = #{ID}
+    </delete>
+</mapper>

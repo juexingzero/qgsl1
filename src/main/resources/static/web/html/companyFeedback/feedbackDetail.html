@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>企业之声详情</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<link type="text/css" rel="stylesheet" href="/resources/organizational/css/style.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+		body .mini-grid-rows-view {overflow-x: hidden;}
+	</style>
+</head>
+
+<body>
+	<div id="form_feedbackDetail" style="overflow-y:auto;">
+	    <div class="table_edit" style="margin:5px 5px 5px 5px;padding:0px;border-bottom:none;">
+	        <table style="width:100%; table-layout:fixed;background-color:#ffffff;">
+	            <tr>
+	                <td width="10%" align="right"><label style="line-height: 30px;">企业名称：</label></td>
+	                <td width="40%" align="left"><span id="company_name"></span></td>
+	                <td width="10%" align="right"><label>问题类别：</label></td>
+	                <td width="40%" align="left"><span id="feedback_type"></span></td>
+	            </tr>
+	            <tr>
+	                <td align="right"><label style="line-height: 30px;">联系人：</label></td>
+	                <td align="left"><span id="company_linkman_name"></span></td>
+	                <td align="right"><label>联系电话：</label></td>
+	                <td align="left"><span id="company_linkman_phone"></span></td>
+	            </tr>
+	            <tr>
+	                <td align="right"><label style="line-height: 30px;">反馈人：</label></td>
+	                <td align="left"><span id="feedback_man_name"></span></td>
+	                <td align="right"><label>反馈时间：</label></td>
+	                <td align="left"><span id="feedback_time"></span></td>
+	            </tr>
+	            <tr class="answer_tr" style="display:none;">
+	                <td align="right"><label style="line-height: 30px;">回复人：</label></td>
+	                <td align="left"><span id="answer_man_name"></span></td>
+	                <td align="right"><label>回复时间：</label></td>
+	                <td align="left"><span id="answer_time"></span></td>
+	            </tr>
+	            <tr>
+	                <td align="right"><label>反馈内容：</label></td>
+	                <td colspan="3" style="padding-top: 5px">
+                		<input name="feedback_content" class="mini-textarea" style="width:97%;height:180px;" th:value="${feedback.feedback_content}" enabled="false"/>
+	                </td>
+	            </tr>
+	            <tr>
+	            <td class="td1" style="width:150px;"><span style="color: red; margin-right:2px;">*</span>回复内容:</td>
+	                <td colspan="3" style="padding-top: 10px">
+                		<input name="answer_content" emptyText="请输入回复内容（0~200字）" class="mini-textarea" style="width:97%;height:180px;" required="true" maxLength="200" th:value="${feedback.answer_content}"/>
+	                </td>
+	            </tr>
+	        </table>
+	    </div>
+	    
+	    <div class="mini-toolbar bot_btn">
+		    <a class="mini-button saveBut" style="width:60px;" onclick="save()">提交</a>
+		    <a class="mini-button cancelBut" style="width:60px;" onclick="onCancel()">取消</a>
+		    <a class="mini-button closeBut" style="width:60px;display:none;" onclick="onCancel()">关闭</a>
+	    </div>
+	</div>
+	
+    <script th:inline="javascript">
+		var feedback_id = [[${feedback.feedback_id}]];
+		var is_answer = [[${feedback.is_answer}]];
+		var flag = [[${flag}]];//=true可以修改，=false不可以修改
+        function init(){
+        	var feedback_type=[[${feedback.feedback_type}]];
+        	var type_val;
+        	if(feedback_type == "1"){
+                type_val="经济服务";
+            }else if(feedback_type == "2"){
+                type_val="政策咨询";
+            }else if(feedback_type == "3"){
+                type_val="法律维权";
+            }else if(feedback_type == "4"){
+                type_val="商会建设";
+            }else if(feedback_type == "5"){
+                type_val="党建工作";
+            }else if(feedback_type == "6"){
+                type_val="人事人才";
+            }else{
+            	type_val="其他";
+            }
+        	$("#feedback_type").text(type_val);
+        	
+        	var company_name = [[${feedback.company_name}]];
+        	if(company_name.length > 20){
+            	$("#company_name").attr("title",company_name);
+            	$("#company_name").text(company_name.substring(0,20)+"...");
+        	}else{
+            	$("#company_name").text(company_name);
+        	}
+        	
+        	var company_linkman_name = [[${feedback.company_linkman_name}]];
+        	if(company_linkman_name.length > 20){
+            	$("#company_linkman_name").attr("title",company_linkman_name);
+            	$("#company_linkman_name").text(company_linkman_name.substring(0,20)+"...");
+        	}else{
+            	$("#company_linkman_name").text(company_linkman_name);
+        	}
+        	
+        	$("#company_linkman_phone").text([[${feedback.company_linkman_phone}]]);
+        	
+        	var feedback_man_name = [[${feedback.feedback_man_name}]];
+        	if(feedback_man_name.length > 20){
+            	$("#feedback_man_name").attr("title",feedback_man_name);
+            	$("#feedback_man_name").text(feedback_man_name.substring(0,20)+"...");
+        	}else{
+            	$("#feedback_man_name").text(feedback_man_name);
+        	}
+        	
+        	$("#feedback_time").text([[${feedback.feedback_time}]]);
+
+        	var answer_man_name = [[${feedback.answer_man_name}]];
+        	if(answer_man_name != null || answer_man_name == ''){
+                if(answer_man_name.length > 20){
+                    $("#answer_man_name").attr("title",answer_man_name);
+                    $("#answer_man_name").text(answer_man_name.substring(0,20)+"...");
+                }else{
+                    $("#answer_man_name").text(answer_man_name);
+                }
+                $(".answer_tr").show();
+			}
+
+        	
+        	$("#answer_time").text([[${feedback.answer_time}]]);
+        }
+    </script>
+    <script type="text/javascript">
+	    mini.parse();
+	    init();
+	    
+    	$(function(){
+    		if(flag == true){
+    			$(".saveBut").show();
+    			$(".cancelBut").show();
+    			$(".closeBut").hide();
+
+    			$(".mini-textarea").css("height", "180px");
+    			mini.getByName("answer_content").setEnabled(true);
+    		}else if( flag == flag){
+                $(".saveBut").hide();
+                $(".cancelBut").hide();
+                $(".closeBut").show();
+                mini.getByName("answer_content").setEnabled(false);
+			}
+
+    		//如果状态为未查看状态，将修改状态
+			if(is_answer == '0'){
+                $.ajax({
+                    type : "POST",
+                    url : "/web/v1/companyFeedback/queryCompanyFeedback",
+                    data : {
+                        feedback_id		: feedback_id,
+                        is_answer	: '1'
+                    },
+                    success : function(msg) {
+                        if (msg.state == "1") {
+
+                        }else{
+                            alert("操作失败");
+                        }
+                    }
+                });
+			}
+    	});
+
+    	//提交回复内容
+    	function save(){
+    		var form = new mini.Form("#form_feedbackDetail");
+    	  	form.validate();
+    	  	if (form.isValid() == false){
+    	  		return;
+    	  	}
+    	  	var answer_content = mini.getByName("answer_content").getValue();
+    	  	$.ajax({
+    			type : "POST",
+    			url : "/web/v1/companyFeedback/saveCompanyFeedback",
+    			data : {
+    				'feedback_id': feedback_id,
+    				'answer_content': answer_content
+    			},
+    			success : function(msg) {
+    				if (msg.state == "1") {
+    				  	$(".saveBut").attr("disabled",true);
+    					CloseWindow("ok");
+    				}else{
+    	            	alert("操作失败");
+    	            }
+    			}
+    		});
+    	}
+    	
+    	//取消
+    	function onCancel() {
+    	  CloseWindow("cancel");
+    	}
+    </script>
+</body>
+</html>

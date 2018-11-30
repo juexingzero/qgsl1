@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.web.meetingmanager.MeetingSignFlowMapper">
+	  <select id="querypersonNum" resultType="int">
+    	select count(*) from 
+    	meeting_sign_flow where 
+    	meeting_id=#{meeting_id}
+	  </select>
+	  
+	   <select id="getMeetingSignLists" resultType="com.manhui.gsl.jbqgsl.model.MeetingSignFlow">
+    	SELECT
+			*
+		FROM
+			meeting_sign_flow
+		WHERE
+			meeting_id=#{meeting_id}
+			
+ 		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+	    
+	    <select id="queryMeetingSignTotal" resultType="int">
+    	SELECT
+			count(*)
+		FROM
+			meeting_sign_flow
+		WHERE 1=1
+		<if test="meeting_id != null and meeting_id != ''">
+			and meeting_id=#{meeting_id}		
+		</if>
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	    </select>
+	    
+	    <select id="queryCompanyTotal" resultType="int">
+    	select 
+    	<if test="meeting_id != null and meeting_id != ''">
+			count(distinct company_name)		
+		</if>
+    	<if test="meeting_id == null">
+			count(*)		
+		</if>
+    	from 
+    		meeting_sign_flow
+    	<if test="sing_time != null and sing_time != ''">
+          where  sing_time >= #{sign_phone} and sing_time &lt;= #{sing_time}
+        </if> 
+	    </select>
+</mapper> 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.NewsReceiptContentMapper">
+
+    <!--新增数据-->
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.NewsReceiptContent" useGeneratedKeys="true" keyProperty="receiptId">
+        insert into tb_news_receipt_content
+         (newsId,newsName,operatingId,receiptType,content,userNums,assignPeople,userId,userName)
+       values
+         (#{newsId},#{newsName},#{operatingId},#{receiptType},#{content},#{userNums},#{assignPeople},#{userId},#{userName})
+    </insert>
+
+    <!--查询回执内容-->
+    <select id="queryReceiptList" parameterType="com.manhui.gsl.jbqgsl.model.NewsReceiptContent"
+            resultType="com.manhui.gsl.jbqgsl.model.NewsReceiptContent">
+        select c.* from tb_news_receipt_content c inner join tb_news_operating o on o.operatingId = c.operatingId
+        where o.newsId = #{newsId} and o.userId = #{userId}
+    </select>
+
+    <!--根据id 查询数据-->
+    <select id="queryById" parameterType="Integer" resultType="com.manhui.gsl.jbqgsl.model.NewsReceiptContent">
+        select * from tb_news_receipt_content where receiptId = #{receiptId}
+    </select>
+
+    <!--根据id 修改数据-->
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.NewsReceiptContent">
+        update tb_news_receipt_content
+        <set>
+            <if test="newsId!=null">newsId=#{newsId},</if>
+            <if test="newsName!=null and newsName != ''">newsName=#{newsName},</if>
+            <if test="operatingId!=null">operatingId=#{operatingId},</if>
+            <if test="receiptType!=null">receiptType=#{receiptType},</if>
+            <if test="content!=null and content != '' ">content=#{content},</if>
+
+            <if test="userNums!=null">userNums=#{userNums},</if>
+            <if test="assignPeople!=null and assignPeople != ''">assignPeople=#{assignPeople},</if>
+        </set>
+        where receiptId = #{receiptId}
+    </update>
+</mapper>

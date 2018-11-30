@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>评论管理</title>
+    <link type="text/css" href="/resources/organizational/css/style.css" rel="stylesheet"/>
+    <script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+    <script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+    <style type="text/css">
+    </style>
+</head>
+
+<body>
+	<!-- 消息列表 -->
+	<div id="searchForm_messageInfo" style="margin-top:8px;margin-bottom:8px;">
+	    <div style="margin:0;padding:0px;border-bottom:none;">
+	        <table style="width:100%; table-layout:fixed;background-color:#ffffff;">
+	            <tr>
+	                <td style="width:20%;">
+	                    <label style="padding-left:5px;">信息栏目</label>
+	                    <input id="menuName" class="mini-textbox" style="width: 200px;" name="menuName" allowInput="false"  onclick="onSelectMenus" emptyText="请选择信息栏目"/>
+	                    <input visible="false"  name="menuId" id="menuId" class="mini-textbox"/>
+	                   <!-- <label style="padding-left:10px;">名称：</label>
+	                    <input name="newsName" id="newsName" emptyText="请输入标题" class="mini-textbox" width="200px"/>
+	    -->
+	                    <a class="mini-button" onclick="queryData()"><i class="fa fa-search"></i>查询</a>
+	                </td>
+	            </tr>
+	        </table>
+	    </div>
+	</div>
+    <div id="evaluate_state_tabs" class="mini-tabs" style="margin-top:10px;width:100%;" onactivechanged="queryState">
+        <div class="mini-tabs"  id="-1" name="-1" title="全部"></div>
+        <div class="mini-tabs" id="1" name="1" title="待审核"></div>
+        <div class="mini-tabs" id="2" name="2" title="通过"></div>
+        <div class="mini-tabs" id="3" name="3" title="不通过"></div>
+    </div>
+    <table style="width:100%; table-layout:fixed;">
+        <tr>
+            <td align="left" width="60" nowrap="nowrap"><label style="font-family:Verdana;padding-left:5px;">评论列表</label></td>
+            <td align="right" nowrap="nowrap">
+                <a id="isReviewButton" class="mini-button" iconCls=""><i class="fa fa-check"></i>通过</a>
+                <a id="noReviewButton" class="mini-button" iconCls=""><i class="fa fa-times"></i>不通过</a>
+            </td>
+        </tr>
+    </table>
+    
+	<div id="mini-fit" class="mini-fit" >
+	    <div id="datagrid" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[5,10,20,50]" pageSize="20"
+	         url="/web/v1/commentManager/queryInteractiveData" idField="operatingId" multiSelect="true" allowRowSelect="true" allowAlternating="true"
+	         autoLoad="true" renderer="onActionRenderer" ><!--allowCellWrap="true" 展示列的全部内容-->
+	        <div property="columns">
+	            <div type="checkcolumn" width="50px" headerAlign="center" align="center"></div>
+	            <div field="userName" width="20%" headerAlign="center" align="center">评论账户</div>
+	            <div field="menuName" width="10%" headerAlign="center" align="center">信息栏目</div>
+	            <!--<div field="newsName" width="10%" headerAlign="center" align="left">标题</div>-->
+	            <div field="content" headerAlign="center">评论内容</div>
+	            <div field="createTime" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm:ss">评论时间</div>
+	            <div field="commentStateStr" width="10%" headerAlign="center" align="center">状态</div>
+	            <!--<div field="operatingId" width="10%" headerAlign="center" align="center">操作</div>-->
+	        </div>
+	    </div>
+	</div>
+
+	<script>
+	    mini.parse();
+	    var datagrid_info = mini.get("datagrid");
+	
+	    //查询详情
+	    function query(operatingIds) {
+	        mini.open({
+	            url: "/web/v1/commentManager/queryDetails?operatingIds="+ operatingIds,
+	            title: "评论详情",
+	            width: 750,
+	            height: 600,
+	            onload: function () {
+	                var iframe = this.getIFrameEl();
+	            },
+	            ondestroy: function (action) {
+	                datagrid_info.reload();
+	            }
+	        });
+	    }
+	
+	    //点击同意审核按钮
+	    $("#isReviewButton").click(function (){
+	        var rows = datagrid_info.getSelecteds();
+	        if(rows.length == 0){
+	            alert("请先勾选内容!");
+	            return;
+	        }
+	        var operatingIds = '';
+	        var commentState;
+	        for(var i=0;i<rows.length;i++){
+	            operatingIds += rows[i].operatingId+",";
+	            commentState = rows[i].commentState;
+	            /*if(commentState != 1){
+	                alert("已经审核的内容不能选择!");
+	                return;
+	            }*/
+	        }
+	
+	        if(confirm("是否确定审核通过评论内容？")) {
+	            Ajax({
+	                type : "POST",
+	                url : "/web/v1/commentManager/passComment",
+	                data : {
+	                    "operatingIds" : operatingIds
+	                },
+	                success : function(msg) {
+	                    if (msg.state == "0") {
+	                        datagrid_info.reload();
+	                    }else{
+	                        alert("操作失败");
+	                    }
+	                }
+	            });
+	        }
+	    });
+	
+	    // 审核不通过
+	    $("#noReviewButton").click(function(){
+	        var rows = datagrid_info.getSelecteds();
+	        var operatingIds = "";
+	        if(!rows[0]){
+	            alert("请选择需要审核的评论内容!");
+	            return;
+	        }else{
+	            var commentState;
+	            for(var i=0; i<rows.length; i++){
+	                operatingIds += rows[i].operatingId+",";
+	                /*commentState = rows[i].commentState;
+	                if(commentState != 1){
+	                    alert("已经审核的内容不能选择!");
+	                    return;
+	                }*/
+	            }
+	            operatingIds.substring(0, operatingIds.length-1);
+	        }
+	        var noReason = '';//不合格原因
+	
+	        mini.open({
+	            url: "/web/v1/commentManager/vetoCommentData",
+	            title: "选择栏目",
+	            width: 350,
+	            height: 450,
+	            ondestroy: function (action) {
+	                if (action == "ok") {
+	                    var iframe = this.getIFrameEl();
+	                    noReason = iframe.contentWindow.getData();
+	
+	                    if(confirm("是否确定审核不通过评论内容？")) {
+	                        Ajax({
+	                            type : "POST",
+	                            url : "/web/v1/commentManager/vetoComment",
+	                            data : {
+	                                "operatingIds" : operatingIds,
+	                                'noReason':noReason
+	                            },
+	                            success : function(msg) {
+	                                if (msg.state == "0") {
+	                                    datagrid_info.reload();
+	                                }else{
+	                                    alert("操作失败");
+	                                }
+	                            }
+	                        });
+	                    }
+	                }
+	            }
+	        });
+	
+	    });
+	    //选择新闻栏目
+	    function onSelectMenus(){
+	        mini.open({
+	            url: "/web/v1/news/toSelectMenuPage",
+	            title: "选择栏目",
+	            width: 350,
+	            height: 450,
+	            ondestroy: function (action) {
+	                if (action == "ok") {
+	                    var iframe = this.getIFrameEl();
+	                    var data = iframe.contentWindow.GetData();
+	                    data = mini.clone(data);
+	                    if (data) {
+	                        mini.getByName("menuName").setValue(data.menuName);
+	                        mini.getByName("menuId").setValue(data.menuId);
+	                    }
+	                }
+	            }
+	        });
+	    }
+	
+	
+	    function queryData(commentState){
+	        var menuId = mini.get("menuId").getValue();
+	        datagrid_info.load({'menuId':menuId,'commentState':commentState});
+	    }
+	
+	    //状态查询
+	    function queryState(e) {
+	        var commentState = e.tab.name;
+	        if(commentState == -1){
+	            commentState = null;
+	        }
+	        queryData(commentState);
+	    }
+	</script>
+</body>
+</html>

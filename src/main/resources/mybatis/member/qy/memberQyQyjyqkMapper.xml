@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyQyjyqkMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyjyqk">
+        <id column="JYQKZJ" jdbcType="VARCHAR" property="jyqkzj" />
+        <result column="NF" jdbcType="VARCHAR" property="nf" />
+        <result column="QYCZNF" jdbcType="VARCHAR" property="qycznf" />
+        <result column="LRNF" jdbcType="VARCHAR" property="lrnf" />
+        <result column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="ZZCNF" jdbcType="VARCHAR" property="zzcnf" />
+        <result column="SHJLRNF" jdbcType="VARCHAR" property="shjlrnf" />
+        <result column="GDZC" jdbcType="DOUBLE" property="gdzc" />
+        <result column="NSNF" jdbcType="DOUBLE" property="nsnf" />
+        <result column="SHJLR" jdbcType="DOUBLE" property="shjlr" />
+        <result column="CKZE" jdbcType="DOUBLE" property="ckze" />
+        <result column="GDZCNF" jdbcType="VARCHAR" property="gdzcnf" />
+        <result column="ZCFZLNF" jdbcType="VARCHAR" property="zcfzlnf" />
+        <result column="ZZC" jdbcType="DOUBLE" property="zzc" />
+        <result column="ZCFZL" jdbcType="DOUBLE" property="zcfzl" />
+        <result column="YYSRNF" jdbcType="VARCHAR" property="yysrnf" />
+        <result column="YYSRZE" jdbcType="DOUBLE" property="yysrze" />
+        <result column="LRZE" jdbcType="DOUBLE" property="lrze" />
+        <result column="CKNF" jdbcType="VARCHAR" property="cknf" />
+        <result column="JZC" jdbcType="DOUBLE" property="jzc" />
+        <result column="JZCNF" jdbcType="VARCHAR" property="jzcnf" />
+        <result column="NSZE" jdbcType="DOUBLE" property="nsze" />
+        <result column="QYCZ" jdbcType="DOUBLE" property="qycz" />
+        <result column="QYID" jdbcType="VARCHAR" property="qyid" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyjyqk">
+       insert into member_qy_qyjyqk(JYQKZJ,NF,QYCZNF,LRNF,JBXXZJ,ZZCNF,SHJLRNF,GDZC,NSNF,SHJLR,CKZE,GDZCNF,ZCFZLNF,ZZC,ZCFZL,
+        YYSRNF,YYSRZE,LRZE,CKNF,JZC,JZCNF,NSZE,QYCZ,QYID)
+      values (#{jyqkzj},#{nf},#{qycznf},#{lrnf},#{jbxxzj},#{zzcnf},#{shjlrnf},#{gdzc},#{nsnf},#{shjlr},#{ckze},#{gdzcnf},
+        #{zcfzlnf},#{zzc},#{zcfzl},#{yysrnf},#{yysrze},#{lrze},#{cknf},#{jzc},#{jzcnf},#{nsze},#{qycz},#{qyid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQyjyqk">
+        update member_qy_qyjyqk
+        <set>
+            <if test="jyqkzj!=null and jyqkzj != ''">JYQKZJ=#{jyqkzj},</if>
+            <if test="nf!=null">NF=#{nf},</if>
+            <if test="qycznf!=null">QYCZNF=#{qycznf},</if>
+            <if test="lrnf!=null">LRNF=#{lrnf},</if>
+            <if test="jbxxzj!=null">JBXXZJ=#{jbxxzj},</if>
+            <if test="zzcnf!=null">ZZCNF=#{zzcnf},</if>
+            <if test="shjlrnf!=null">SHJLRNF=#{shjlrnf},</if>
+            <if test="shjlrnf!=null">GDZC=#{gdzc},</if>
+            <if test="shjlrnf!=null">NSNF=#{nsnf},</if>
+            <if test="shjlrnf!=null">SHJLR=#{shjlr},</if>
+            <if test="shjlrnf!=null">CKZE=#{ckze},</if>
+            <if test="gdzcnf!=null">GDZCNF=#{gdzcnf},</if>
+            <if test="zcfzlnf!=null">ZCFZLNF=#{zcfzlnf},</if>
+            <if test="zcfzlnf!=null">ZZC=#{zzc},</if>
+            <if test="zcfzlnf!=null">ZCFZL=#{zcfzl},</if>
+            <if test="yysrnf!=null">YYSRNF=#{yysrnf},</if>
+            <if test="yysrnf!=null">YYSRZE=#{yysrze},</if>
+            <if test="yysrnf!=null">LRZE=#{lrze},</if>
+            <if test="cknf!=null">CKNF=#{cknf},</if>
+            <if test="cknf!=null">JZC=#{jzc},</if>
+            <if test="jzcnf!=null">JZCNF=#{jzcnf},</if>
+            <if test="jzcnf!=null">NSZE=#{nsze},</if>
+            <if test="jzcnf!=null">QYCZ=#{qycz},</if>
+            <if test="qyid!=null and qyid !='' ">QYID=#{qyid},</if>
+        </set>
+        where JYQKZJ = #{jyqkzj}
+    </update>
+
+</mapper>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.MemberRyFgrszyzwMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.MemberRyFgrszyzw">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="RYBM" jdbcType="VARCHAR" property="rybm" />
+        <result column="XZQHMC" jdbcType="VARCHAR" property="xzqhmc" />
+        <result column="XZQHBM" jdbcType="VARCHAR" property="xzqhbm" />
+        <result column="GSMC" jdbcType="VARCHAR" property="gsmc" />
+        <result column="GSBM" jdbcType="VARCHAR" property="gsbm" />
+        <result column="NBJGBM" jdbcType="VARCHAR" property="nbjgbm" />
+        <result column="NBJGMC" jdbcType="VARCHAR" property="nbjgmc" />
+        <result column="QTSHDWMC" jdbcType="VARCHAR" property="qtshdwmc" />
+        <result column="JE" jdbcType="VARCHAR" property="je" />
+        <result column="ZW" jdbcType="VARCHAR" property="zw" />
+        <result column="ZJ" jdbcType="VARCHAR" property="zj" />
+        <result column="SSZWLB" jdbcType="VARCHAR" property="sszwlb" />
+        <result column="ZWSZSF" jdbcType="VARCHAR" property="zwszsf" />
+        <result column="ZWSZCS" jdbcType="VARCHAR" property="zwszcs" />
+        <result column="BM" jdbcType="VARCHAR" property="bm" />
+        <result column="ZWSZQX" jdbcType="VARCHAR" property="zwszqx" />
+        <result column="SFZJZZJG" jdbcType="VARCHAR" property="sfzjzzjg" />
+        <result column="RZQSRQ" jdbcType="VARCHAR" property="rzqsrq" />
+        <result column="RZJSRQ" jdbcType="VARCHAR" property="rzjsrq" />
+        <result column="SFZZ" jdbcType="VARCHAR" property="sfzz" />
+        <result column="SFJZ" jdbcType="VARCHAR" property="sfjz" />
+        <result column="FGGZ" jdbcType="VARCHAR" property="fggz" />
+        <result column="TJDW" jdbcType="VARCHAR" property="tjdw" />
+        <result column="TJRX" jdbcType="VARCHAR" property="tjrx" />
+        <result column="RDZW" jdbcType="VARCHAR" property="rdzw" />
+        <result column="ZXZW" jdbcType="VARCHAR" property="zxzw" />
+        <result column="TTXHMC" jdbcType="VARCHAR" property="ttxhmc" />
+        <result column="TTXHZW" jdbcType="VARCHAR" property="ttxhzw" />
+        <result column="PARAMID" jdbcType="VARCHAR" property="paramid" />
+        <result column="SHZW" jdbcType="VARCHAR" property="shzw" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberRyFgrszyzw">
+        insert into member_ry_fgrszyzw(ID,RYBM,XZQHMC,XZQHBM,GSMC,GSBM,NBJGBM,NBJGMC,QTSHDWMC,
+            JE,ZW,ZJ,SSZWLB,ZWSZSF,ZWSZCS,BM,ZWSZQX,SFZJZZJG,RZQSRQ,RZJSRQ,SFZZ,SFJZ,FGGZ,TJDW,TJRX,RDZW,ZXZW,TTXHMC,TTXHZW,PARAMID,
+            SHZW)
+          values (#{id},#{rybm},#{xzqhmc},#{xzqhbm},#{gsmc},#{gsbm},#{nbjgbm},#{nbjgmc},#{qtshdwmc},#{je},#{zw},#{zj},
+            #{sszwlb},#{zwszsf},#{zwszcs},#{bm},#{zwszqx},#{sfzjzzjg},#{rzqsrq},#{rzjsrq},#{sfzz},#{sfjz},#{fggz},#{tjdw},#{tjrx},#{rdzw},#{zxzw},#{ttxhmc},#{ttxhzw},#{paramid},
+            #{shzw})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberRyFgrszyzw">
+        update member_ry_fgrszyzw
+        <set>
+            <if test="rybm!=null">RYBM=#{rybm},</if>
+            <if test="xzqhmc!=null ">XZQHMC=#{xzqhmc},</if>
+            <if test="xzqhbm!=null">XZQHBM=#{xzqhbm},</if>
+            <if test="gsmc!=null">GSMC=#{gsmc},</if>
+            <if test="gsbm!=null ">GSBM=#{gsbm},</if>
+            <if test="nbjgbm!=null">NBJGBM=#{nbjgbm},</if>
+            <if test="nbjgmc!=null">NBJGMC=#{nbjgmc},</if>
+            <if test="qtshdwmc!=null">QTSHDWMC=#{qtshdwmc},</if>
+            <if test="je!=null ">JE=#{je},</if>
+            <if test="zw!=null">ZW=#{zw},</if>
+            <if test="zj!=null">ZJ=#{zj},</if>
+            <if test="sszwlb!=null">SSZWLB=#{sszwlb},</if>
+            <if test="zwszsf!=null ">ZWSZSF=#{zwszsf},</if>
+            <if test="zwszcs!=null">ZWSZCS=#{zwszcs},</if>
+            <if test="bm!=null">BM=#{bm},</if>
+            <if test="zwszqx!=null">ZWSZQX=#{zwszqx},</if>
+            <if test="sfzjzzjg!=null">SFZJZZJG=#{sfzjzzjg},</if>
+            <if test="rzqsrq!=null">RZQSRQ=#{rzqsrq},</if>
+            <if test="rzjsrq!=null">RZJSRQ=#{rzjsrq},</if>
+            <if test="sfzz!=null">SFZZ=#{sfzz},</if>
+            <if test="sfjz!=null">SFJZ=#{sfjz},</if>
+            <if test="fggz!=null">FGGZ=#{fggz},</if>
+            <if test="tjdw!=null ">TJDW=#{tjdw},</if>
+            <if test="tjrx!=null">TJRX=#{tjrx},</if>
+            <if test="rdzw!=null">RDZW=#{rdzw},</if>
+            <if test="zxzw!=null">ZXZW=#{zxzw},</if>
+            <if test="ttxhmc!=null">TTXHMC=#{ttxhmc},</if>
+            <if test="ttxhzw!=null">TTXHZW=#{ttxhzw},</if>
+            <if test="paramid!=null">PARAMID=#{paramid},</if>
+            <if test="shzw!=null">SHZW=#{shzw},</if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!--根据关联表id 查询数据-->
+    <select id="appQueryMapByParamid" parameterType="String" resultType="HashMap">
+        select id,rybm,xzqhmc,xzqhbm,gsmc,gsbm,nbjgbm,nbjgmc,qtshdwmc,
+            je,zw,zj,sszwlb,zwszsf,zwszcs,bm,zwszqx,sfzjzzjg,rzqsrq,rzjsrq,sfzz,sfjz,fggz,tjdw,tjrx,rdzw,zxzw,ttxhmc,ttxhzw,paramid,shzw
+             from member_ry_fgrszyzw where PARAMID = #{paramid}
+    </select>
+
+    <!--根据关联表paramid 修改数据-->
+    <update id="updateByParamid" parameterType="com.manhui.gsl.jbqgsl.model.member.MemberRyFgrszyzw">
+        update member_ry_fgrszyzw
+        <set>
+            <if test="paramid!=null and paramid != ''">PARAMID=#{paramid},</if>
+            <if test="rybm!=null ">RYBM=#{rybm},</if>
+            <if test="xzqhmc!=null ">XZQHMC=#{xzqhmc},</if>
+            <if test="xzqhbm!=null ">XZQHBM=#{xzqhbm},</if>
+            <if test="gsmc!=null ">GSMC=#{gsmc},</if>
+            <if test="gsbm!=null ">GSBM=#{gsbm},</if>
+            <if test="nbjgbm!=null">NBJGBM=#{nbjgbm},</if>
+            <if test="nbjgmc!=null ">NBJGMC=#{nbjgmc},</if>
+            <if test="qtshdwmc!=null">QTSHDWMC=#{qtshdwmc},</if>
+            <if test="je!=null ">JE=#{je},</if>
+            <if test="zw!=null  ">ZW=#{zw},</if>
+            <if test="zj!=null  ">ZJ=#{zj},</if>
+            <if test="sszwlb!=null  ">SSZWLB=#{sszwlb},</if>
+            <if test="zwszsf!=null ">ZWSZSF=#{zwszsf},</if>
+            <if test="zwszcs!=null  ">ZWSZCS=#{zwszcs},</if>
+            <if test="bm!=null ">BM=#{bm},</if>
+            <if test="zwszqx!=null">ZWSZQX=#{zwszqx},</if>
+            <if test="sfzjzzjg!=null  ">SFZJZZJG=#{sfzjzzjg},</if>
+            <if test="rzqsrq!=null  ">RZQSRQ=#{rzqsrq},</if>
+            <if test="rzjsrq!=null  ">RZJSRQ=#{rzjsrq},</if>
+            <if test="sfzz!=null ">SFZZ=#{sfzz},</if>
+            <if test="sfjz!=null ">SFJZ=#{sfjz},</if>
+            <if test="fggz!=null  ">FGGZ=#{fggz},</if>
+            <if test="tjdw!=null ">TJDW=#{tjdw},</if>
+            <if test="tjrx!=null  ">TJRX=#{tjrx},</if>
+            <if test="rdzw!=null ">RDZW=#{rdzw},</if>
+            <if test="zxzw!=null ">ZXZW=#{zxzw},</if>
+            <if test="ttxhmc!=null">TTXHMC=#{ttxhmc},</if>
+            <if test="ttxhzw!=null  ">TTXHZW=#{ttxhzw},</if>
+            <if test="shzw!=null  ">SHZW=#{shzw},</if>
+        </set>
+        where PARAMID = #{paramid}
+    </update>
+</mapper>

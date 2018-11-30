@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>企业之声列表</title>
+	<link type="text/css" rel="stylesheet" href="/resources/css/base.css"/>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<style type="text/css">
+	/* 圆圈图 */
+		ul, li, p {
+			margin: 0;
+			padding: 0;
+		}
+		ul, li {
+			list-style: none;
+		}
+		.activity_content {
+			padding: 15px 0;
+			border-bottom: solid 1px #ccc;
+		}
+		.activity_ul {
+			overflow: hidden;
+			padding: 0;
+		}
+		.activity_item {
+			float: left;
+			width: 33.33%;
+			text-align: center;
+			padding: 5px 0;
+			margin: 0;
+		}
+		.activity_div {
+			display: inline-block;
+			width: 130px;
+			height: 130px;
+			border-radius: 50%;
+			border: solid 10px transparent;
+			background: #fff;
+		}
+		.activity_div .title {
+			font-size: 18px;
+			padding-top: 30px;
+			margin-bottom: 10px;
+		}
+		.activity_div .num {
+			font-size: 24px;
+		}
+		.activity_div.div1 {
+			border-color: #FF9B71;
+		}
+		.activity_div.div1 .num {
+			color: #FF9B71;
+		}
+		.activity_div.div2 {
+			border-color: #17C6FF;
+		}
+		.activity_div.div2 .num {
+			color: #17C6FF;
+		}
+		.activity_div.div3 {
+			border-color: #8AB766;
+		}
+		.activity_div.div3 .num {
+			color: #8AB766;
+		}
+		body .mini-grid-rows-view {overflow-x: hidden;}
+	</style>
+</head>
+
+<body>
+<div class="activity_content">
+<label style="font-family:Verdana;padding-left:5px;">活动情况统计</label><br/>
+日期：
+<input name="starttime" emptyText="开始时间" class="mini-datepicker" style="width:150px" allowInput="false" format="yyyy-MM-dd H:mm" timeFormat="H:mm" showTime="true" required="true"/>
+	               		<label style="line-height:30px;padding-left:5px;">-&nbsp;</label>
+	               	   <input name="endtime" emptyText="结束时间" class="mini-datepicker" style="width:150px" allowInput="false" format="yyyy-MM-dd HH:mm" timeFormat="HH:mm" showTime="true" required="true"/>
+	               	   <a class="mini-button searchBtnt"><i class="fa fa-search"></i>查询</a>
+		<ul class="activity_ul">
+			<li class="activity_item">
+				<div class="activity_div div1">
+					<p class="title">活动场次</p>
+					<p><span class="num" th:text=" ${mmTotal}" ></span>次</p>
+				</div>
+			</li>
+			<li class="activity_item">
+				<div class="activity_div div2">
+					<p class="title">参与人数</p>
+					<p><span class="num" th:text=" ${pTotal}"></span>人</p>
+				</div>
+			</li>
+			<li class="activity_item">
+				<div class="activity_div div3">
+					<p class="title">参与企业</p>
+					<p><span class="num" th:text=" ${cTotal}"></span>家</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div id="searchForm" style="margin-top:10px;margin-bottom:1px;">
+	    <input name="is_answer" class="mini-textbox" visible="false"/>
+	    <div style="margin:0;padding:0px;border-bottom:none;">
+			<table>
+				<tr>
+					<td>
+						<label style="font-family:Verdana;padding-left:5px;">活动名称</label>
+						<input name="activity_theme" emptyText="请输入活动主题" class="mini-textbox" width="200px" onenter="loadGridData"/>
+						<a class="mini-button searchBtn"><i class="fa fa-search"></i>查询</a>
+						<a class="mini-button cleanBtn"><i class="fa fa-repeat"></i>重置</a>
+				    	<a class="mini-button cleanBtn" onclick="addMeeting()"><i class="fa fa-plus"></i>发起活动</a>
+	                </td>
+				</tr>
+			</table>
+	    </div>
+	    
+		<div id="is_answer_tabs" class="mini-tabs" style="margin-top:10px;width:100%;" onactivechanged="changeTabs">
+		    <div id="evaluate_state" class="mini-tabs" title="全部"></div>
+		    <div id="evaluate_state0" class="mini-tabs" title="未发布"></div>
+		    <div id="evaluate_state1" class="mini-tabs" title="未开始"></div>
+		    <div id="evaluate_state2" class="mini-tabs" title="进行中"></div>
+		    <div id="evaluate_state3" class="mini-tabs" title="已结束"></div>
+		</div>
+	</div>
+	
+	<div id="mini-fit" class="mini-fit">
+		<div id="datagrid_meetingManagerList" class="mini-datagrid" style="width:100%;height:100%;" borderStyle="border-top:none;" sizeList="[10,20,50,100]" pageSize="20"
+			 url="/web/v1/activity/getActivityInfoList" idField="meeting_id" multiSelect="true">
+	        <div property="columns">
+	            <div type="indexcolumn" width="5%" headerAlign="center" align="center">序号</div>
+	            <div field="activity_name" width="20%" headerAlign="center">活动主题</div>
+	            <div field=activity_start_time width="15%" headerAlign="center" align="center">活动开始时间</div>
+	            <div field="activity_end_time" width="15%" headerAlign="center" align="center">活动结束时间</div>
+	            <div field="activity_state" width="5%"  headerAlign="center" align="center">活动状态</div>
+	            <div width="20%" headerAlign="center" renderer="onConvertFunction" >功能</div>
+	            <div width="20%" headerAlign="center" renderer="onConvertOperation">操作</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/activity/activityInfoList.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.membermanager.qy.MemberQyQygybfqkMapper">
+    <resultMap id="BaseResultMap" type="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQygybfqk">
+        <id column="GYBFZJ" jdbcType="VARCHAR" property="gybfzj" />
+        <result column="GYBFXMMC" jdbcType="VARCHAR" property="gybfxmmc" />
+        <result column="GYBFJWZHZE" jdbcType="DOUBLE" property="gybfjwzhze" />
+        <result column="JBXXZJ" jdbcType="VARCHAR" property="jbxxzj" />
+        <result column="GYBFXMHJCM" jdbcType="VARCHAR" property="gybfxmhjcm" />
+        <result column="GYBFYTFL" jdbcType="VARCHAR" property="gybfytfl" />
+        <result column="GYBFJDLK_RKS" jdbcType="VARCHAR" property="gybfjdlk_rks" />
+        <result column="GYBFSJKWHJ" jdbcType="DOUBLE" property="gybfsjkwhj" />
+        <result column="GYBFSJJZ_WHJ" jdbcType="DOUBLE" property="gybfsjjz_whj" />
+        <result column="GYBFJDLKHS" jdbcType="VARCHAR" property="gybfjdlkhs" />
+        <result column="GYBFXMSY_ZRS" jdbcType="VARCHAR" property="gybfxmsy_zrs" />
+        <result column="GYBFJSDW" jdbcType="VARCHAR" property="gybfjsdw" />
+        <result column="QYID" jdbcType="VARCHAR" property="qyid" />
+    </resultMap>
+    <insert id="save" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQygybfqk">
+       insert into member_qy_qygybfqk(GYBFZJ,GYBFXMMC,GYBFJWZHZE,JBXXZJ,GYBFXMHJCM,GYBFYTFL,GYBFJDLK_RKS,GYBFSJKWHJ,GYBFSJJZ_WHJ,
+        GYBFJDLKHS,GYBFXMSY_ZRS,GYBFJSDW,QYID)
+       values (#{gybfzj},#{gybfxmmc},#{gybfjwzhze},#{jbxxzj},#{gybfxmhjcm},#{gybfytfl},#{gybfjdlk_rks},#{gybfsjkwhj},#{gybfsjjz_whj},
+        #{gybfjdlkhs},#{gybfxmsy_zrs},#{gybfjsdw},#{qyid})
+    </insert>
+    
+    <update id="updateById" parameterType="com.manhui.gsl.jbqgsl.model.member.qy.MemberQyQygybfqk">
+        update member_qy_qygybfqk
+        <set>
+            <if test="gybfzj!=null and gybfzj != ''">GYBFZJ=#{gybfzj},</if>
+            <if test="gybfxmmc!=null">GYBFXMMC=#{gybfxmmc},</if>
+            <if test="gybfxmmc!=null">GYBFJWZHZE=#{gybfjwzhze},</if>
+            <if test="jbxxzj!=null">JBXXZJ=#{jbxxzj},</if>
+            <if test="gybfxmhjcm!=null">GYBFXMHJCM=#{gybfxmhjcm},</if>
+            <if test="gybfytfl!=null">GYBFYTFL=#{gybfytfl},</if>
+            <if test="gybfjdlk_rks!=null">GYBFJDLK_RKS=#{gybfjdlk_rks},</if>
+            <if test="gybfjdlk_rks!=null">GYBFSJKWHJ=#{gybfsjkwhj},</if>
+            <if test="gybfjdlk_rks!=null">GYBFSJJZ_WHJ=#{gybfsjjz_whj},</if>
+            <if test="gybfjdlkhs!=null">GYBFJDLKHS=#{gybfjdlkhs},</if>
+            <if test="gybfxmsy_zrs!=null">GYBFXMSY_ZRS=#{gybfxmsy_zrs},</if>
+            <if test="gybfjsdw!=null">GYBFJSDW=#{gybfjsdw},</if>
+            <if test="qyid!=null">QYID=#{qyid},</if>
+        </set>
+        where GYBFZJ = #{gybfzj}
+    </update>
+
+</mapper>

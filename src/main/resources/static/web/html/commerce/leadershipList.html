@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>领导班子</title>
+    <script src="/resources/miniui/scripts/boot.js" type="text/javascript"></script>
+    <script src="/resources/organizational/js/util.js" type="text/javascript"></script>
+    <link href="/resources/organizational/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="addForm" class="addForm" style="height:100%; width: 100%;">
+	<div>
+		<input class="mini-hidden" id="shbmid" name="shbmid" th:value="${shbmid}">
+		<table class="form-table" border="0" cellpadding="1" cellspacing="2" style="margin-top: 20px;">
+			<tr>
+				<td class="title noEmpty" style="width: 80px;text-align:right; font-size: 14px;font-weight: bold;">
+					<span style="color:red;margin-right:2px;"></span>商会会长
+				</td>
+				<td style="width: 80px" colspan="3">
+				</td>
+			</tr>
+			<tr>
+				<td class="title noEmpty" style="text-align:right;">
+					<span style="color:red;margin-right:2px;"></span>姓名：
+				</td>
+				<td style="width: 80px">
+					<input id="xm" name="xm" class="mini-textbox" value="" borderStyle="border:0;" readonly="readonly" emptyText=""/>
+				</td>
+				<td class="title noEmpty" style="width: 80px ;text-align:right;">
+					<span style="color:red;margin-right:2px;"></span>手机号码：
+				</td>
+				<td style="width: 80px">
+					<input id="YDDH" name="YDDH" class="mini-textbox" value="" borderStyle="border:0;" readonly="readonly" emptyText=""/>
+				</td>
+			</tr>
+			<tr>
+				<td class="title noEmpty" style="width: 10px; text-align:right;font-size: 14px;font-weight: bold;">
+					<span style="color:red;margin-right:2px; "></span>商会秘书长
+				</td>
+				<td style="width: 80px" colspan="3">
+				</td>
+			</tr>
+			<tr>
+				<td class="title noEmpty" style="text-align:right;">
+					<span style="color:red;margin-right:2px;"></span>姓名：
+				</td>
+				<td style="width: 80px">
+					<input id="XM1" name="XM1" class="mini-textbox" value="" borderStyle="border:0;" readonly="readonly" emptyText=""/>
+				</td>
+				<td class="title noEmpty" style="text-align:right;">
+					<span style="color:red;margin-right:2px;"></span>手机号码：
+				</td>
+				<td style="width: 80px">
+					<input id="YDDH1" name="YDDH1" class="mini-textbox" value="" borderStyle="border:0;" readonly="readonly" emptyText=""/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<!-- bot btns -->
+	<div class="mini-toolbar bot_btn">
+		<a class="mini-button" onclick="returns('ok')">关闭</a>
+	</div>
+</div>
+	
+	<script type="application/javascript">
+        mini.parse();
+        $(function(){
+            var shbmid = mini.getbyName("shbmid").getValue();
+            Ajax({
+                type : "post",
+                url : "/web/v1/leadership/queryLeadershipListTree",
+                data : {"SHBMID":shbmid},
+                success : function(msg) {
+                    if (errorCheck(msg)) {
+                        var result = mini.decode(msg);
+                        console.log(result);
+                        if(result != null) {
+                            setFormData("addForm", result);
+                        }
+                    }
+                }
+            });
+        });
+        //关闭
+        function returns(action){
+            //window.location.href = "/web/v1/institution/toInstitutionListPage";
+            if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+            else window.close();
+        }
+	</script>
+</body>
+</html>

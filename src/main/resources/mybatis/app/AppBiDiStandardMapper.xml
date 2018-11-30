@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppBiDiStandardMapper">
+	<select id="showEvaluateStandard" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.EvaluateStandard">
+		select * from evaluate_standard where del_flag = 0 and standard_id = #{standard_id} 
+	</select>
+	<select id="appBiDiStandardMapper"  resultType="String">
+		select 
+			standard_id
+		 from 
+		 	evaluate_standard 
+		 <where>
+		 	del_flag = '0' and is_effect = '1' 
+		 	<if test="standardIds !=null and standardIds.size()>0">
+		 		and standard_id in
+		 		<foreach collection="standard_id" open="(" separator="," close=")" item="obj" >
+		 			#{obj}
+		 		</foreach>
+		 	</if>
+		 
+		 </where> 
+		
+	</select>
+	<select id="queryIsEffectStandard"  resultType="String">
+		select 
+			standard_id
+		 from 
+		 	evaluate_standard 
+		 <where>
+		 	del_flag = '0' and is_effect = '1' 
+		 	<if test="standardIds !=null and standardIds.size()>0">
+		 		and standard_id in
+		 		<foreach collection="standardIds" open="(" separator="," close=")" item="obj" >
+		 			#{obj}
+		 		</foreach>
+		 	</if>
+		 
+		 </where> 
+		
+	</select>
+	
+</mapper> 

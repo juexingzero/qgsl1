@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主题评价列表</title>
+	<script type="text/javascript" src="/resources/miniui/scripts/boot.js"></script>
+	<script type="text/javascript" src="/resources/organizational/js/util.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.cookie.js"></script>
+	<style type="text/css">
+		body .mini-grid-rows-view {overflow-x: hidden;}
+	</style>
+</head>
+
+<body>
+	<div class="flow_hidden">
+		<div id="searchForm">
+		    <input name="evaluate_state" class="mini-textbox" visible="false"/>
+		    <div style="margin:0;padding:0px;border-bottom:none;">
+				<table class="search_table_border">
+					<tr>
+						<td>
+							<label style="font-family:Verdana;padding-left:5px;">评价主题</label>
+							<input name="topic_name" emptyText="请输入评价主题" class="mini-textbox" width="200px" onenter="loadGridData"/>
+							<a class="mini-button searchBtn"><i class="fa fa-search"></i>查询</a>
+					    	<a class="mini-button"><i class="fa fa-repeat"></i>重置</a>
+					    	<a class="mini-button addBtn" onclick="toAdd()"><i class="fa fa-plus"></i>新增</a>
+						</td>
+					</tr>
+				</table>
+		    </div>
+			<div id="evaluate_state_tabs" class="mini-tabs" style="margin-top:10px;width:100%;" onactivechanged="changeTabs">
+			    <div id="evaluate_state0" class="mini-tabs" title="未发布"></div>
+			    <div id="evaluate_state1" class="mini-tabs" title="未开始"></div>
+			    <div id="evaluate_state2" class="mini-tabs" title="评价中"></div>
+			    <div id="evaluate_state3" class="mini-tabs" title="已结束"></div>
+			    <div id="evaluate_state4" class="mini-tabs" title="已撤销"></div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="mini-fit" class="mini-fit" >
+		<div id="datagrid_topicEvaluateList" class="mini-datagrid" style="width:100%;height:100%;" sizeList="[10,20,50,100]" pageSize="20"
+			 url="/web/v1/topicEvaluate/getTopicEvaluateList" idField="topic_id" multiSelect="true">
+	        <div property="columns">
+	            <div field="topic_number" width="8%" headerAlign="center" align="center">主题编号</div>
+	            <div field="topic_name" width="10%" headerAlign="center">主题名称</div>
+	            <div field="topic_type" headerAlign="center" align="center" renderer="onConvertTopicType">主题类型</div>
+	            <div field="institution_name_passives" headerAlign="center">被评价方</div>
+	            <div field="institution_name_actives" headerAlign="center">评价方</div>
+	            <div field="evaluate_state" headerAlign="center" align="center" renderer="onConvertEvaluateState">评价状态</div>
+	            <div field="evaluate_start_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm">评价开始时间</div>
+	            <div field="evaluate_end_time" width="10%" headerAlign="center" align="center" dateFormat="yyyy-MM-dd HH:mm">评价结束时间</div>
+	            <div width="10%" headerAlign="center" align="center" renderer="onConvertOperation">操作</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script type="text/javascript" src="/resources/js/topicEvaluate/topicEvaluateList.js"></script>
+</body>
+</html>

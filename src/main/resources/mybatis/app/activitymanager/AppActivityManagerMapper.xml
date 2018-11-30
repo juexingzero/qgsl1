@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.activitymanager.AppActivityManagerMapper">
+	<select id="getActivityList" parameterType="java.util.Map" resultType="com.manhui.gsl.jbqgsl.controller.app.activitymanager.result.ActivityResultList">
+		SELECT
+			ai.activity_id,
+			ai.activity_name,
+			ai.activity_start_time,
+			ai.activity_end_time,
+			ai.activity_image,
+			ai.activity_content,
+			ai.activity_entry_end_time,
+			ai.activity_entry_end_time,
+			ai.activity_address,
+			ai.activity_link_man,
+			ai.activity_link_phone,
+			ai.activity_navigation,
+			ai.longitude_latitude,
+			ai.is_sign,
+			aef.entry_id,
+			asf.sign_id 
+		FROM
+			activity_info ai
+		INNER JOIN activity_person ap on ap.activity_id = ai.activity_id
+		LEFT JOIN activity_entry_flow aef ON aef.activity_id = ai.activity_id and aef.member_id = ap.member_id<!-- 签到按公司来 -->
+		<!-- LEFT JOIN (SELECT * FROM activity_sign_flow WHERE group_name = #{group_name} limit 0,1)as asf ON asf.activity_id = ai.activity_id -->
+		LEFT JOIN (SELECT * FROM activity_sign_flow WHERE member_id = #{member_id} limit 0,1)as asf ON asf.activity_id = ai.activity_id
+		<where>
+			<if test="activity_state !=null and activity_state !=''">
+				<!-- 进行中 -->
+				<if test="activity_state =='2'.toString()">
+					AND (ai.activity_state = '1' or ai.activity_state = '2')
+				</if>
+				<!--已结束  -->
+				<if test="activity_state =='3'.toString()">
+					AND ai.activity_state = #{activity_state}
+				</if>
+				<!--已参加  -->
+				<if test="activity_state =='5'.toString()">
+					AND ai.activity_state = "3" AND (aef.entry_id!=null OR asf.sign_id !=null)
+				</if>
+			</if>
+			<if test="member_id !=null and member_id !=''">
+				AND ap.member_id = #{member_id} AND ai.is_delete='0' AND ai.activity_state !='4'
+			</if>
+		</where>
+	</select>
+	<select id="getActivityFile" parameterType="String" resultType="String">
+		SELECT
+			ai.activity_file
+		FROM
+			activity_info ai
+		WHERE ai.activity_id = #{activity_id}
+	</select>
+	<select id="queryEntryActivity" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			aef.*
+		FROM
+			activity_entry_flow aef
+		<where>
+			<if test="activity_id !=null and activity_id !=''">
+				and aef.activity_id = #{activity_id}
+			</if>
+			<if test="member_id !=null and member_id !=''">
+				and aef.member_id = #{member_id}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryMemberName" parameterType="java.util.Map" resultType="com.manhui.gsl.jbqgsl.controller.app.activitymanager.result.ActivityMemberName">
+		SELECT
+			ap.activity_id,
+			ap.member_name as group_name
+		FROM
+			activity_person ap
+		<where>
+			<if test="activity_id !=null and activity_id !=''">
+				and ap.activity_id = #{activity_id}
+			</if>
+			<if test="member_name !=null and member_name !=''">
+				and ap.member_name like concat('%',#{member_name},'%') 
+			</if>
+		</where>
+	</select>
+
+	   <select id="queryCompanyName" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			mjm.createUserId AS user_id,
+			mryjb.XM AS sign_name,
+			mryjb.XM AS company_name,
+			mrtx.GSZW AS company_title,
+			mrtx.YDDH AS sign_phone
+		FROM
+			member_join_manager mjm
+		INNER JOIN member_ry_ryjbxx mryjb ON mryjb.ID = mjm.memberId
+		INNER JOIN member_ry_txfs mrtx ON mrtx.RYID = mjm.memberId
+		WHERE
+			mjm.createUserId = #{member_id}
+		UNION ALL
+			SELECT
+				mjm.createUserId AS user_id,
+				mqlxr.LXRXM AS sign_name,
+				mqyjb.QYMC AS company_name,
+				mqlxr.LXRXM AS company_title,
+				mqlxr.LXRLXFS AS sign_phone
+			FROM
+				member_join_manager mjm
+			INNER JOIN member_qy_qylxrxx mqlxr ON mqlxr.QYID = mjm.memberId
+			INNER JOIN member_qy_qyjbxx mqyjb ON mqyjb.JBXXZJ  = mjm.memberId
+			WHERE
+				mjm.createUserId = #{member_id}
+		UNION ALL
+			SELECT
+				mjm.createUserId AS user_id,
+				mqstjb.MSCGZRYXM AS sign_name,
+				mqstjb.STMC AS company_name,
+				mqyfr.GSZW AS company_title,
+				mqstjb.MSCGZRYDH AS sign_phone
+			FROM
+				member_join_manager mjm
+			INNER JOIN member_qy_qyfrxx mqyfr ON mqyfr.QYID = mjm.memberId
+			INNER JOIN member_jg_stjbxx mqstjb ON mqstjb.ID  = mjm.memberId
+			WHERE
+				mjm.createUserId = #{member_id}
+	</select>
+	<insert id="saveEntryActivity">
+		INSERT INTO activity_entry_flow (
+			entry_id,
+			activity_id,
+			member_id,
+			member_name,
+			member_linkman_name,
+			member_linkman_sex,
+			member_linkman_title,
+			member_linkman_phone,
+			entry_num,
+			remarks,
+			sign_time,
+			create_time,
+			update_time
+		)
+		VALUES
+			(
+			#{entry_id},
+			#{activity_id},
+			#{member_id},
+			#{member_name},
+			#{member_linkman_name},
+			#{member_linkman_sex},
+			#{member_linkman_title},
+			#{member_linkman_phone},
+			#{entry_num},
+			#{remarks},
+			#{sign_time},
+			#{create_time},
+			#{update_time}
+		 )
+	</insert>
+	<insert id="saveActivitySign">
+		INSERT INTO activity_sign_flow (
+			sign_id,
+			activity_id,
+			member_id,
+			group_name,
+			sign_name,
+			sign_title,
+			sign_phone,
+			sign_time,
+			create_time,
+			update_time
+		)
+		VALUES
+			(
+			#{sign_id},
+			#{activity_id},
+			#{member_id},
+			#{group_name},
+			#{sign_name},
+			#{sign_title},
+			#{sign_phone},
+			#{sign_time},
+			#{create_time},
+			#{update_time}
+		 )
+	</insert>
+	<insert id="saveActivitySignQr">
+		INSERT INTO activity_sign_flow (
+			sign_id,
+			activity_id,
+			member_id,
+			group_name,
+			sign_name,
+			sign_title,
+			sign_phone,
+			sign_time,
+			create_time,
+			update_time
+		)
+		VALUES
+			(
+			#{sign_id},
+			#{activity_id},
+			#{member_id},
+			#{group_name},
+			#{sign_name},
+			#{sign_title},
+			#{sign_phone},
+			#{sign_time},
+			#{create_time},
+			#{update_time}
+		 )
+	</insert>
+		<select id="querySignPhone" parameterType="java.util.Map" resultType="String">
+		SELECT
+			asf.sign_phone
+		FROM
+			activity_sign_flow asf
+		<where>
+			<if test="activity_id !=null and activity_id !=''">
+				and asf.activity_id = #{activity_id}
+			</if>
+		</where>
+	</select>
+	<select id="queryActivityInfo" parameterType="java.util.Map" resultType="Map">
+		SELECT
+			*
+		FROM
+			activity_info 
+		<where>
+			<if test="activity_id !=null and activity_id !=''">
+				and activity_id = #{activity_id}
+			</if>
+		</where>
+	</select>
+	<select id="querySignUserId" parameterType="java.util.Map" resultType="String">
+		SELECT
+			sign_id
+		FROM
+			activity_sign_flow 
+		<where>
+			<if test=" member_id !=null and member_id !=''">
+				and member_id = #{member_id}
+			</if>
+			<if test=" activity_id !=null and activity_id !=''">
+				and activity_id = #{activity_id}
+			</if>
+		</where>
+	</select>
+	<select id="queryActivityPerson" parameterType="java.util.Map" resultType="Map">
+		SELECT
+			*
+		FROM
+			activity_person 
+		<where>
+			<if test=" member_id !=null and member_id !=''">
+				and member_id = #{member_id} limit 0,1
+			</if>
+			
+		</where>
+	</select>
+	<select id="getActivityContent" parameterType="String" resultType="Map">
+		SELECT
+			*
+		FROM
+			activity_info
+		<where>
+			<if test="activity_id !=null and activity_id !=''">
+				and activity_id = #{activity_id} 
+			</if>
+			
+		</where>
+	</select>
+</mapper>

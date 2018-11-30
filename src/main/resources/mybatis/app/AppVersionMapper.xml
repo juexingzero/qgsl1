@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.gsl.jbqgsl.dao.app.AppVersionMapper">
+	<select id="queryVersion" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.AppVersion">
+		SELECT
+			*
+		FROM
+			app_version
+		WHERE
+			version IN (
+		SELECT
+			max(version) AS version
+		FROM
+			app_version
+		WHERE
+			channal = #{channal}
+	)
+	</select>
+	
+	<select id="queryVersionList" parameterType="java.util.Map" resultType="com.manhui.gsl.jbqgsl.model.AppVersion">
+		select * from app_version
+		where channal = #{channal}
+		<if test="version != null and version != ''">
+            AND version LIKE CONCAT('%','${version}','%')
+        </if>
+		ORDER BY
+			create_time DESC
+		<if test="pageNo != null and pageSize != null">
+            LIMIT #{pageNo},#{pageSize}
+        </if>
+	</select>
+	
+	<select id="queryVersionCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(*) from app_version
+		where channal = #{channal}
+		<if test="channal != null and channal != ''">
+            AND channal LIKE CONCAT('%','${channal}','%')
+        </if>
+		ORDER BY
+			create_time DESC
+	</select>
+	
+	<delete id="deleteVersion" parameterType="java.lang.String">
+		delete from app_version where id = #{id}
+	</delete>
+	
+	<insert id="saveVersion" parameterType="com.manhui.gsl.jbqgsl.model.AppVersion">
+		insert into app_version
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			id,
+			version,
+			<if test="is_force != null">is_force,</if>
+			<if test="url != null">url,</if>
+			<if test="channal != null">channal,</if>
+			<if test="introduce != null">introduce,</if>
+			<if test="create_time != null">create_time,</if>
+			<if test="update_time != null">update_time,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			#{id},
+			#{version},
+			<if test="is_force != null">#{is_force},</if>
+			<if test="url != null">#{url},</if>
+			<if test="channal != null">#{channal},</if>
+			<if test="introduce != null">#{introduce},</if>
+			<if test="create_time != null">#{create_time},</if>
+			<if test="update_time != null">#{update_time}</if>
+		</trim>
+	</insert>
+	
+	<update id="editVersion" parameterType="com.manhui.gsl.jbqgsl.model.AppVersion">
+		update app_version
+		<set>
+			version = #{version},
+			<if test="is_force != null">is_force = #{is_force},</if>
+			<if test="url != null">url = #{url},</if>
+			<if test="channal != null">channal = #{channal},</if>
+			<if test="introduce != null">introduce = #{introduce},</if>
+			<if test="create_time != null">create_time = #{create_time},</if>
+			<if test="update_time != null">update_time = #{update_time},</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="queryAppVersionDetail" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.AppVersion">
+		select * from app_version where id = #{id}
+	</select>
+	
+	<select id="load" parameterType="java.lang.String" resultType="com.manhui.gsl.jbqgsl.model.AppVersion">
+		select * from app_version where channal= #{channel}
+	</select>
+	<select id="queryVersionByChannalAndVersion" parameterType="com.manhui.gsl.jbqgsl.model.AppVersion" resultType="com.manhui.gsl.jbqgsl.model.AppVersion">
+		select * from app_version where channal= #{channal} and version=#{version}
+	</select>
+	
+	<update id="cleanLast" parameterType="java.lang.String">
+		update app_version
+		<set>
+			is_force = 0
+		</set>
+		where channal = #{channal}
+	</update>
+	
+</mapper>
